@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toyota RAV4 2026 | Sales Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #EB0A1E;
+  --red-glow: rgba(235,10,30,0.4);
+  --red-dim: rgba(235,10,30,0.15);
+  --black: #050507;
+  --surface: #0e0e12;
+  --surface2: #16161c;
+  --surface3: #1e1e26;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f0f4;
+  --text-dim: rgba(240,240,244,0.55);
+  --text-muted: rgba(240,240,244,0.25);
+  --accent: #76b9ff;
+  --green: #00e5a0;
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; }
+
+/* ── BACKGROUND ───────────────────────────────────────── */
+#bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────── */
+#app {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-rows: 64px 1fr 56px;
+  grid-template-columns: 200px 1fr;
+  width: 100vw; height: 100vh;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────── */
+#topbar {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(14,14,18,0.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+}
+.top-brand { display: flex; align-items: center; gap: 14px; }
+.toyota-oval {
+  width: 44px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+}
+.toyota-oval svg { width: 100%; height: 100%; }
+.brand-text { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--text); }
+.brand-sub { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; }
+.top-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: 2px; color: var(--text-dim); }
+.top-right { display: flex; align-items: center; gap: 16px; }
+.session-badge {
+  padding: 4px 12px; border-radius: 20px;
+  background: var(--red-dim); border: 1px solid var(--red);
+  font-size: 11px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; font-weight: 600;
+}
+.btn-settings {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .2s; color: var(--text-dim); font-size: 16px;
+}
+.btn-settings:hover { background: var(--surface3); color: var(--text); }
+
+/* ── SIDEBAR ──────────────────────────────────────────── */
+#sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  display: flex; flex-direction: column; gap: 6px;
+  overflow: hidden;
+}
+.phase-item {
+  position: relative;
+  padding: 10px 12px; border-radius: 10px;
+  cursor: pointer; transition: all .25s;
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid transparent;
+}
+.phase-item:hover { background: var(--surface2); }
+.phase-item.active {
+  background: var(--red-dim);
+  border-color: rgba(235,10,30,0.3);
+}
+.phase-item.completed .phase-num { background: var(--green); color: #000; }
+.phase-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--text-dim);
+  flex-shrink: 0; transition: all .3s;
+}
+.phase-item.active .phase-num {
+  background: var(--red); border-color: var(--red);
+  color: white;
+  box-shadow: 0 0 16px var(--red-glow);
+}
+.phase-info { flex: 1; min-width: 0; }
+.phase-name { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.phase-item.active .phase-name { color: var(--text); }
+.phase-dur { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.phase-bar {
+  position: absolute; bottom: 0; left: 12px; right: 12px; height: 2px;
+  background: transparent; border-radius: 1px; overflow: hidden;
+}
+.phase-bar-fill { height: 100%; background: var(--red); width: 0%; transition: width .5s; border-radius: 1px; }
+.phase-item.active .phase-bar-fill { box-shadow: 0 0 8px var(--red); }
+
+.sidebar-divider { height: 1px; background: var(--border); margin: 6px 0; }
+.sidebar-footer { margin-top: auto; }
+.sidebar-stat { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-align: center; padding: 8px; }
+
+/* ── MAIN CONTENT ─────────────────────────────────────── */
+#main {
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* ── SLIDES ───────────────────────────────────────────── */
+.slide {
+  position: absolute; inset: 0;
+  padding: 40px 56px;
+  display: flex; flex-direction: column;
+  opacity: 0; transform: translateX(40px);
+  transition: opacity .4s ease, transform .4s ease;
+  pointer-events: none;
+  overflow-y: auto;
+}
+.slide.active {
+  opacity: 1; transform: translateX(0);
+  pointer-events: all;
+}
+.slide.exit { opacity: 0; transform: translateX(-40px); }
+
+.slide-eyebrow {
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.slide-eyebrow::before { content: ''; display: block; width: 24px; height: 2px; background: var(--red); border-radius: 1px; }
+
+.slide-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 52px; font-weight: 700; line-height: 1.05;
+  color: var(--text); margin-bottom: 32px;
+}
+.slide-title span { color: var(--red); }
+
+/* ── CONTENT CARDS ────────────────────────────────────── */
+.cards-grid { display: grid; gap: 16px; }
+.cards-2 { grid-template-columns: 1fr 1fr; }
+.cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+.cards-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 20px;
+  transition: all .2s; position: relative; overflow: hidden;
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--red) 0%, transparent 100%);
+  opacity: 0; transition: opacity .2s;
+}
+.card:hover { border-color: rgba(235,10,30,0.3); background: var(--surface2); }
+.card:hover::before { opacity: 1; }
+.card-icon { font-size: 28px; margin-bottom: 12px; }
+.card-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 6px; }
+.card-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.card-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.card-highlight { font-size: 28px; font-weight: 700; font-family: 'Rajdhani', sans-serif; color: var(--red); margin-bottom: 4px; }
+
+/* ── TABLE ────────────────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  text-align: left; padding: 10px 14px;
+  background: var(--surface2); color: var(--text-dim);
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.data-table th:first-child { border-radius: 10px 0 0 0; }
+.data-table th:last-child { border-radius: 0 10px 0 0; }
+.data-table td {
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--surface2); }
+.win-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(0,229,160,0.1); color: var(--green);
+  border: 1px solid rgba(0,229,160,0.3);
+  border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 600;
+}
+
+/* ── OBJECTION CARDS ──────────────────────────────────── */
+.obj-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;
+}
+.obj-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+.obj-question { font-style: italic; color: var(--text-dim); font-size: 13px; }
+.obj-label-q { color: var(--text-muted); }
+.obj-label-a { color: var(--green); }
+.obj-answer { font-size: 13px; color: var(--text); }
+.obj-answer li { margin-left: 16px; margin-bottom: 4px; color: var(--text-dim); }
+
+/* ── SCENARIO CARD ────────────────────────────────────── */
+.scenario-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px; position: relative; overflow: hidden;
+}
+.scenario-card::after {
+  content: ''; position: absolute; right: -20px; top: -20px;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: var(--red-dim); filter: blur(30px);
+}
+.scenario-tag {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  background: var(--red-dim); border: 1px solid rgba(235,10,30,0.4);
+  color: var(--red); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  font-weight: 600; margin-bottom: 12px;
+}
+.scenario-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.scenario-details { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 14px; }
+.scenario-rec { font-size: 13px; padding: 10px 14px; background: rgba(0,229,160,0.07); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; color: var(--text); }
+
+/* ── QR SLIDE ─────────────────────────────────────────── */
+.qr-center { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 32px; }
+.qr-wrapper {
+  background: white; border-radius: 20px; padding: 20px;
+  box-shadow: 0 0 60px rgba(235,10,30,0.3), 0 0 120px rgba(235,10,30,0.1);
+}
+#qr-code canvas { display: block; }
+.qr-instructions { text-align: center; max-width: 480px; }
+.qr-title { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+.qr-title span { color: var(--red); }
+.qr-sub { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
+.qr-url-display {
+  padding: 12px 20px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 13px; color: var(--accent);
+  font-family: monospace; letter-spacing: 0.5px; word-break: break-all;
+  text-align: center; max-width: 480px;
+}
+.qr-config-note { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+/* ── SCOREBOARD ───────────────────────────────────────── */
+.scoreboard { width: 100%; }
+.score-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 20px; border-radius: 12px; margin-bottom: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all .3s;
+}
+.score-row.rank-1 { background: rgba(235,10,30,0.08); border-color: rgba(235,10,30,0.3); }
+.score-row.rank-2 { background: rgba(118,185,255,0.06); border-color: rgba(118,185,255,0.2); }
+.score-row.rank-3 { background: rgba(0,229,160,0.06); border-color: rgba(0,229,160,0.2); }
+.score-rank { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; width: 40px; color: var(--text-muted); }
+.score-row.rank-1 .score-rank { color: var(--red); }
+.score-name { flex: 1; }
+.score-name-main { font-size: 16px; font-weight: 600; }
+.score-name-dealer { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.score-bar-wrap { width: 200px; }
+.score-bar-bg { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.score-bar-fill { height: 100%; background: var(--red); border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+.score-num { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; min-width: 60px; text-align: right; }
+.score-row.rank-1 .score-num { color: var(--red); }
+
+/* ── FEATURES LIST ────────────────────────────────────── */
+.feature-list { display: flex; flex-direction: column; gap: 10px; }
+.feature-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.feature-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--red);
+  margin-top: 5px; flex-shrink: 0;
+  box-shadow: 0 0 8px var(--red-glow);
+}
+.feature-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+.feature-text strong { color: var(--text); font-weight: 600; }
+
+/* ── BOTTOMBAR ────────────────────────────────────────── */
+#bottombar {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(14,14,18,0.97);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+}
+.bottom-left { display: flex; align-items: center; gap: 12px; }
+.slide-dots { display: flex; gap: 6px; align-items: center; }
+.slide-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--surface3); transition: all .3s; cursor: pointer;
+}
+.slide-dot.active { background: var(--red); width: 18px; border-radius: 3px; box-shadow: 0 0 6px var(--red); }
+.slide-dot.done { background: rgba(235,10,30,0.4); }
+.slide-counter { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
+
+.bottom-center { display: flex; align-items: center; gap: 12px; }
+.btn-nav {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 18px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .2s;
+}
+.btn-nav:hover { background: var(--surface3); border-color: rgba(255,255,255,0.15); }
+.btn-nav.primary {
+  background: var(--red); border-color: var(--red); color: white;
+  box-shadow: 0 0 20px var(--red-glow);
+}
+.btn-nav.primary:hover { background: #c8081a; }
+.btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.timer-display {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+}
+.timer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+.timer-value { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); min-width: 48px; }
+.timer-value.warning { color: #ffaa00; }
+.timer-value.danger { color: var(--red); animation: pulse-timer 1s infinite; }
+@keyframes pulse-timer { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.btn-timer {
+  width: 30px; height: 30px; border-radius: 6px;
+  background: var(--surface3); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim); font-size: 12px; transition: all .2s;
+}
+.btn-timer:hover { color: var(--text); background: var(--surface); }
+
+.bottom-right { display: flex; gap: 8px; }
+.btn-qr {
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-size: 12px; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-qr:hover { border-color: rgba(235,10,30,0.4); color: var(--red); }
+.btn-fullscreen {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim); font-size: 14px; transition: all .2s;
+}
+.btn-fullscreen:hover { color: var(--text); }
+
+/* ── SETTINGS MODAL ───────────────────────────────────── */
+#modal-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+#modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px; width: 480px; max-width: 90vw;
+  transform: scale(.95); transition: transform .3s;
+}
+#modal-overlay.open .modal { transform: scale(1); }
+.modal-title { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; }
+.modal-field { margin-bottom: 16px; }
+.modal-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; display: block; }
+.modal-input {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  background: var(--surface3); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; outline: none;
+  transition: border-color .2s;
+}
+.modal-input:focus { border-color: var(--red); }
+.modal-hint { font-size: 11px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.btn-modal {
+  flex: 1; padding: 12px; border-radius: 10px; border: none;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s;
+}
+.btn-modal.secondary { background: var(--surface3); color: var(--text); }
+.btn-modal.primary { background: var(--red); color: white; }
+.btn-modal:hover { opacity: .85; }
+
+/* ── SPEAKER NOTES ────────────────────────────────────── */
+.speaker-notes {
+  position: fixed; bottom: 70px; left: 212px; right: 0; z-index: 50;
+  background: rgba(10,10,14,0.97); border-top: 1px solid rgba(235,10,30,0.3);
+  padding: 12px 56px; max-height: 180px; overflow-y: auto;
+  transform: translateY(100%); transition: transform .3s;
+}
+.speaker-notes.open { transform: translateY(0); }
+.notes-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 8px; font-weight: 600; }
+.notes-text { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* ── SECURITY SYSTEM ─────────────────────────────────────── */
+#sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
+#sec-overlay.fade-out{opacity:0;pointer-events:none}
+#pin-entry{display:flex;flex-direction:column;align-items:center}
+.sec-brand{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:rgba(240,240,244,0.28);margin-bottom:16px}
+.sec-heading{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#f0f0f4;margin-bottom:4px;text-align:center}
+.sec-heading span{color:#EB0A1E}
+.sec-sub{font-size:11px;color:rgba(240,240,244,0.32);letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+.pin-dots{display:flex;gap:14px;margin-bottom:6px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);transition:all .15s}
+.pin-dot.filled{background:#EB0A1E;border-color:#EB0A1E;box-shadow:0 0 10px rgba(235,10,30,0.5)}
+.pin-dot.error{background:#ff4444;border-color:#ff4444}
+@keyframes sec-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.pin-shake{animation:sec-shake .4s}
+.pin-err-msg{font-size:11px;color:#ff4444;letter-spacing:1px;height:14px;margin-bottom:14px;text-align:center}
+.pin-pad{display:grid;grid-template-columns:repeat(3,70px);gap:9px;margin-bottom:18px}
+.pin-key{height:62px;border-radius:14px;background:#16161c;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:20px;font-weight:600;font-family:'Rajdhani',sans-serif;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;user-select:none}
+.pin-key:hover{background:#1e1e26;border-color:rgba(255,255,255,0.14)}
+.pin-key:active{transform:scale(.93);background:rgba(235,10,30,0.15);border-color:rgba(235,10,30,0.35)}
+.pin-key.del{font-size:17px;color:rgba(240,240,244,0.45)}
+.pin-key.clr{font-size:11px;letter-spacing:1px;color:rgba(240,240,244,0.35)}
+.sec-hint-txt{font-size:10px;color:rgba(240,240,244,0.18);letter-spacing:2px;text-transform:uppercase}
+#lock-screen{display:none;flex-direction:column;align-items:center;text-align:center}
+.lock-icon{font-size:54px;margin-bottom:14px}
+.lock-title{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:#EB0A1E;margin-bottom:8px}
+.lock-msg{color:rgba(240,240,244,0.45);font-size:14px;max-width:380px;margin:0 auto 20px;line-height:1.6}
+.lock-admin-link{background:none;border:none;font-size:11px;color:rgba(240,240,244,0.2);cursor:pointer;letter-spacing:1px;transition:color .2s}
+.lock-admin-link:hover{color:rgba(240,240,244,0.45)}
+#admin-fab{position:fixed;bottom:72px;right:18px;z-index:8000;width:38px;height:38px;border-radius:50%;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:15px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s}
+#admin-fab:hover{background:rgba(235,10,30,0.25)}
+#admin-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center}
+#admin-modal.open{display:flex}
+.admin-panel{background:#16161c;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;width:400px;max-width:90vw}
+.admin-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.admin-badge{display:inline-block;padding:2px 10px;border-radius:20px;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:10px;letter-spacing:2px;font-weight:600;margin-bottom:18px}
+.admin-sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,240,244,0.28);margin-bottom:8px;font-weight:600}
+.admin-pin-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.admin-pin-lbl{font-size:12px;color:rgba(240,240,244,0.55);width:96px;flex-shrink:0}
+.admin-pin-inp{flex:1;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:14px;outline:none;font-family:monospace;letter-spacing:4px}
+.admin-pin-inp:focus{border-color:#EB0A1E}
+.admin-lock-ta{width:100%;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:12px;outline:none;resize:none;height:56px;margin-bottom:14px}
+.admin-lock-ta:focus{border-color:#EB0A1E}
+.admin-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-adm{padding:9px 16px;border-radius:9px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-adm.save{background:#EB0A1E;color:white}
+.btn-adm.lock-btn{background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.35);color:#ffaa00}
+.btn-adm.unlock-btn{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.35);color:#00e5a0}
+.btn-adm.close-btn{background:#1e1e26;color:rgba(240,240,244,0.45)}
+.btn-adm:hover{opacity:.82}
+.admin-status-txt{font-size:11px;color:rgba(240,240,244,0.28);margin-top:10px}
+
+/* ── INTRO / SPLASH ───────────────────────────────────── */
+#splash {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--black);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 24px; transition: opacity .8s;
+}
+#splash.hide { opacity: 0; pointer-events: none; }
+.splash-logo { text-align: center; margin-bottom: 16px; }
+.splash-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 80px; font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; text-align: center;
+}
+.splash-sub { font-size: 14px; letter-spacing: 6px; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+.splash-red-line { width: 80px; height: 3px; background: var(--red); border-radius: 2px; box-shadow: 0 0 20px var(--red); }
+.splash-btn {
+  padding: 14px 40px; border-radius: 12px;
+  background: var(--red); border: none; color: white;
+  font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700;
+  letter-spacing: 2px; cursor: pointer; transition: all .2s;
+  box-shadow: 0 0 30px var(--red-glow);
+}
+.splash-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px var(--red-glow); }
+.splash-version { font-size: 11px; color: var(--text-muted); }
+
+/* ── PHASE TITLE SLIDE ────────────────────────────────── */
+.phase-splash {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; text-align: center; gap: 20px;
+}
+.phase-splash-num {
+  font-family: 'Rajdhani', sans-serif; font-size: 120px; font-weight: 700;
+  color: var(--red); opacity: .12; line-height: 1;
+  position: absolute;
+}
+.phase-splash-content { position: relative; z-index: 1; }
+.phase-splash-tag { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 12px; }
+.phase-splash-title { font-family: 'Rajdhani', sans-serif; font-size: 64px; font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
+.phase-splash-subtitle { font-size: 16px; color: var(--text-dim); max-width: 480px; }
+.phase-splash-items { display: flex; gap: 24px; margin-top: 24px; justify-content: center; }
+.phase-splash-item { font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+.phase-splash-item::before { content: '→'; color: var(--red); }
+
+/* ── BIG STAT ─────────────────────────────────────────── */
+.big-stats { display: flex; gap: 24px; margin-bottom: 28px; }
+.big-stat {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px; position: relative; overflow: hidden;
+}
+.big-stat::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--red), transparent);
+}
+.big-stat-value { font-family: 'Rajdhani', sans-serif; font-size: 48px; font-weight: 700; color: var(--red); line-height: 1; }
+.big-stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; }
+
+/* ── ANIMATIONS ───────────────────────────────────────── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp .5s ease forwards; }
+.fade-in-1 { animation-delay: .1s; opacity: 0; }
+.fade-in-2 { animation-delay: .2s; opacity: 0; }
+.fade-in-3 { animation-delay: .3s; opacity: 0; }
+.fade-in-4 { animation-delay: .4s; opacity: 0; }
+
+/* ── SCROLLBAR ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+/* ── MISC UTILITIES ───────────────────────────────────── */
+.red { color: var(--red); }
+.green { color: var(--green); }
+.dim { color: var(--text-dim); }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.split { display: flex; gap: 24px; align-items: flex-start; }
+.flex-1 { flex: 1; }
+
+.knowledge-battle-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  align-items: start;
+}
+
+.tag {
+  display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+}
+.tag-new { background: rgba(0,229,160,0.12); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+.tag-improved { background: rgba(118,185,255,0.12); color: var(--accent); border: 1px solid rgba(118,185,255,0.3); }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">
+    <svg width="72" height="48" viewBox="0 0 72 48" fill="none">
+      <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="3"/>
+      <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="3"/>
+      <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="3"/>
+    </svg>
+  </div>
+  <div class="splash-red-line"></div>
+  <div class="splash-title">RAV4 2026</div>
+  <div class="splash-sub">Sales Coach · Meeting in a Box</div>
+  <button class="splash-btn" onclick="startPresentation()">▶ &nbsp;BEGIN SESSION</button>
+  <div class="splash-version">Information current as of March 2026 &nbsp;·&nbsp; Toyota Motor Sales</div>
+</div>
+
+<!-- SECURITY OVERLAY -->
+<div id="sec-overlay">
+  <div id="lock-screen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">SYSTEM LOCKED</div>
+    <div class="lock-msg" id="lock-msg-text">This training system has been temporarily locked by your administrator.</div>
+    <button class="lock-admin-link" onclick="secShowPin()">Administrator access →</button>
+  </div>
+  <div id="pin-entry">
+    <svg width="50" height="34" viewBox="0 0 72 48" fill="none" style="margin-bottom:10px"><ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/></svg>
+    <div class="sec-brand">TOYOTA · RAV4 2026</div>
+    <div class="sec-heading">Sales Coach <span>Engine</span></div>
+    <div class="sec-sub" id="sec-access-label">Presenter Access — Enter PIN</div>
+    <div class="pin-dots" id="sec-pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div class="pin-err-msg" id="pin-err-msg"></div>
+    <div class="pin-pad">
+      <div class="pin-key" onclick="secKey('1')">1</div><div class="pin-key" onclick="secKey('2')">2</div><div class="pin-key" onclick="secKey('3')">3</div>
+      <div class="pin-key" onclick="secKey('4')">4</div><div class="pin-key" onclick="secKey('5')">5</div><div class="pin-key" onclick="secKey('6')">6</div>
+      <div class="pin-key" onclick="secKey('7')">7</div><div class="pin-key" onclick="secKey('8')">8</div><div class="pin-key" onclick="secKey('9')">9</div>
+      <div class="pin-key clr" onclick="secClear()">CLR</div><div class="pin-key" onclick="secKey('0')">0</div><div class="pin-key del" onclick="secDel()">⌫</div>
+    </div>
+    <div class="sec-hint-txt">Authorized Personnel Only · Toyota Motor Sales</div>
+  </div>
+</div>
+<div id="admin-fab" onclick="openAdminPanel()" title="Master Admin">⚙</div>
+<div id="admin-modal">
+  <div class="admin-panel">
+    <div class="admin-title">Master Admin</div>
+    <div class="admin-badge">● MASTER ACCESS</div>
+    <div class="admin-sec-label">Access PINs (4 digits each)</div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Master PIN</span><input class="admin-pin-inp" id="ap-master" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Manager PIN</span><input class="admin-pin-inp" id="ap-manager" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row" style="margin-bottom:16px"><span class="admin-pin-lbl">Sales PIN</span><input class="admin-pin-inp" id="ap-sales" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-sec-label">Lock Message</div>
+    <textarea class="admin-lock-ta" id="ap-lock-msg" placeholder="Message displayed when system is locked..."></textarea>
+    <div class="admin-actions">
+      <button class="btn-adm save" onclick="secSaveAdmin()">Save PINs</button>
+      <button class="btn-adm lock-btn" id="btn-lock-toggle" onclick="secToggleLock()">🔒 Lock System</button>
+      <button class="btn-adm close-btn" onclick="closeAdminPanel()">Close</button>
+    </div>
+    <div class="admin-status-txt" id="admin-status-txt"></div>
+  </div>
+</div>
+
+<!-- BACKGROUND -->
+<div class="bg-grid"></div>
+
+<!-- SETTINGS MODAL -->
+<div id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">⚙ Session Settings</div>
+    <div class="modal-field">
+      <label class="modal-label">Quiz URL (for QR Code)</label>
+      <input class="modal-input" id="quiz-url-input" type="text" placeholder="http://192.168.1.100:8000/RAV4_Quiz.html">
+      <div class="modal-hint">
+        To serve locally: open terminal in this folder and run:<br>
+        <code style="color:#76b9ff">python3 -m http.server 8000</code><br>
+        Then enter your computer's local IP above (check with <code style="color:#76b9ff">ipconfig</code> or <code style="color:#76b9ff">ifconfig</code>).
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Session Label</label>
+      <input class="modal-input" id="session-label-input" type="text" placeholder="e.g. Morning Huddle · June 2026">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal primary" onclick="saveSettings()">Save & Generate QR</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="top-brand">
+      <div class="toyota-oval">
+        <svg viewBox="0 0 72 48" fill="none">
+          <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+          <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+          <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-text">TOYOTA</div>
+        <div class="brand-sub">RAV4 2026</div>
+      </div>
+    </div>
+    <div class="top-title" id="top-phase-title">Sales Coach Engine</div>
+    <div class="top-right">
+      <div class="session-badge" id="session-label-display">● LIVE SESSION</div>
+      <div class="btn-settings" onclick="openModal()" title="Settings">⚙</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="phase-item active" id="phase-tab-0" onclick="jumpToPhase(0)">
+      <div class="phase-num">1</div>
+      <div class="phase-info">
+        <div class="phase-name">Product Spotlight</div>
+        <div class="phase-dur">3 MIN</div>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" id="phase-prog-0"></div></div>
+    </div>
+    <div class="phase-item" id="phase-tab-1" onclick="jumpToPhase(1)">
+      <div class="phase-num">2</div>
+      <div class="phase-info">
+        <div class="phase-name">Competitive</div>
+        <div class="phase-dur">4 MIN</div>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" id="phase-prog-1"></div></div>
+    </div>
+    <div class="phase-item" id="phase-tab-2" onclick="jumpToPhase(2)">
+      <div class="phase-num">3</div>
+      <div class="phase-info">
+        <div class="phase-name">Sales Scenario</div>
+        <div class="phase-dur">4 MIN</div>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" id="phase-prog-2"></div></div>
+    </div>
+    <div class="phase-item" id="phase-tab-3" onclick="jumpToPhase(3)">
+      <div class="phase-num">4</div>
+      <div class="phase-info">
+        <div class="phase-name">Knowledge Battle</div>
+        <div class="phase-dur">3 MIN</div>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" id="phase-prog-3"></div></div>
+    </div>
+    <div class="phase-item" id="phase-tab-4" onclick="jumpToPhase(4)">
+      <div class="phase-num">5</div>
+      <div class="phase-info">
+        <div class="phase-name">Scoreboard</div>
+        <div class="phase-dur">2 MIN</div>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" id="phase-prog-4"></div></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-footer">
+      <div class="sidebar-stat">TOTAL SESSION<br><strong style="color:var(--text);font-size:14px">15–20 MIN</strong></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- ═══ PHASE 0: PRODUCT SPOTLIGHT ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Product<br><span class="red">Spotlight</span></div>
+          <div class="phase-splash-subtitle">Build foundational knowledge of the 2026 RAV4's key updates and innovations.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">New Product Updates</div>
+            <div class="phase-splash-item">Feature / Benefit Review</div>
+            <div class="phase-splash-item">Key Talking Points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: Performance Updates -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Product Spotlight · Performance</div>
+      <div class="slide-title fade-in fade-in-1">All-New <span>Electrified</span> Lineup</div>
+      <div class="big-stats fade-in fade-in-2">
+        <div class="big-stat">
+          <div class="big-stat-value">+22 HP</div>
+          <div class="big-stat-label">Max Horsepower Gain</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">3,500 lbs</div>
+          <div class="big-stat-label">Max Towing Capacity</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">306 HP</div>
+          <div class="big-stat-label">GR SPORT Output</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">100%</div>
+          <div class="big-stat-label">Electrified Lineup (HEV+PHEV)</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3">
+        <div class="card">
+          <div class="card-label">New</div>
+          <div class="card-title">HEV Now Available in FWD</div>
+          <div class="card-body">Improved efficiency and an approachable cost of entry for budget-focused buyers.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">New</div>
+          <div class="card-title">North America's First GR SPORT</div>
+          <div class="card-body">Track-inspired styling with red brake calipers, aluminum sport pedals, and paddle shifters. 306 hp.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">New</div>
+          <div class="card-title">Woodland Grade</div>
+          <div class="card-body">Higher ground clearance, RIGID Industries® LED fog lights, roof rails, tow hitch, 1500W AC outlet.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Upgrade</div>
+          <div class="card-title">PHEV +1,000 lbs Towing</div>
+          <div class="card-body">PHEV towing capacity now exceeds competitors with improved EPA-estimated total driving range.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: Interior & Tech -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Product Spotlight · Interior & Technology</div>
+      <div class="slide-title fade-in fade-in-1">Next-Level <span>Interior</span> Tech</div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Larger Touchscreen</strong> — 10.5-in. standard, 12.9-in. available (+2.5 and +2.4-inches vs prior gen). Easier to navigate.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Head-Up Display</strong> — Available on Limited & PHEV XSE. See critical info without taking eyes off road.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Dual Wireless Charging</strong> — New dual Qi pad on select grades. Expanded single-pad availability across lineup.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>3D Panoramic View Monitor</strong> — Bird's-eye view for parking in tight spaces. Standard on GR SPORT & Limited.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Climate-Controlled Seats</strong> — Available heated/ventilated front; heated rear outboard seats.</div>
+          </div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Toyota Audio Multimedia (TAMM)</strong> — New Spotify® streaming (no phone needed), customizable widgets, improved Voice Assistant with onboard 5G.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>SiriusXM® with 360L</strong> — Personalized recommendations, home/away sports, on-demand content.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Drive Recorder</strong> — Continuous footage capture with automatic event saving and Drive Connect map integration.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>1500W AC Outlet</strong> — Standard on Woodland. Power small appliances on the trail or at a campsite.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: Safety TSS 4.0 -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Product Spotlight · Safety</div>
+      <div class="slide-title fade-in fade-in-1">Toyota Safety Sense <span>4.0</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Standard TSS 4.0 (All Grades)</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Improved sensor & camera array</strong> — Smoother, more natural reaction to driving environment</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Blind Spot Monitor</strong> with Rear Cross-Traffic Alert — Now standard across ALL grades</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Road Sign Assist</strong> — Streamlined to show Stop, Speed Limit, and Do Not Enter signs</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>TAMM-integrated settings</strong> — Full descriptions and animations for driver assist features</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Available Driver Assistance</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Traffic Jam Assist*</strong> — Hands-free low-speed steering, throttle & braking on limited-access highways</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Advanced Park</strong> — Sensors detect space; hands-free parallel parking and back-in assist</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Lane Change Assist</strong> — Works with Lane Tracing Assist for steering assist during lane changes</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Trailer Driving Assist</strong> — Auto-detects trailer, keeps vehicle centered; adjusts BSM for trailer length</div></div>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">*Drive Connect trial or subscription required.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: COMPETITIVE CHALLENGE ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">Competitive<br><span class="red">Challenge</span></div>
+          <div class="phase-splash-subtitle">Introduce RAV4's core competitors and arm the team with real-world winning talking points.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Toyota vs Competitors</div>
+            <div class="phase-splash-item">Objection Handling</div>
+            <div class="phase-splash-item">Real Customer Questions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Competitive Wins Table -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Competitive Challenge · Key Wins</div>
+      <div class="slide-title fade-in fade-in-1">RAV4 <span>Real-World Wins</span></div>
+      <div class="fade-in fade-in-2">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>2026 Toyota RAV4</th>
+              <th>Key Competitors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Electrification</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Fully electrified lineup — HEV & PHEV across all grades</td>
+              <td class="dim">Kia offers HEV/PHEV but only in select grades. Honda & Nissan lag further behind.</td>
+            </tr>
+            <tr>
+              <td><strong>Performance</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Better MPG estimates + more horsepower</td>
+              <td class="dim">Competitor HEV/PHEV power and efficiency numbers don't match RAV4's output.</td>
+            </tr>
+            <tr>
+              <td><strong>Towing</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Up to 3,500 lbs when properly equipped</td>
+              <td class="dim">Kia Sportage: 2,000 lbs max. Honda CR-V PHEV: 1,500 lbs. Nissan Rogue: 1,350 lbs.</td>
+            </tr>
+            <tr>
+              <td><strong>Lineup Versatility</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Core, Rugged (Woodland), and Sport (GR SPORT) variants</td>
+              <td class="dim">No competitor matches RAV4's Woodland rugged capability or the GR SPORT's performance.</td>
+            </tr>
+            <tr>
+              <td><strong>Technology</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Larger standard screen + updated TAMM with onboard 5G</td>
+              <td class="dim">To match RAV4's tech offerings, competitors charge extra for premium packages.</td>
+            </tr>
+            <tr>
+              <td><strong>Resale Value</strong></td>
+              <td><span class="win-badge">✓ WIN</span> KBB.com "Best Resale Award" winner</td>
+              <td class="dim">Toyota's proven reliability track record unmatched across the segment.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Objection Handling -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Competitive Challenge · Objection Handling</div>
+      <div class="slide-title fade-in fade-in-1">Handle <span>Objections</span> With Confidence</div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"The CR-V is a lot like RAV4 but with a lower price."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>RAV4 has more horsepower in every configuration</li><li>RAV4's touchscreen is larger — standard</li><li>More electrified powertrain flexibility (HEV + PHEV across grades)</li><li>Expanded grade choices and greater performance makes the difference</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"The Rogue's interior seems nicer."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Nissan has done well with their interiors — acknowledge it</li><li>RAV4 balances interior comfort with more horsepower, advanced tech, and electrified options</li><li>RAV4's TAMM system is more capable and future-ready</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"Kia Sportage has a longer warranty, more tech, and lower starting price."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Lower entry price = stripped standard features (BSM/RCTA not standard on Sportage)</li><li>RAV4 is value-packed from the entry grade</li><li>Toyota's history of retaining value over time — KBB Best Resale</li><li>1,200+ dealerships vs Kia's service network</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Why Buy Toyota -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Competitive Challenge · Brand Value</div>
+      <div class="slide-title fade-in fade-in-1">Why Buy <span>Toyota?</span></div>
+      <div class="cards-grid cards-4 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <div class="card-label">QDR</div>
+          <div class="card-title">Quality, Durability, Reliability</div>
+          <div class="card-body">Older RAV4s seen on roads everywhere — speaking to Toyota's legendary longevity.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <div class="card-label">Value</div>
+          <div class="card-title">Best Resale Award</div>
+          <div class="card-body">KBB.com recognizes RAV4 as a Best Resale Award winner, year after year.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-label">Safety</div>
+          <div class="card-title">TSS 4.0 Standard</div>
+          <div class="card-body">Toyota Safety Sense 4.0 included across all RAV4 grades at no extra charge.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-label">Innovation</div>
+          <div class="card-title">Pioneer of Hybrid</div>
+          <div class="card-body">Toyota brought the first mass-produced hybrid to the U.S. RAV4 carries that legacy forward.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">Choice</div>
+          <div class="card-title">Power of Choice</div>
+          <div class="card-body">Full electrified lineup: HEV and PHEV across all grades. No ICE option — pure electrified future.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⛽</div>
+          <div class="card-label">Efficiency</div>
+          <div class="card-title">Fuel Efficiency Leader</div>
+          <div class="card-body">PHEV delivers impressive EPA-estimated total driving range, besting the prior gen.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <div class="card-label">Technology</div>
+          <div class="card-title">Latest TAMM + 5G</div>
+          <div class="card-body">RAV4 debuts Toyota's latest TSS 4.0 and TAMM with onboard 5G — more tech, standard.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-label">Support</div>
+          <div class="card-title">1,200+ Dealerships</div>
+          <div class="card-body">Toyota's nationwide dealer network ensures access to service, support, and genuine parts.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: SALES SCENARIO ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">Sales<br><span class="red">Scenario</span></div>
+          <div class="phase-splash-subtitle">Practice delivering RAV4's value story for diverse customer profiles. Match the right grade to the right lifestyle.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Live Role Play</div>
+            <div class="phase-splash-item">Discovery Practice</div>
+            <div class="phase-splash-item">Closing Practice</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Scenarios A & B -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Sales Scenario · Customer Profiles</div>
+      <div class="slide-title fade-in fade-in-1">Who's <span>In Your Showroom?</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="scenario-card">
+          <div class="scenario-tag">Scenario A</div>
+          <div class="scenario-title">Supra Lease Expiration</div>
+          <div class="scenario-details">"Lease on my Supra is up. We're expecting our first baby — need something practical but still fun to drive. Long daily commute mixing traffic and freeways."</div>
+          <div class="scenario-rec">💡 <strong>Recommended Grade:</strong> GR SPORT or XSE PHEV — track-inspired performance meets family-friendly practicality. Highlight horsepower, space, and efficiency.</div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-tag">Scenario B</div>
+          <div class="scenario-title">Scion Upgrader</div>
+          <div class="scenario-details">"Handing my Scion xB to my daughter. Short commute but lots of driving for kids' activities. I want comfortable, safe, and still affordable."</div>
+          <div class="scenario-rec">💡 <strong>Recommended Grade:</strong> LE or XLE Premium — significant amenity upgrade, standard safety features, room for the family. Highlight value and BSM standard.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: Scenarios C & D -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Sales Scenario · Customer Profiles</div>
+      <div class="slide-title fade-in fade-in-1">More <span>Customer Profiles</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="scenario-card">
+          <div class="scenario-tag">Scenario C</div>
+          <div class="scenario-title">Jeep Defector</div>
+          <div class="scenario-details">"My Jeep finally died. Work from home in a rural area — I drive into town weekly and spend weekends outdoors. Need capable but more comfortable."</div>
+          <div class="scenario-rec">💡 <strong>Recommended Grade:</strong> Woodland — higher ground clearance, Multi-Terrain Monitor, RIGID LED fogs, roof rails, tow hitch. The obvious choice.</div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-tag">Scenario D</div>
+          <div class="scenario-title">Camry Upgrader</div>
+          <div class="scenario-details">"My Camry totaled in a hit and run. I'm in sales — spend a lot of time in the car with clients. I love tech and want something roomier and more polished."</div>
+          <div class="scenario-rec">💡 <strong>Recommended Grade:</strong> Limited — heated/ventilated front seats, dual wireless charging, 12.9-in. touchscreen, panoramic roof. Projects the right image.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Grade Quick Reference -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Sales Scenario · Grade Strategy</div>
+      <div class="slide-title fade-in fade-in-1">RAV4 <span>Grade Lineup</span></div>
+      <div class="fade-in fade-in-2">
+        <table class="data-table">
+          <thead><tr><th>Grade</th><th>Powertrain</th><th>Horsepower</th><th>Key Differentiator</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td><strong>LE</strong></td><td>HEV (FWD/AWD)</td><td>226 hp</td><td>Entry-level HEV, BSM standard, push-button start</td><td>Value buyers, first-time HEV</td></tr>
+            <tr><td><strong>SE</strong></td><td>HEV (FWD)</td><td>226 hp</td><td>Piano Black accents, blue stitching, heated front seats</td><td>Style-conscious budget buyer</td></tr>
+            <tr><td><strong>XLE Premium</strong></td><td>HEV (FWD/AWD)</td><td>226 hp</td><td>SofTex® seats, power liftgate, wireless charging</td><td>Comfort-focused families</td></tr>
+            <tr><td><strong>XSE</strong></td><td>HEV or PHEV (AWD)</td><td>226–306 hp</td><td>20-in. wheels, 12.9-in. screen, two-tone paint</td><td>Tech-forward, sporty shoppers</td></tr>
+            <tr><td><strong>GR SPORT</strong></td><td>PHEV (AWD)</td><td><span class="red">306 hp</span></td><td>Red calipers, sport pedals, paddle shifters, 3D PVM</td><td>Performance enthusiasts</td></tr>
+            <tr><td><strong>Woodland</strong></td><td>HEV or PHEV (AWD)</td><td>226–306 hp</td><td>RIGID LED fogs, high clearance, 1500W outlet, roof rails</td><td>Outdoor adventurers</td></tr>
+            <tr><td><strong>Limited</strong></td><td>HEV (AWD)</td><td>236 hp</td><td>12.9-in. screen, dual wireless charging, panoramic roof, HUD</td><td>Luxury-adjacent buyers</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Team competition time. Scan the QR code, take the quiz, and see who knows RAV4 best. Fastest correct answer wins.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">Product Trivia</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: QR Code -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard">
+          <div class="scoreboard" id="scoreboard-list">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap" class="fade-in fade-in-2">
+        <div id="final-scoreboard"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">RAV4 Product Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn RAV4 Product module certification. Check the dashboard for your progress.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today. Next session: deep dive on PHEV features and competitive objections against Kia Sportage.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Check the <strong style="color:var(--text)">RAV4 Dashboard</strong> for detailed scores, regional rankings, and certification progress.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Open RAV4_Dashboard.html</div>
+            <div class="phase-splash-item">Import today's quiz results</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- BOTTOM BAR -->
+  <div id="bottombar">
+    <div class="bottom-left">
+      <div class="slide-dots" id="slide-dots"></div>
+      <div class="slide-counter" id="slide-counter"></div>
+    </div>
+    <div class="bottom-center">
+      <button class="btn-nav" id="btn-prev" onclick="prevSlide()">← Prev</button>
+      <div class="timer-display">
+        <div>
+          <div class="timer-label" id="timer-phase-label">PHASE 1</div>
+          <div class="timer-value" id="timer-value">3:00</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div class="btn-timer" onclick="toggleTimer()" id="btn-timer-icon" title="Start/Pause">▶</div>
+          <div class="btn-timer" onclick="resetTimer()" title="Reset">↺</div>
+        </div>
+      </div>
+      <button class="btn-nav primary" id="btn-next" onclick="nextSlide()">Next →</button>
+    </div>
+    <div class="bottom-right">
+      <button class="btn-qr" onclick="jumpToQR()">📱 Show QR</button>
+      <button class="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- SPEAKER NOTES -->
+<div class="speaker-notes" id="speaker-notes">
+  <div class="notes-label">Speaker Notes</div>
+  <div class="notes-text" id="notes-text"></div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const phases = [
+  { name: 'Product Spotlight', duration: 180 },
+  { name: 'Competitive Challenge', duration: 240 },
+  { name: 'Sales Scenario', duration: 240 },
+  { name: 'Knowledge Battle', duration: 180 },
+  { name: 'Accountability', duration: 120 }
+];
+
+const slideNotes = [
+  // Phase 0
+  'Kick off with energy! Tell participants this session follows the 5-phase Sales Coach Engine. Everyone will be tested on this material.',
+  'PERFORMANCE: Emphasize the 100% electrified lineup as a key differentiator. Every RAV4 is now HEV or PHEV — no ICE option.',
+  'INTERIOR: Focus on the TAMM system. The new 10.5-in standard screen plus 5G connectivity puts RAV4 ahead of CR-V and Sportage out of the box.',
+  'SAFETY: TSS 4.0 is standard — remind the team that BSM with RCTA is now standard across all grades, unlike Kia Sportage.',
+  // Phase 1
+  'Set the competitive context: Marketing data identifies CR-V, Rogue, and Sportage as top cross-shops. Know your competition.',
+  'Let participants study this table. Call on people: "In one sentence, why does RAV4 WIN on towing vs the Sportage?"',
+  'Role play: Read an objection out loud. Give a rep 30 seconds to respond without looking at notes. Then discuss.',
+  'Ask: "A customer says they looked at the Honda. What\'s your first response?" Build the habit of brand-first conversation.',
+  // Phase 2
+  'Split the room into pairs. Assign one scenario per pair. 3 minutes to build their value story, then report out.',
+  'Scenarios A & B: New parent and budget-conscious family. Focus on safety, practicality, efficiency messaging.',
+  'Scenarios C & D: Adventure and tech buyers. The Woodland and Limited are the clear answers — coach participants to lead with lifestyle.',
+  'Review the grade ladder as a team. Can everyone name the horsepower for each powertrain? Quiz them!',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
+];
+
+// Build slides index
+const allSlides = Array.from(document.querySelectorAll('.slide'));
+let currentSlideIdx = 0;
+let quizUrl = '';
+let sessionLabel = 'LIVE SESSION';
+let scores = JSON.parse(localStorage.getItem('presenter_scores') || '[]');
+
+// Timer state
+let timerSeconds = 180;
+let timerRunning = false;
+let timerInterval = null;
+let currentPhaseIdx = 0;
+
+// ── INIT ──────────────────────────────────────────────────────
+function startPresentation() {
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => document.getElementById('splash').remove(), 900);
+  updateUI();
+  renderScoreboard();
+}
+
+function updateUI() {
+  const slide = allSlides[currentSlideIdx];
+  const phaseIdx = parseInt(slide.dataset.phase);
+  const slideInPhase = parseInt(slide.dataset.slide);
+  currentPhaseIdx = phaseIdx;
+
+  // Show slide
+  allSlides.forEach((s, i) => {
+    s.classList.remove('active', 'exit');
+    if (i < currentSlideIdx) s.classList.add('exit');
+  });
+  slide.classList.add('active');
+
+  // Phase sidebar
+  document.querySelectorAll('.phase-item').forEach((el, i) => {
+    el.classList.toggle('active', i === phaseIdx);
+    el.classList.toggle('completed', i < phaseIdx);
+  });
+
+  // Phase progress bars
+  const slidesInPhase = allSlides.filter(s => parseInt(s.dataset.phase) === phaseIdx);
+  const phaseProgress = ((slideInPhase) / Math.max(slidesInPhase.length - 1, 1)) * 100;
+  document.querySelectorAll('[id^="phase-prog-"]').forEach((el, i) => {
+    if (i < phaseIdx) el.style.width = '100%';
+    else if (i === phaseIdx) el.style.width = phaseProgress + '%';
+    else el.style.width = '0%';
+  });
+
+  // Top title
+  document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = phases[phaseIdx]?.name);
+  document.getElementById('top-phase-title').textContent = 'Phase ' + (phaseIdx + 1) + ' · ' + phases[phaseIdx].name;
+
+  // Timer label
+  document.getElementById('timer-phase-label').textContent = 'PHASE ' + (phaseIdx + 1);
+  if (!timerRunning) {
+    timerSeconds = phases[phaseIdx].duration;
+    updateTimerDisplay();
+  }
+
+  // Slide dots
+  const dotsEl = document.getElementById('slide-dots');
+  const slideCount = allSlides.length;
+  dotsEl.innerHTML = '';
+  allSlides.forEach((s, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'slide-dot' + (i === currentSlideIdx ? ' active' : (i < currentSlideIdx ? ' done' : ''));
+    dot.onclick = () => goToSlide(i);
+    dotsEl.appendChild(dot);
+  });
+  document.getElementById('slide-counter').textContent = (currentSlideIdx + 1) + ' / ' + slideCount;
+
+  // Nav buttons
+  document.getElementById('btn-prev').disabled = currentSlideIdx === 0;
+  document.getElementById('btn-next').textContent = currentSlideIdx === allSlides.length - 1 ? '✓ Done' : 'Next →';
+
+  // Speaker notes
+  const notesEl = document.getElementById('notes-text');
+  notesEl.textContent = slideNotes[currentSlideIdx] || '';
+
+  // Final scoreboard sync
+  if (phaseIdx === 4) renderFinalScoreboard();
+}
+
+function goToSlide(idx) {
+  currentSlideIdx = Math.max(0, Math.min(idx, allSlides.length - 1));
+  updateUI();
+}
+function nextSlide() { goToSlide(currentSlideIdx + 1); }
+function prevSlide() { goToSlide(currentSlideIdx - 1); }
+
+function jumpToPhase(phaseIdx) {
+  const idx = allSlides.findIndex(s => parseInt(s.dataset.phase) === phaseIdx);
+  if (idx !== -1) goToSlide(idx);
+}
+
+function jumpToQR() {
+  const idx = allSlides.findIndex(s => s.querySelector('#qr-code'));
+  if (idx !== -1) goToSlide(idx);
+}
+
+// ── TIMER ─────────────────────────────────────────────────────
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  const el = document.getElementById('timer-value');
+  el.textContent = m + ':' + String(s).padStart(2, '0');
+  el.classList.toggle('warning', timerSeconds <= 30 && timerSeconds > 10);
+  el.classList.toggle('danger', timerSeconds <= 10);
+}
+
+function toggleTimer() {
+  timerRunning = !timerRunning;
+  document.getElementById('btn-timer-icon').textContent = timerRunning ? '⏸' : '▶';
+  if (timerRunning) {
+    timerInterval = setInterval(() => {
+      if (timerSeconds > 0) { timerSeconds--; updateTimerDisplay(); }
+      else { clearInterval(timerInterval); timerRunning = false; document.getElementById('btn-timer-icon').textContent = '▶'; }
+    }, 1000);
+  } else {
+    clearInterval(timerInterval);
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('btn-timer-icon').textContent = '▶';
+  timerSeconds = phases[currentPhaseIdx].duration;
+  updateTimerDisplay();
+}
+
+// ── QR CODE ───────────────────────────────────────────────────
+let qrInstance = null;
+function generateQR(url) {
+  const container = document.getElementById('qr-code');
+  container.innerHTML = '';
+  if (!url) { container.innerHTML = '<div style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;text-align:center">Configure URL<br>in Settings</div>'; return; }
+  try {
+    qrInstance = new QRCode(container, { text: url, width: 200, height: 200, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+    document.getElementById('qr-url-display').textContent = url;
+    document.getElementById('qr-config-note').textContent = 'Scan with phone camera to access quiz';
+  } catch(e) { console.error(e); }
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────
+function openModal() { document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function saveSettings() {
+  quizUrl = document.getElementById('quiz-url-input').value.trim();
+  sessionLabel = document.getElementById('session-label-input').value.trim() || '● LIVE SESSION';
+  document.getElementById('session-label-display').textContent = sessionLabel.includes('●') ? sessionLabel : '● ' + sessionLabel;
+  generateQR(quizUrl);
+  closeModal();
+}
+
+// ── SCOREBOARD ────────────────────────────────────────────────
+function addScore() {
+  const name = document.getElementById('score-name-input').value.trim();
+  const dealer = document.getElementById('score-dealer-input').value.trim();
+  const score = parseInt(document.getElementById('score-val-input').value);
+  if (!name || isNaN(score)) return;
+  scores.push({ name, dealer, score, pct: Math.round(score / 15 * 100), ts: Date.now() });
+  scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
+  localStorage.setItem('presenter_scores', JSON.stringify(scores));
+  document.getElementById('score-name-input').value = '';
+  document.getElementById('score-dealer-input').value = '';
+  document.getElementById('score-val-input').value = '';
+  renderScoreboard();
+  renderFinalScoreboard();
+}
+
+function clearScores() {
+  if (confirm('Clear all scores?')) {
+    scores = [];
+    localStorage.removeItem('presenter_scores');
+    renderScoreboard();
+    renderFinalScoreboard();
+  }
+}
+
+function importJSON() {
+  const json = prompt('Paste quiz result JSON here:');
+  if (!json) return;
+  try {
+    const data = JSON.parse(json);
+    const entries = Array.isArray(data) ? data : [data];
+    entries.forEach(e => {
+      if (e.name && e.score !== undefined) {
+        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, pct: e.pct || Math.round(e.score / 15 * 100), ts: Date.now() });
+      }
+    });
+    scores.sort((a, b) => b.score - a.score);
+    localStorage.setItem('presenter_scores', JSON.stringify(scores));
+    renderScoreboard();
+    renderFinalScoreboard();
+  } catch(e) { alert('Invalid JSON format.'); }
+}
+
+function renderScoreboard() {
+  const el = document.getElementById('scoreboard-list');
+  if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
+  el.innerHTML = scores.slice(0, 8).map((s, i) => `
+    <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
+      <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
+      <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
+      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/15</span></div>
+    </div>
+  `).join('');
+}
+
+function renderFinalScoreboard() {
+  const el = document.getElementById('final-scoreboard');
+  if (!el) return;
+  if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No quiz results yet.</div>'; return; }
+  el.innerHTML = scores.slice(0, 5).map((s, i) => `
+    <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
+      <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
+      <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
+      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/15</span></div>
+    </div>
+  `).join('');
+}
+
+// ── SECURITY SYSTEM ──────────────────────────────────────────
+const _SEC_KEY='rav4_sec_v1';
+const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _FILE_REQ='manager';
+let _secPin='',_secCfg={},_secLevel=null;
+function _getSecCfg(){try{const s=localStorage.getItem(_SEC_KEY);return s?{..._SEC_DEF,...JSON.parse(s)}:{..._SEC_DEF}}catch(e){return{..._SEC_DEF}}}
+function _saveSecCfg(c){localStorage.setItem(_SEC_KEY,JSON.stringify(c))}
+function secInit(){
+  _secCfg=_getSecCfg();
+  const ov=document.getElementById('sec-overlay');
+  const sl=sessionStorage.getItem('rav4_sec_level');
+  if(sl&&!_secCfg.locked){_secLevel=sl;ov.style.display='none';if(sl==='master')document.getElementById('admin-fab').style.display='flex';return}
+  ov.style.display='flex';
+  const lk=document.getElementById('lock-screen'),pe=document.getElementById('pin-entry');
+  if(_secCfg.locked){document.getElementById('lock-msg-text').textContent=_secCfg.lockMsg||_SEC_DEF.lockMsg;lk.style.display='flex';lk.style.flexDirection='column';lk.style.alignItems='center';pe.style.display='none'}
+  else{lk.style.display='none';pe.style.display='flex'}
+}
+function secShowPin(){document.getElementById('lock-screen').style.display='none';const pe=document.getElementById('pin-entry');pe.style.display='flex';document.getElementById('sec-access-label').textContent='Master PIN Required'}
+function secKey(k){if(_secPin.length>=4)return;_secPin+=k;_secUpdateDots();if(_secPin.length===4)setTimeout(_secCheck,130)}
+function secDel(){_secPin=_secPin.slice(0,-1);_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function secClear(){_secPin='';_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function _secUpdateDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<_secPin.length);d.classList.remove('error')}}
+function _secCheck(){
+  _secCfg=_getSecCfg();
+  let level=null;
+  if(_secPin===_secCfg.masterPin)level='master';
+  else if(_FILE_REQ!=='master'&&_secPin===_secCfg.managerPin)level='manager';
+  else if(_FILE_REQ==='sales'&&_secPin===_secCfg.salesPin)level='sales';
+  if(_secCfg.locked&&level!=='master')level=null;
+  if(level){
+    _secLevel=level;sessionStorage.setItem('rav4_sec_level',level);
+    const ov=document.getElementById('sec-overlay');ov.classList.add('fade-out');
+    setTimeout(()=>{ov.style.display='none'},400);
+    if(level==='master'){document.getElementById('admin-fab').style.display='flex';if(_secCfg.locked){_secCfg.locked=false;_saveSecCfg(_secCfg)}}
+  }else{
+    const dots=document.getElementById('sec-pin-dots');dots.classList.add('pin-shake');
+    for(let i=0;i<4;i++)document.getElementById('pd'+i).classList.add('error');
+    document.getElementById('pin-err-msg').textContent='Incorrect PIN. Try again.';
+    setTimeout(()=>{_secPin='';_secUpdateDots();dots.classList.remove('pin-shake')},700)
+  }
+}
+function openAdminPanel(){
+  _secCfg=_getSecCfg();
+  document.getElementById('ap-master').value='';document.getElementById('ap-manager').value='';document.getElementById('ap-sales').value='';
+  document.getElementById('ap-lock-msg').value=_secCfg.lockMsg||'';
+  const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='System is currently '+(lk?'LOCKED':'active');
+  document.getElementById('admin-modal').classList.add('open');
+}
+function secSaveAdmin(){
+  _secCfg=_getSecCfg();
+  const m=document.getElementById('ap-master').value.trim(),mg=document.getElementById('ap-manager').value.trim(),s=document.getElementById('ap-sales').value.trim();
+  if(m.length===4&&/^\d+$/.test(m))_secCfg.masterPin=m;
+  if(mg.length===4&&/^\d+$/.test(mg))_secCfg.managerPin=mg;
+  if(s.length===4&&/^\d+$/.test(s))_secCfg.salesPin=s;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);document.getElementById('admin-status-txt').textContent='✓ PINs saved · '+new Date().toLocaleTimeString();
+}
+function secToggleLock(){
+  _secCfg=_getSecCfg();_secCfg.locked=!_secCfg.locked;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='✓ System '+(lk?'LOCKED':'unlocked')+' · '+new Date().toLocaleTimeString();
+}
+function closeAdminPanel(){document.getElementById('admin-modal').classList.remove('open')}
+
+// ── KEYBOARD ──────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (document.getElementById('sec-overlay').style.display !== 'none') {
+    if (e.key >= '0' && e.key <= '9') secKey(e.key);
+    else if (e.key === 'Backspace') secDel();
+    else if (e.key === 'Escape') secClear();
+    return;
+  }
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'n' || e.key === 'N') {
+    const notes = document.getElementById('speaker-notes');
+    notes.classList.toggle('open');
+  }
+  if (e.key === 'Escape') closeModal();
+});
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
+secInit();
+generateQR('');
+updateUI();
+updateTimerDisplay();
+</script>
+</body>
+</html>

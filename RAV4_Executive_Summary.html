@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Coach Engine — Executive Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  @media print {
+    body { background: white !important; color: #111 !important; }
+    .no-print { display: none !important; }
+    .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; max-width: 100% !important; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f0f0f2;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .print-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    padding: 10px 20px; background: #EB0A1E; color: white;
+    border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(235,10,30,0.3);
+    transition: opacity .2s;
+  }
+  .print-btn:hover { opacity: .85; }
+
+  .page {
+    background: white;
+    max-width: 850px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #060608;
+    padding: 32px 44px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(235,10,30,0.15) 0%, transparent 70%);
+  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-brand svg { width: 44px; height: 30px; }
+  .brand-name { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 4px; color: white; }
+  .brand-sub { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-top: 2px; }
+  .header-badge { padding: 5px 14px; border-radius: 20px; background: rgba(235,10,30,0.15); border: 1px solid rgba(235,10,30,0.4); font-size: 10px; letter-spacing: 3px; color: #EB0A1E; font-weight: 600; text-transform: uppercase; }
+  .header-title { font-family: 'Rajdhani', sans-serif; font-size: 46px; font-weight: 700; color: white; line-height: 1.05; margin-bottom: 8px; position: relative; z-index: 1; }
+  .header-title span { color: #EB0A1E; }
+  .header-sub { font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 1px; position: relative; z-index: 1; }
+  .red-line { width: 48px; height: 3px; background: #EB0A1E; border-radius: 2px; margin: 16px 0; box-shadow: 0 0 12px rgba(235,10,30,0.5); }
+
+  /* ── BODY ── */
+  .body { padding: 36px 44px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 28px; }
+  .section-label {
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: #EB0A1E; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #f0f0f2; }
+  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: #111; margin-bottom: 10px; }
+
+  /* ── PROBLEM BLOCK ── */
+  .problem-box {
+    background: #fafafa; border-left: 4px solid #EB0A1E;
+    border-radius: 0 10px 10px 0; padding: 16px 20px;
+    font-size: 13px; color: #444; line-height: 1.7;
+  }
+  .problem-box strong { color: #111; }
+
+  /* ── 3-COLUMN ── */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .col-card {
+    border: 1px solid #e8e8e8; border-radius: 12px; padding: 16px 14px;
+    position: relative; overflow: hidden;
+  }
+  .col-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .col-card.c1::before { background: #EB0A1E; }
+  .col-card.c2::before { background: #007AFF; }
+  .col-card.c3::before { background: #00C07F; }
+  .col-num { font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .col-card.c1 .col-num { color: #EB0A1E; }
+  .col-card.c2 .col-num { color: #007AFF; }
+  .col-card.c3 .col-num { color: #00C07F; }
+  .col-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: #111; margin-bottom: 6px; }
+  .col-body { font-size: 11.5px; color: #555; line-height: 1.6; }
+
+  /* ── CAPABILITIES TABLE ── */
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .cap-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: #fafafa; border-radius: 8px; border: 1px solid #eeeeee; }
+  .cap-dot { width: 8px; height: 8px; border-radius: 50%; background: #EB0A1E; flex-shrink: 0; margin-top: 4px; }
+  .cap-text { font-size: 12px; color: #333; line-height: 1.5; }
+  .cap-text strong { color: #111; display: block; font-size: 12.5px; }
+
+  /* ── METRICS ── */
+  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+  .metric-card { text-align: center; padding: 14px 10px; background: #060608; border-radius: 10px; }
+  .metric-val { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: #EB0A1E; line-height: 1; margin-bottom: 4px; }
+  .metric-label { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 1px; line-height: 1.4; }
+
+  /* ── PILOT ── */
+  .pilot-box { background: #060608; border-radius: 14px; padding: 22px 24px; color: white; }
+  .pilot-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .pilot-steps { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .pilot-step { }
+  .step-num { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: rgba(235,10,30,0.5); line-height: 1; margin-bottom: 4px; }
+  .step-title { font-size: 12px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .step-body { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  /* ── ASK ── */
+  .ask-box { background: #EB0A1E; border-radius: 14px; padding: 22px 24px; color: white; }
+  .ask-title { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .ask-body { font-size: 13px; line-height: 1.7; opacity: .9; }
+  .ask-body strong { opacity: 1; }
+
+  /* ── QUOTE ── */
+  .quote-block { border-left: 3px solid #EB0A1E; padding: 12px 18px; margin-top: 14px; background: #fafafa; border-radius: 0 8px 8px 0; }
+  .quote-text { font-size: 13px; color: #333; line-height: 1.7; font-style: italic; }
+
+  /* ── FOOTER ── */
+  .footer { padding: 16px 44px; border-top: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+  .footer-left { font-size: 10px; color: #bbb; letter-spacing: 1px; }
+  .footer-right { font-size: 10px; color: #bbb; }
+  .footer-confidential { display: inline-block; padding: 2px 8px; border-radius: 4px; background: #f5f5f5; color: #999; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+
+  /* ── TWO COL ── */
+  .two-col-main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 72 48" fill="none">
+          <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+          <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+          <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">Motor Sales, U.S.A.</div>
+        </div>
+      </div>
+      <div class="header-badge">Executive Brief</div>
+    </div>
+    <div class="red-line"></div>
+    <div class="header-title">Sales Coach<br><span>Engine</span></div>
+    <div class="header-sub">A scalable, measurable digital training system for the Toyota dealer network &nbsp;·&nbsp; May 2026</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- THE OPPORTUNITY -->
+    <div class="section">
+      <div class="section-label">The Opportunity</div>
+      <div class="section-title">Training reaches dealers. Measurement doesn't.</div>
+      <div class="problem-box">
+        Toyota invests significantly in developing world-class product and competitive training content. The <strong>Meeting-in-a-Box program</strong> delivers that content effectively — but once a PDF leaves corporate, there is no visibility into whether it was used, retained, or had any impact on the sales floor. <strong>There is no system today that tells us who was trained, what they learned, or where knowledge gaps exist by region or dealer.</strong> The Sales Coach Engine closes that loop.
+      </div>
+    </div>
+
+    <!-- THE SOLUTION -->
+    <div class="section">
+      <div class="section-label">The Solution</div>
+      <div class="section-title">Three components. One connected system.</div>
+      <div class="three-col">
+        <div class="col-card c1">
+          <div class="col-num">01 · Presenter</div>
+          <div class="col-title">Live Session Display</div>
+          <div class="col-body">A cinematic, TV-ready presentation that guides managers through the 5-phase Sales Coach Engine. Timer-controlled, keyboard-navigable, with built-in speaker notes.</div>
+        </div>
+        <div class="col-card c2">
+          <div class="col-num">02 · Quiz</div>
+          <div class="col-title">Mobile Knowledge Check</div>
+          <div class="col-body">Salespeople scan a QR code on their phone during the session and take a 15-question timed quiz. Covers both product knowledge and competitive objection handling.</div>
+        </div>
+        <div class="col-card c3">
+          <div class="col-num">03 · Dashboard</div>
+          <div class="col-title">Analytics & Reporting</div>
+          <div class="col-body">Real-time leaderboards, regional breakdowns, dealer rankings, certification tracking, and CSV export — accessible at local, regional, and national levels.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFORMATION FLOW -->
+    <div class="section">
+      <div class="section-label">How It Works</div>
+      <div class="section-title">Content flows down. Intelligence flows up.</div>
+
+      <div style="background:#060608;border-radius:14px;padding:22px 20px 18px;margin-top:14px;position:relative;overflow:hidden">
+
+        <!-- Subtle background glow -->
+        <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(235,10,30,0.08),transparent);pointer-events:none"></div>
+        <div style="position:absolute;bottom:-40px;left:80px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,160,0.06),transparent);pointer-events:none"></div>
+
+        <!-- Flow direction labels -->
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px;padding:0 4px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(235,10,30,0.6);font-weight:600">
+            <div style="width:20px;height:2px;background:#EB0A1E;border-radius:1px"></div>
+            Training Content
+            <div style="font-size:11px">→</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,229,160,0.6);font-weight:600">
+            <div style="font-size:11px">←</div>
+            Analytics & Results
+            <div style="width:20px;height:2px;background:#00e5a0;border-radius:1px"></div>
+          </div>
+        </div>
+
+        <!-- TOP ROW: Content flows → -->
+        <div style="display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr 28px 1fr;align-items:center;gap:0;margin-bottom:6px">
+
+          <!-- Node 1: Corporate -->
+          <div style="background:#0e0e12;border:1px solid rgba(235,10,30,0.3);border-radius:10px;padding:10px 10px 8px;border-top:2px solid #EB0A1E">
+            <div style="font-size:16px;margin-bottom:4px">🏛️</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#EB0A1E;font-weight:700;margin-bottom:3px">National</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Toyota Corporate</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Creates RAV4 product &amp; competitive training content</div>
+          </div>
+
+          <!-- Arrow → -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="width:100%;height:2px;background:rgba(235,10,30,0.4);position:relative">
+              <div style="position:absolute;right:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(235,10,30,0.6)"></div>
+            </div>
+            <div style="font-size:8px;color:rgba(235,10,30,0.4);letter-spacing:1px;white-space:nowrap">12 Regions</div>
+          </div>
+
+          <!-- Node 2: Region -->
+          <div style="background:#0e0e12;border:1px solid rgba(118,185,255,0.25);border-radius:10px;padding:10px 10px 8px;border-top:2px solid #76b9ff">
+            <div style="font-size:16px;margin-bottom:4px">🗺️</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#76b9ff;font-weight:700;margin-bottom:3px">Regional</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Sales Region</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">BOS · NY · CAT · CIN · CHI · KC · DVR · LA · SF · POR · SET · GST</div>
+          </div>
+
+          <!-- Arrow → -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="width:100%;height:2px;background:rgba(255,170,0,0.35);position:relative">
+              <div style="position:absolute;right:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(255,170,0,0.55)"></div>
+            </div>
+            <div style="font-size:8px;color:rgba(255,170,0,0.45);letter-spacing:1px;white-space:nowrap">1,200+ Dealers</div>
+          </div>
+
+          <!-- Node 3: Dealer Session -->
+          <div style="background:#0e0e12;border:1px solid rgba(255,170,0,0.25);border-radius:10px;padding:10px 10px 8px;border-top:2px solid #ffaa00">
+            <div style="font-size:16px;margin-bottom:4px">🏢</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ffaa00;font-weight:700;margin-bottom:3px">Dealer</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Live Session</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Manager runs 15-min Sales Coach Engine on showroom TV</div>
+          </div>
+
+          <!-- Arrow → -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="width:100%;height:2px;background:rgba(0,229,160,0.35);position:relative">
+              <div style="position:absolute;right:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(0,229,160,0.55)"></div>
+            </div>
+            <div style="font-size:8px;color:rgba(0,229,160,0.45);letter-spacing:1px;white-space:nowrap">📱 QR Code</div>
+          </div>
+
+          <!-- Node 4: Quiz -->
+          <div style="background:#080e0c;border:1px solid rgba(0,229,160,0.3);border-radius:10px;padding:10px 10px 8px;border-top:2px solid #00e5a0">
+            <div style="font-size:16px;margin-bottom:4px">📱</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00e5a0;font-weight:700;margin-bottom:3px">Salesperson</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Knowledge Quiz</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">15 questions · 20 sec each · Instant cert if 12+/15</div>
+          </div>
+
+          <!-- Arrow → -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="width:100%;height:2px;background:rgba(0,229,160,0.35);position:relative">
+              <div style="position:absolute;right:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid rgba(0,229,160,0.55)"></div>
+            </div>
+            <div style="font-size:8px;color:rgba(0,229,160,0.45);letter-spacing:1px;white-space:nowrap">Score + Cert</div>
+          </div>
+
+          <!-- Node 5: Result -->
+          <div style="background:#080e0c;border:1px solid rgba(0,229,160,0.25);border-radius:10px;padding:10px 10px 8px;border-top:2px solid #00e5a0">
+            <div style="font-size:16px;margin-bottom:4px">✅</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00e5a0;font-weight:700;margin-bottom:3px">Output</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Result Record</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Name · Dealer · Region · Score · Certified Y/N</div>
+          </div>
+
+        </div>
+
+        <!-- Vertical down arrows at positions 1, 3, 5 (nodes) -->
+        <div style="display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr 28px 1fr;margin-bottom:6px">
+          <div style="display:flex;justify-content:center"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:2px;height:16px;background:rgba(235,10,30,0.2)"></div><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(235,10,30,0.35)"></div></div></div>
+          <div></div>
+          <div style="display:flex;justify-content:center"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:2px;height:16px;background:rgba(118,185,255,0.2)"></div><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(118,185,255,0.3)"></div></div></div>
+          <div></div>
+          <div style="display:flex;justify-content:center"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:2px;height:16px;background:rgba(255,170,0,0.2)"></div><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(255,170,0,0.3)"></div></div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div style="display:flex;justify-content:center"><div style="display:flex;flex-direction:column;align-items:center"><div style="width:2px;height:16px;background:rgba(0,229,160,0.25)"></div><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(0,229,160,0.4)"></div></div></div>
+        </div>
+
+        <!-- BOTTOM ROW: Analytics flows ← -->
+        <div style="display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr 28px 1fr;align-items:center;gap:0">
+
+          <!-- Node B1: National Insight -->
+          <div style="background:#0a080a;border:1px solid rgba(235,10,30,0.2);border-radius:10px;padding:10px 10px 8px;border-bottom:2px solid #EB0A1E">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#EB0A1E;font-weight:700;margin-bottom:3px">National View</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Exec Dashboard</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Cert rates · Knowledge gaps · Top regions · CSV export</div>
+          </div>
+
+          <!-- Arrow ← -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="font-size:8px;color:rgba(235,10,30,0.4);letter-spacing:1px;white-space:nowrap">Rolls up</div>
+            <div style="width:100%;height:2px;background:rgba(235,10,30,0.35);position:relative">
+              <div style="position:absolute;left:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:6px solid rgba(235,10,30,0.55)"></div>
+            </div>
+          </div>
+
+          <!-- Node B2: Regional View -->
+          <div style="background:#0a080a;border:1px solid rgba(118,185,255,0.2);border-radius:10px;padding:10px 10px 8px;border-bottom:2px solid #76b9ff">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#76b9ff;font-weight:700;margin-bottom:3px">Regional View</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Region Rankings</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Dealer scores · Regional avg · Coaching targets</div>
+          </div>
+
+          <!-- Arrow ← -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="font-size:8px;color:rgba(118,185,255,0.4);letter-spacing:1px;white-space:nowrap">Aggregates</div>
+            <div style="width:100%;height:2px;background:rgba(118,185,255,0.3);position:relative">
+              <div style="position:absolute;left:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:6px solid rgba(118,185,255,0.5)"></div>
+            </div>
+          </div>
+
+          <!-- Node B3: Dealer Dashboard -->
+          <div style="background:#0a080a;border:1px solid rgba(255,170,0,0.2);border-radius:10px;padding:10px 10px 8px;border-bottom:2px solid #ffaa00">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ffaa00;font-weight:700;margin-bottom:3px">Dealer View</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Team Leaderboard</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Per-rep scores · Cert status · Who needs coaching</div>
+          </div>
+
+          <!-- Arrow ← -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="font-size:8px;color:rgba(0,229,160,0.4);letter-spacing:1px;white-space:nowrap">Imported</div>
+            <div style="width:100%;height:2px;background:rgba(0,229,160,0.3);position:relative">
+              <div style="position:absolute;left:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:6px solid rgba(0,229,160,0.5)"></div>
+            </div>
+          </div>
+
+          <!-- Node B4: empty (aligns with Quiz node) -->
+          <div style="background:transparent;border:1px dashed rgba(255,255,255,0.06);border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center">
+            <div style="text-align:center">
+              <div style="font-size:20px;margin-bottom:4px">📊</div>
+              <div style="font-size:9px;color:rgba(240,240,244,0.3);line-height:1.4">Manager pastes<br>result code</div>
+            </div>
+          </div>
+
+          <!-- Arrow ← -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="font-size:8px;color:rgba(0,229,160,0.4);letter-spacing:1px;white-space:nowrap">Auto-flows</div>
+            <div style="width:100%;height:2px;background:rgba(0,229,160,0.3);position:relative">
+              <div style="position:absolute;left:-4px;top:-4px;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:6px solid rgba(0,229,160,0.5)"></div>
+            </div>
+          </div>
+
+          <!-- Node B5: aligns with Result Record -->
+          <div style="background:#080e0c;border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:10px 10px 8px;border-bottom:2px solid #00e5a0">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#00e5a0;font-weight:700;margin-bottom:3px">Data Captured</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#f0f0f4;margin-bottom:3px">Quiz Analytics</div>
+            <div style="font-size:9px;color:rgba(240,240,244,0.4);line-height:1.4">Score · Time · Product vs Competitive breakdown</div>
+          </div>
+
+        </div>
+
+        <!-- Bottom caption -->
+        <div style="display:flex;justify-content:center;gap:28px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.05)">
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:rgba(240,240,244,0.25);letter-spacing:1px">
+            <div style="width:16px;height:2px;background:#EB0A1E;border-radius:1px"></div> National
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:rgba(240,240,244,0.25);letter-spacing:1px">
+            <div style="width:16px;height:2px;background:#76b9ff;border-radius:1px"></div> Regional
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:rgba(240,240,244,0.25);letter-spacing:1px">
+            <div style="width:16px;height:2px;background:#ffaa00;border-radius:1px"></div> Dealer
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:9px;color:rgba(240,240,244,0.25);letter-spacing:1px">
+            <div style="width:16px;height:2px;background:#00e5a0;border-radius:1px"></div> Salesperson Data
+          </div>
+          <div style="font-size:9px;color:rgba(240,240,244,0.18);letter-spacing:1px">Toyota Motor Sales · Confidential</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CAPABILITIES -->
+    <div class="section">
+      <div class="section-label">Capabilities</div>
+      <div class="section-title">Built for scale from day one.</div>
+      <div class="cap-grid">
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>12 Toyota U.S. Sales Regions</strong>All official regions pre-configured: BOS, New York, CAT, CIN, CHI, Kansas City, DVR, LA, SF, POR, SET, GST.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>National, Regional & Dealer Access</strong>Three-tier reporting hierarchy mirrors Toyota's structure — National leadership, Regional managers, and Dealer principals each see their relevant data.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>Certification Tracking</strong>Salespeople who score 12/15 or above earn module certification. Progress tracked individually, by dealer, and by region.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>QR-Code Quiz Delivery</strong>No app download. No login. Salespeople scan, enter their PIN, complete the quiz, and results flow to the dashboard automatically.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>No Infrastructure Required</strong>Three self-contained HTML files. Runs on any laptop, TV, or web server. Can be hosted on existing Toyota internal infrastructure at zero licensing cost.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>Instant Content Updates</strong>When product specs or competitive data changes, updates go live the same day — no reprinting, no field rep visits, no content lag.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>Exportable Data</strong>All quiz results export to CSV for integration with existing reporting tools, LMS platforms, or field manager scorecards.</div></div>
+        <div class="cap-item"><div class="cap-dot"></div><div class="cap-text"><strong>Offline Capable</strong>The presenter and quiz work without internet. Only the QR-code step requires local network access, which every dealership already has.</div></div>
+      </div>
+    </div>
+
+    <!-- SCALE -->
+    <div class="section">
+      <div class="section-label">Scale</div>
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-val">1,200+</div>
+          <div class="metric-label">Toyota Dealers<br>Nationwide</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">12</div>
+          <div class="metric-label">U.S. Sales Regions<br>Pre-Configured</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">$0</div>
+          <div class="metric-label">Per-Seat License<br>Cost</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">15 min</div>
+          <div class="metric-label">Session Length<br>Fits Any Huddle</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PILOT PROPOSAL -->
+    <div class="section">
+      <div class="section-label">Pilot Proposal</div>
+      <div class="pilot-box">
+        <div class="pilot-title">90-Day Regional Pilot</div>
+        <div class="pilot-steps">
+          <div class="pilot-step">
+            <div class="step-num">01</div>
+            <div class="step-title">Select One Region</div>
+            <div class="step-body">Deploy to one Toyota sales region — suggested: Los Angeles Region given market volume and training infrastructure. 4–6 week rollout.</div>
+          </div>
+          <div class="pilot-step">
+            <div class="step-num">02</div>
+            <div class="step-title">Measure & Compare</div>
+            <div class="step-body">Track certification rates, quiz scores, and knowledge gaps by dealer. Compare RAV4 sales performance vs. prior period and vs. non-pilot regions.</div>
+          </div>
+          <div class="pilot-step">
+            <div class="step-num">03</div>
+            <div class="step-title">Decision Point</div>
+            <div class="step-body">At 90 days, present data to leadership. If results support it, expand to all 12 regions and apply the framework to future vehicle launches.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE ASK -->
+    <div class="section">
+      <div class="section-label">The Ask</div>
+      <div class="two-col-main">
+        <div class="ask-box">
+          <div class="ask-title">What We're Requesting</div>
+          <div class="ask-body">Approval to run a <strong>90-day pilot in one region</strong> using the Sales Coach Engine alongside the existing RAV4 Meeting-in-a-Box program. No budget for software. No vendor contract. No infrastructure change. We are asking for time, access to one regional training coordinator, and permission to measure.</div>
+        </div>
+        <div>
+          <div class="quote-block">
+            <div class="quote-text">"Toyota already creates world-class training content. This system gives us the ability, for the first time, to know whether that content is actually landing — and where to focus next."</div>
+          </div>
+          <div style="margin-top:14px;padding:14px;background:#fafafa;border-radius:10px;border:1px solid #eeeeee">
+            <div style="font-size:10px;letter-spacing:2px;color:#aaa;text-transform:uppercase;font-weight:600;margin-bottom:8px">Success Metrics</div>
+            <div style="font-size:12px;color:#444;line-height:1.8">
+              ✓ Certification rate ≥ 60% in pilot region<br>
+              ✓ Avg quiz score improvement session-over-session<br>
+              ✓ Identified knowledge gap by dealer cluster<br>
+              ✓ Manager satisfaction with session format
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">Toyota Motor Sales, U.S.A. &nbsp;·&nbsp; Sales Coach Engine &nbsp;·&nbsp; May 2026</div>
+    <div class="footer-right"><span class="footer-confidential">Confidential — Internal Use Only</span></div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
