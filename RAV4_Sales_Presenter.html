@@ -630,11 +630,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <div class="modal-title">⚙ Session Settings</div>
     <div class="modal-field">
       <label class="modal-label">Quiz URL (for QR Code)</label>
-      <input class="modal-input" id="quiz-url-input" type="text" placeholder="http://192.168.1.100:8000/RAV4_Quiz.html">
+      <input class="modal-input" id="quiz-url-input" type="text" placeholder="https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html">
       <div class="modal-hint">
-        To serve locally: open terminal in this folder and run:<br>
-        <code style="color:#76b9ff">python3 -m http.server 8000</code><br>
-        Then enter your computer's local IP above (check with <code style="color:#76b9ff">ipconfig</code> or <code style="color:#76b9ff">ifconfig</code>).
+        Defaults to the live GitHub Pages quiz: <code style="color:#76b9ff">RAV4_Quiz.html</code>.<br>
+        Only change this if you're testing a different build or a local copy.
       </div>
     </div>
     <div class="modal-field">
@@ -1295,8 +1294,9 @@ const slideNotes = [
 // Build slides index
 const allSlides = Array.from(document.querySelectorAll('.slide'));
 let currentSlideIdx = 0;
-let quizUrl = '';
-let sessionLabel = 'LIVE SESSION';
+const DEFAULT_QUIZ_URL = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
+let quizUrl = localStorage.getItem('presenter_quiz_url') || DEFAULT_QUIZ_URL;
+let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 let scores = JSON.parse(localStorage.getItem('presenter_scores') || '[]');
 
 // Timer state
@@ -1438,11 +1438,17 @@ function generateQR(url) {
 }
 
 // ── SETTINGS ──────────────────────────────────────────────────
-function openModal() { document.getElementById('modal-overlay').classList.add('open'); }
+function openModal() {
+  document.getElementById('quiz-url-input').value = quizUrl;
+  document.getElementById('session-label-input').value = sessionLabel;
+  document.getElementById('modal-overlay').classList.add('open');
+}
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 function saveSettings() {
-  quizUrl = document.getElementById('quiz-url-input').value.trim();
-  sessionLabel = document.getElementById('session-label-input').value.trim() || '● LIVE SESSION';
+  quizUrl = document.getElementById('quiz-url-input').value.trim() || DEFAULT_QUIZ_URL;
+  sessionLabel = document.getElementById('session-label-input').value.trim() || 'LIVE SESSION';
+  localStorage.setItem('presenter_quiz_url', quizUrl);
+  localStorage.setItem('presenter_session_label', sessionLabel);
   document.getElementById('session-label-display').textContent = sessionLabel.includes('●') ? sessionLabel : '● ' + sessionLabel;
   generateQR(quizUrl);
   closeModal();
@@ -1613,7 +1619,8 @@ function toggleFullscreen() {
 
 // ── BOOT ──────────────────────────────────────────────────────
 secInit();
-generateQR('');
+generateQR(quizUrl);
+document.getElementById('session-label-display').textContent = sessionLabel.includes('●') ? sessionLabel : '● ' + sessionLabel;
 updateUI();
 updateTimerDisplay();
 </script>
