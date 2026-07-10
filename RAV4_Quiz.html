@@ -285,7 +285,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="form-field">
       <label class="form-label">State</label>
-      <input class="form-input" id="f-state" type="text" placeholder="CA" maxlength="2" style="text-transform:uppercase">
+      <input class="form-input" id="f-state" type="text" placeholder="Start typing your state..." autocomplete="off">
     </div>
     <button class="btn-primary" onclick="startQuiz()">START QUIZ →</button>
     <div style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
@@ -438,6 +438,59 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='Escape')secClear();
 });
 secInit();
+
+// ── STATE AUTOCOMPLETE (inline fill-as-you-type, converts to 2-letter code) ──
+(function(){
+  const stateInput = document.getElementById('f-state');
+  if(!stateInput) return;
+
+  const STATES = [
+    {name:'Alabama',code:'AL'},{name:'Alaska',code:'AK'},{name:'Arizona',code:'AZ'},
+    {name:'Arkansas',code:'AR'},{name:'California',code:'CA'},{name:'Colorado',code:'CO'},
+    {name:'Connecticut',code:'CT'},{name:'Delaware',code:'DE'},{name:'Florida',code:'FL'},
+    {name:'Georgia',code:'GA'},{name:'Hawaii',code:'HI'},{name:'Idaho',code:'ID'},
+    {name:'Illinois',code:'IL'},{name:'Indiana',code:'IN'},{name:'Iowa',code:'IA'},
+    {name:'Kansas',code:'KS'},{name:'Kentucky',code:'KY'},{name:'Louisiana',code:'LA'},
+    {name:'Maine',code:'ME'},{name:'Maryland',code:'MD'},{name:'Massachusetts',code:'MA'},
+    {name:'Michigan',code:'MI'},{name:'Minnesota',code:'MN'},{name:'Mississippi',code:'MS'},
+    {name:'Missouri',code:'MO'},{name:'Montana',code:'MT'},{name:'Nebraska',code:'NE'},
+    {name:'Nevada',code:'NV'},{name:'New Hampshire',code:'NH'},{name:'New Jersey',code:'NJ'},
+    {name:'New Mexico',code:'NM'},{name:'New York',code:'NY'},{name:'North Carolina',code:'NC'},
+    {name:'North Dakota',code:'ND'},{name:'Ohio',code:'OH'},{name:'Oklahoma',code:'OK'},
+    {name:'Oregon',code:'OR'},{name:'Pennsylvania',code:'PA'},{name:'Rhode Island',code:'RI'},
+    {name:'South Carolina',code:'SC'},{name:'South Dakota',code:'SD'},{name:'Tennessee',code:'TN'},
+    {name:'Texas',code:'TX'},{name:'Utah',code:'UT'},{name:'Vermont',code:'VT'},
+    {name:'Virginia',code:'VA'},{name:'Washington',code:'WA'},{name:'West Virginia',code:'WV'},
+    {name:'Wisconsin',code:'WI'},{name:'Wyoming',code:'WY'},{name:'District of Columbia',code:'DC'}
+  ];
+
+  let deleting = false;
+  stateInput.addEventListener('keydown', function(e){
+    deleting = (e.key === 'Backspace' || e.key === 'Delete');
+  });
+
+  stateInput.addEventListener('input', function(){
+    const val = stateInput.value;
+    if(deleting || val.length === 0) return;
+    const match = STATES.find(s => s.name.toLowerCase().startsWith(val.toLowerCase()));
+    if(match && match.name.toLowerCase() !== val.toLowerCase()){
+      stateInput.value = val + match.name.slice(val.length);
+      stateInput.setSelectionRange(val.length, match.name.length);
+    }
+  });
+
+  function normalizeState(){
+    const val = stateInput.value.trim();
+    const exact = STATES.find(s => s.name.toLowerCase() === val.toLowerCase());
+    if(exact){
+      stateInput.value = exact.code;
+    } else if(/^[A-Za-z]{2}$/.test(val)){
+      stateInput.value = val.toUpperCase();
+    }
+  }
+  stateInput.addEventListener('blur', normalizeState);
+  stateInput.addEventListener('change', normalizeState);
+})();
 
 // ── QUIZ QUESTIONS ────────────────────────────────────────────
 const questions = [
