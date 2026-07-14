@@ -792,7 +792,78 @@ function showToast(msg) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 secInit();
+// ── AUTO-IMPORT FROM GOOGLE SHEET (fed by quiz's silent Form submits) ──
+const GSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv';
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else { inQuotes = false; } }
+      else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i+1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else field += c;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+async function fetchGoogleFormResults() {
+  try {
+    const res = await fetch(GSHEET_CSV_URL, { cache: 'no-store' });
+    if (!res.ok) return;
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (rows.length < 2) return;
+    const headers = rows[0].map(h => h.trim());
+    const col = name => headers.indexOf(name);
+    const idx = {
+      name: col('name'), dealerName: col('dealerName'), region: col('region'), state: col('state'),
+      score: col('score'), total: col('total'), pct: col('pct'), productScore: col('productScore'),
+      competitiveScore: col('competitiveScore'), certified: col('certified'), timeSec: col('timeSec'),
+      sessionDate: col('sessionDate')
+    };
+    const fetched = rows.slice(1).filter(r => r.length > 1).map(r => ({
+      name: r[idx.name] || '',
+      dealerName: r[idx.dealerName] || '',
+      region: r[idx.region] || '',
+      state: r[idx.state] || '',
+      score: Number(r[idx.score]) || 0,
+      total: Number(r[idx.total]) || 15,
+      pct: Number(r[idx.pct]) || 0,
+      productScore: r[idx.productScore] !== '' ? Number(r[idx.productScore]) : null,
+      competitiveScore: r[idx.competitiveScore] !== '' ? Number(r[idx.competitiveScore]) : null,
+      certified: r[idx.certified] === 'true',
+      timeSec: Number(r[idx.timeSec]) || 0,
+      sessionDate: r[idx.sessionDate] || new Date().toISOString()
+    }));
+    let added = 0;
+    fetched.forEach(f => {
+      const dup = allData.find(d => d.name === f.name && d.sessionDate === f.sessionDate);
+      if (!dup) { allData.push(f); added++; }
+    });
+    if (added > 0) {
+      localStorage.setItem('rav4_quiz_results', JSON.stringify(allData));
+      filteredData = [...allData];
+      refreshAll();
+    }
+  } catch(e) {
+    // Silent fail — dashboard still works from localStorage/manual import
+  }
+}
+
 boot();
+fetchGoogleFormResults();
 </script>
 </body>
 </html>
