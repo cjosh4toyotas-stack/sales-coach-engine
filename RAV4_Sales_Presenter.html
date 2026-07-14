@@ -1123,8 +1123,51 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       </div>
     </div>
 
-    <!-- Slide 3-1: QR Code -->
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
     <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
       <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
       <div class="qr-center">
         <div class="qr-instructions fade-in fade-in-1">
@@ -1139,8 +1182,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       </div>
     </div>
 
-    <!-- Slide 3-2: Live Scoreboard (manual entry) -->
-    <div class="slide" data-phase="3" data-slide="2">
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
       <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
       <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
       <div class="fade-in fade-in-2">
@@ -1292,6 +1335,100 @@ const slideNotes = [
 ];
 
 // Build slides index
+// ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
+const DEALER_LOOKUP = {
+  '15047': {name:'Hendrick Toyota Merriam', state:'KS'},
+  '15050': {name:'Olathe Toyota', state:'KS'},
+  '15051': {name:'Crown Toyota', state:'KS'},
+  '15056': {name:'Legends Toyota', state:'KS'},
+  '24026': {name:"Adams Toyota Lee's Summit", state:'MO'},
+  '24061': {name:'Molle Toyota', state:'MO'},
+  '24074': {name:'Jay Wolfe Toyota', state:'MO'},
+  '24079': {name:'Rolling Hills Toyota', state:'MO'},
+  '24022': {name:'Seeger Toyota', state:'MO'},
+  '24036': {name:'Tom Pappas Toyota', state:'MO'},
+  '24045': {name:'Lou Fusz Toyota', state:'MO'},
+  '24052': {name:'Straatmann Toyota', state:'MO'},
+  '24063': {name:'Jerry Ackerman Toyota', state:'MO'},
+  '24067': {name:'Twin City Toyota', state:'MO'},
+  '24077': {name:'Jay Wolfe Toyota of West County', state:'MO'},
+  '24078': {name:'Coad Toyota', state:'MO'},
+  '24085': {name:'Bommarito Toyota', state:'MO'},
+  '24088': {name:'Victory Toyota of St. Louis', state:'MO'},
+  '15060': {name:'Briggs Toyota of Fort Scott', state:'KS'},
+  '24053': {name:'Seeger Toyota of St. Robert', state:'MO'},
+  '24059': {name:'Baldwin Toyota', state:'MO'},
+  '24068': {name:'Toyota of West Plains', state:'MO'},
+  '24071': {name:'Reliable Toyota', state:'MO'},
+  '24076': {name:'Frank Fletcher Toyota', state:'MO'},
+  '24080': {name:'McCarthy Toyota of Sedalia', state:'MO'},
+  '24084': {name:'Joe Machens Toyota', state:'MO'},
+  '24087': {name:'Rusty Drewing Toyota', state:'MO'},
+  '15010': {name:'Lewis Toyota of Topeka', state:'KS'},
+  '15012': {name:"Eddy's Toyota of Wichita", state:'KS'},
+  '15021': {name:'Lewis Toyota of Dodge City', state:'KS'},
+  '15034': {name:'Quality Toyota of Independence', state:'KS'},
+  '15046': {name:'Lewis Toyota of Hays', state:'KS'},
+  '15052': {name:'Conklin Toyota Salina', state:'KS'},
+  '15053': {name:'Little Apple Toyota', state:'KS'},
+  '15054': {name:'Midwest Toyota', state:'KS'},
+  '15057': {name:'Clint Bowyer Toyota', state:'KS'},
+  '15059': {name:'Lewis Toyota of Garden City', state:'KS'},
+  '26021': {name:'Baxter Toyota of La Vista', state:'NE'},
+  '26023': {name:'Premier Toyota', state:'NE'},
+  '26024': {name:'Baxter Toyota of Lincoln', state:'NE'},
+  '26027': {name:'Wagner Toyota', state:'NE'},
+  '26029': {name:'Team Toyota', state:'NE'},
+  '26030': {name:'Village Pointe Toyota', state:'NE'},
+  '26031': {name:'Corwin Toyota of Bellevue', state:'NE'},
+  '26032': {name:'Gregg Young Toyota of Columbus', state:'NE'},
+  '26033': {name:'Woodhouse Toyota', state:'NE'},
+  '14011': {name:'Anderson-Weber Toyota', state:'IA'},
+  '14015': {name:'Cedar Rapids Toyota, Inc.', state:'IA'},
+  '14036': {name:'Deery Brothers Toyota', state:'IA'},
+  '14050': {name:'Toyota of Muscatine', state:'IA'},
+  '14052': {name:'Smart Toyota of Quad Cities', state:'IA'},
+  '14054': {name:'Billion Toyota of Clinton', state:'IA'},
+  '14055': {name:'McGrath Toyota of Iowa City', state:'IA'},
+  '14056': {name:'Gregg Young Toyota Ottumwa', state:'IA'},
+  '24083': {name:'Kirksville Toyota', state:'MO'},
+  '14017': {name:'Hosmer Toyota', state:'IA'},
+  '14041': {name:'Dan Deery Toyota', state:'IA'},
+  '14044': {name:'Toyota of Des Moines', state:'IA'},
+  '14046': {name:'Wilson Toyota', state:'IA'},
+  '14048': {name:'Fort Dodge Ford Lincoln Toyota', state:'IA'},
+  '14049': {name:'Okoboji Toyota', state:'IA'},
+  '14051': {name:'Rick Collins Toyota', state:'IA'},
+  '14053': {name:'Motor Inn Toyota of Carroll', state:'IA'},
+  '33010': {name:'Lloyds Toyota', state:'ND'},
+  '33017': {name:'Lake Toyota', state:'ND'},
+  '33021': {name:'Corwin Toyota', state:'ND'},
+  '33024': {name:'Dan Porter Honda-Toyota', state:'ND'},
+  '33025': {name:'Cedric Theel Toyota', state:'ND'},
+  '33031': {name:'Rydell Toyota of Grand Forks', state:'ND'},
+  '33032': {name:'Minot Toyota', state:'ND'},
+  '40009': {name:'Harr Toyota', state:'SD'},
+  '40011': {name:'Billion Toyota', state:'SD'},
+  '40017': {name:'Sharp Chevrolet-Toyota', state:'SD'},
+  '40021': {name:'Denny Menholt Toyota', state:'SD'},
+  '40022': {name:'Capital City Toyota', state:'SD'}
+};
+
+(function(){
+  const codeInput = document.getElementById('pres-reg-dealer-code');
+  if(!codeInput) return;
+  codeInput.addEventListener('input', function(){
+    const code = codeInput.value.trim();
+    const match = DEALER_LOOKUP[code];
+    if(match){
+      document.getElementById('pres-reg-dealer').value = match.name;
+      document.getElementById('pres-reg-state').value = match.state;
+      const regionSel = document.getElementById('pres-reg-region');
+      if(regionSel) regionSel.value = 'Kansas City Region';
+    }
+  });
+})();
+
 const allSlides = Array.from(document.querySelectorAll('.slide'));
 let currentSlideIdx = 0;
 const DEFAULT_QUIZ_URL = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
