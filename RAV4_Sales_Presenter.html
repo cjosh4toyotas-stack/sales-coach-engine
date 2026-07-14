@@ -1497,6 +1497,73 @@ function importJSON() {
   } catch(e) { alert('Invalid JSON format.'); }
 }
 
+// ── AUTO-IMPORT FROM GOOGLE SHEET (fed by quiz's silent Form submits) ──
+const GSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv';
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else { inQuotes = false; } }
+      else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i+1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else field += c;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+async function fetchGoogleFormResults() {
+  try {
+    const res = await fetch(GSHEET_CSV_URL, { cache: 'no-store' });
+    if (!res.ok) return;
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (rows.length < 2) return;
+    const headers = rows[0].map(h => h.trim());
+    const col = name => headers.indexOf(name);
+    const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), pct: col('pct'), sessionDate: col('sessionDate') };
+    let added = 0;
+    rows.slice(1).filter(r => r.length > 1).forEach(r => {
+      const sessionDate = r[idx.sessionDate] || '';
+      const name = r[idx.name] || '';
+      const dup = scores.find(s => s.name === name && s._sessionDate === sessionDate);
+      if (dup) return;
+      const score = Number(r[idx.score]) || 0;
+      scores.push({
+        name,
+        dealer: r[idx.dealerName] || '',
+        score,
+        pct: Number(r[idx.pct]) || Math.round(score / 15 * 100),
+        ts: Date.now(),
+        _sessionDate: sessionDate
+      });
+      added++;
+    });
+    if (added > 0) {
+      scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
+      localStorage.setItem('presenter_scores', JSON.stringify(scores));
+      renderScoreboard();
+      renderFinalScoreboard();
+    }
+  } catch(e) {
+    // Silent fail — manual Add Score / Import Results remain as fallback
+  }
+}
+
+fetchGoogleFormResults();
+setInterval(fetchGoogleFormResults, 15000); // poll every 15s so the live leaderboard updates during a session
+
 function renderScoreboard() {
   const el = document.getElementById('scoreboard-list');
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
