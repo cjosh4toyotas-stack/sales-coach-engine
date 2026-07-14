@@ -575,10 +575,10 @@ const questions = [
   },
   {
     cat: 'COMPETITIVE',
-    q: 'These 2026 RAV4 models can be equipped with an optional Head-Up Display with what package?',
-    opts: ['XLE Premium with Driver Assist & GR SPORT as a standalone option', 'XSE HEV with Driver Assist & Limited with Driver Assist', 'GR SPORT PHEV with Driver Assist & XLE Premium as a standalone option', 'XSE PHEV with Driver Assist & Limited as a standalone option'],
-    ans: 3,
-    exp: 'Head-Up Display is only available two ways: on Limited as a standalone option — no other package required — and on XSE bundled into the Driver Assist package, but only when built as a Plug-in Hybrid (Hybrid XSE isn\'t eligible). XLE Premium and GR SPORT both have their own Driver Assist-style packages, but neither one includes HUD, and Limited\'s HUD was never bundled into a package to begin with. Mix up any part of this and you can promise a customer a HUD their exact build can\'t actually get.'
+    q: 'Which competitor comes closest to RAV4 on electrification but only offers it in select grades?',
+    opts: ['Honda CR-V', 'Nissan Rogue', 'Kia Sportage', 'Subaru Forester'],
+    ans: 2,
+    exp: 'Kia Sportage offers HEV and PHEV, but only in select grades — unlike RAV4 which is exclusively electrified across all grades.'
   },
   {
     cat: 'COMPETITIVE',
@@ -596,10 +596,10 @@ const questions = [
   },
   {
     cat: 'COMPETITIVE',
-    q: 'Toyota has nearly how many Toyota and Lexus dealerships across North America?',
+    q: 'Toyota has over how many dealerships across the United States?',
     opts: ['600', '900', '1,200', '1,500'],
-    ans: 3,
-    exp: 'Toyota\'s official figure is nearly 1,500 Toyota and Lexus dealerships across North America, creating unmatched ease of access for service, support, and genuine Toyota parts.'
+    ans: 2,
+    exp: 'Toyota has over 1,200 dealerships in the U.S., creating unmatched ease of access for service, support, and genuine Toyota parts.'
   }
 ];
 
@@ -778,6 +778,9 @@ function showResults() {
     localStorage.setItem('rav4_quiz_results', JSON.stringify(existing));
   } catch(e) {}
 
+  // Silently auto-submit to Google Form (feeds the dashboard automatically)
+  submitToGoogleForm(exportData);
+
   // Question review
   const reviewEl = document.getElementById('question-review');
   reviewEl.innerHTML = '<div style="font-family:Rajdhani,sans-serif;font-size:20px;font-weight:700;margin-bottom:12px">Question Review</div>' +
@@ -797,6 +800,39 @@ function copyExport() {
     btn.textContent = '✓ Copied!';
     setTimeout(() => btn.textContent = '📋 Copy Result Code', 2000);
   });
+}
+
+// ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfWPrmKHSTN4E_3yhJtL-YYncchKErh2wtqR2Ew_WziOSlF6A/formResponse';
+const GFORM_ENTRIES = {
+  name: 'entry.1801764731',
+  dealerName: 'entry.794104824',
+  region: 'entry.1247287401',
+  state: 'entry.496855907',
+  score: 'entry.1030068566',
+  total: 'entry.476908290',
+  pct: 'entry.369912006',
+  productScore: 'entry.822194667',
+  competitiveScore: 'entry.1581056513',
+  certified: 'entry.1626493411',
+  timeSec: 'entry.700522236',
+  sessionDate: 'entry.1679497902'
+};
+
+function submitToGoogleForm(data) {
+  try {
+    const formData = new FormData();
+    Object.keys(GFORM_ENTRIES).forEach(key => {
+      formData.append(GFORM_ENTRIES[key], String(data[key]));
+    });
+    fetch(GFORM_ACTION, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).catch(() => {}); // no-cors means we can't read the response; fire-and-forget
+  } catch(e) {
+    // Fails silently — localStorage + manual copy/import remain as fallback
+  }
 }
 
 function retakeQuiz() {
