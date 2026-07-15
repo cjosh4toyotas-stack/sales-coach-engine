@@ -794,9 +794,9 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'PRODUCT',
     q: 'Which 2026 RAV4 trim levels can be equipped with a Head-Up Display, and under what condition does it apply?',
-    opts: ['Only Limited offers HUD, with no powertrain restriction', 'Limited (any powertrain) and XSE (PHEV only, via the Driver Assist Package)', 'XSE and GR SPORT, both Hybrid-only', 'All grades equipped with the 12.9-in. touchscreen'],
+    opts: ['XLE Premium & Limited w/(DA)Driver Assist Package', 'Limited & XSE PHEV w/(DA)Driver Assist Package', 'GR Sport w/(DA)Driver Assist Package & XSE', 'Limited & XSE w/(DA)Driver Assist Package'],
     ans: 1,
-    exp: 'HUD is available on Limited as a standalone package (HU) with no powertrain restriction, and separately on XSE — but only bundled into the Driver Assist Package, and only on the Plug-in Hybrid powertrain.'
+    exp: 'HUD is available on Limited and on XSE PHEV, both tied to the Driver Assist Package.'
   },
   {
     cat: 'PRODUCT',
@@ -816,9 +816,9 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'COMPETITIVE',
     q: 'What specific engineering detail sets RAV4\'s Electronic On-Demand AWD apart from most competitor hybrid AWD systems?',
-    opts: ['It requires a mechanical transfer case', 'It uses a dedicated rear-mounted electric motor instead of a driveshaft', 'It only works above 45 mph', 'It is only available on gas-only trims'],
+    opts: ['A viscous coupling that passively transfers torque based on wheel-speed differential', 'A dedicated rear-mounted electric motor with no mechanical driveshaft connection', 'A multi-plate wet clutch connecting a mechanical propeller shaft to the rear differential', 'A full-time symmetrical AWD system with a center differential'],
     ans: 1,
-    exp: 'RAV4\'s hybrid AWD uses a dedicated electric motor at the rear axle instead of a mechanical driveshaft — giving instant torque response with fewer moving parts. Most competitor hybrid AWD systems, including Honda\'s CR-V Hybrid, still rely on a mechanical connection to the rear axle.'
+    exp: 'RAV4 uses a dedicated rear e-motor — no mechanical driveshaft at all. Option C is actually how Honda\'s CR-V Hybrid AWD works (a real mechanical propeller shaft with a hydraulically-engaged clutch pack) — a genuine competing system, not a nonsense answer, which is what makes this one hard.'
   },
   {
     cat: 'COMPETITIVE',
@@ -863,8 +863,21 @@ let qtSeconds = 20;
 let startTime = null;
 let userAnswers = [];
 let userData = {};
+let refreshCount = 0;
+const ACTIVE_SESSION_KEY = 'rav4_active_quiz_session';
 
 // ── REGISTRATION ──────────────────────────────────────────────
+function saveActiveSession(){
+  try {
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
+      userData, currentQ, score, prodScore, compScore, userAnswers, startTime, refreshCount
+    }));
+  } catch(e) {}
+}
+function clearActiveSession(){
+  try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
+}
+
 function startQuiz() {
   const name = document.getElementById('f-name').value.trim();
   const dealerCode = document.getElementById('f-dealer-code').value.trim();
@@ -876,6 +889,8 @@ function startQuiz() {
   if (!region) { alert('Please select your region.'); return; }
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
+  refreshCount = 0;
+  saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
 }
@@ -971,6 +986,7 @@ function revealAnswer(selected) {
   userAnswers.push({ q: currentQ, selected, correct: isCorrect });
   document.getElementById('btn-next-q').style.display = 'block';
   document.getElementById('q-score-live').textContent = `Score: ${score}`;
+  saveActiveSession();
 }
 
 function nextQuestion() {
@@ -978,12 +994,14 @@ function nextQuestion() {
   if (currentQ >= questions.length) {
     showResults();
   } else {
+    saveActiveSession();
     loadQuestion();
   }
 }
 
 // ── RESULTS ───────────────────────────────────────────────────
 function showResults() {
+  clearActiveSession();
   showScreen('screen-results');
   const totalTime = Math.round((Date.now() - startTime) / 1000);
   const pct = Math.round(score / questions.length * 100);
@@ -1017,6 +1035,7 @@ function showResults() {
     competitiveScore: compScore,
     certified: pass,
     timeSec: totalTime,
+    refreshCount,
     sessionDate: new Date().toISOString()
   };
   const json = JSON.stringify(exportData);
@@ -1088,10 +1107,37 @@ function submitToGoogleForm(data) {
 
 function retakeQuiz() {
   currentQ = 0; score = 0; prodScore = 0; compScore = 0;
-  answered = false; userAnswers = [];
+  answered = false; userAnswers = []; refreshCount = 0;
   clearInterval(qtInterval);
+  clearActiveSession();
   showScreen('screen-reg');
 }
+
+// ── RESUME ON REFRESH (closes the "refresh to reroll" loophole) ──
+(function resumeSessionIfActive(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (!saved || !saved.userData || !saved.userData.name) return;
+    userData = saved.userData;
+    currentQ = saved.currentQ || 0;
+    score = saved.score || 0;
+    prodScore = saved.prodScore || 0;
+    compScore = saved.compScore || 0;
+    userAnswers = saved.userAnswers || [];
+    startTime = saved.startTime || Date.now();
+    refreshCount = (saved.refreshCount || 0) + 1;
+    saveActiveSession(); // persist the incremented refresh count immediately
+    if (currentQ >= questions.length) {
+      // Edge case: they refreshed exactly on the results transition
+      showResults();
+    } else {
+      showScreen('screen-quiz');
+      loadQuestion();
+    }
+  } catch(e) {
+    // If anything's malformed, fall back to the normal registration screen
+  }
+})();
 </script>
 </body>
 </html>
