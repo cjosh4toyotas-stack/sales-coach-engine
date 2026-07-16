@@ -50,6 +50,8 @@ html, body { background: var(--black); color: var(--text); font-family: 'Inter',
 }
 .form-input:focus { border-color: var(--red); }
 select.form-input { cursor: pointer; }
+.locked-field { background: rgba(255,255,255,0.03); color: rgba(240,240,244,0.55); cursor: not-allowed; }
+.locked-field:focus { border-color: var(--border); }
 
 /* ── BUTTONS ── */
 .btn-primary {
@@ -312,11 +314,11 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="form-field">
       <label class="form-label">Dealership Name</label>
-      <input class="form-input" id="f-dealer" type="text" placeholder="ABC Toyota" autocomplete="organization">
+      <input class="form-input locked-field" id="f-dealer" type="text" placeholder="Auto-filled from Dealer Code" readonly>
     </div>
     <div class="form-field">
       <label class="form-label">Region</label>
-      <select class="form-input" id="f-region">
+      <select class="form-input locked-field" id="f-region" disabled>
         <option value="">Select Region</option>
         <option>Boston Region</option>
         <option>New York Region</option>
@@ -334,7 +336,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="form-field">
       <label class="form-label">State</label>
-      <input class="form-input" id="f-state" type="text" placeholder="Start typing your state..." autocomplete="off">
+      <input class="form-input locked-field" id="f-state" type="text" placeholder="Auto-filled from Dealer Code" readonly>
     </div>
     <button class="btn-primary" onclick="startQuiz()">START QUIZ →</button>
     <div style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
@@ -670,66 +672,17 @@ const DEALER_LOOKUP = {
   codeInput.addEventListener('input', function(){
     const code = codeInput.value.trim();
     const match = DEALER_LOOKUP[code];
+    const regionSel = document.getElementById('f-region');
     if(match){
       document.getElementById('f-dealer').value = match.name;
       document.getElementById('f-state').value = match.state;
-      const regionSel = document.getElementById('f-region');
       if(regionSel) regionSel.value = 'Kansas City Region';
+    } else {
+      document.getElementById('f-dealer').value = '';
+      document.getElementById('f-state').value = '';
+      if(regionSel) regionSel.value = '';
     }
   });
-})();
-
-// ── STATE AUTOCOMPLETE (inline fill-as-you-type, converts to 2-letter code) ──
-(function(){
-  const stateInput = document.getElementById('f-state');
-  if(!stateInput) return;
-
-  const STATES = [
-    {name:'Alabama',code:'AL'},{name:'Alaska',code:'AK'},{name:'Arizona',code:'AZ'},
-    {name:'Arkansas',code:'AR'},{name:'California',code:'CA'},{name:'Colorado',code:'CO'},
-    {name:'Connecticut',code:'CT'},{name:'Delaware',code:'DE'},{name:'Florida',code:'FL'},
-    {name:'Georgia',code:'GA'},{name:'Hawaii',code:'HI'},{name:'Idaho',code:'ID'},
-    {name:'Illinois',code:'IL'},{name:'Indiana',code:'IN'},{name:'Iowa',code:'IA'},
-    {name:'Kansas',code:'KS'},{name:'Kentucky',code:'KY'},{name:'Louisiana',code:'LA'},
-    {name:'Maine',code:'ME'},{name:'Maryland',code:'MD'},{name:'Massachusetts',code:'MA'},
-    {name:'Michigan',code:'MI'},{name:'Minnesota',code:'MN'},{name:'Mississippi',code:'MS'},
-    {name:'Missouri',code:'MO'},{name:'Montana',code:'MT'},{name:'Nebraska',code:'NE'},
-    {name:'Nevada',code:'NV'},{name:'New Hampshire',code:'NH'},{name:'New Jersey',code:'NJ'},
-    {name:'New Mexico',code:'NM'},{name:'New York',code:'NY'},{name:'North Carolina',code:'NC'},
-    {name:'North Dakota',code:'ND'},{name:'Ohio',code:'OH'},{name:'Oklahoma',code:'OK'},
-    {name:'Oregon',code:'OR'},{name:'Pennsylvania',code:'PA'},{name:'Rhode Island',code:'RI'},
-    {name:'South Carolina',code:'SC'},{name:'South Dakota',code:'SD'},{name:'Tennessee',code:'TN'},
-    {name:'Texas',code:'TX'},{name:'Utah',code:'UT'},{name:'Vermont',code:'VT'},
-    {name:'Virginia',code:'VA'},{name:'Washington',code:'WA'},{name:'West Virginia',code:'WV'},
-    {name:'Wisconsin',code:'WI'},{name:'Wyoming',code:'WY'},{name:'District of Columbia',code:'DC'}
-  ];
-
-  let deleting = false;
-  stateInput.addEventListener('keydown', function(e){
-    deleting = (e.key === 'Backspace' || e.key === 'Delete');
-  });
-
-  stateInput.addEventListener('input', function(){
-    const val = stateInput.value;
-    if(deleting || val.length === 0) return;
-    const match = STATES.find(s => s.name.toLowerCase().startsWith(val.toLowerCase()));
-    if(match && match.name.toLowerCase() !== val.toLowerCase()){
-      stateInput.value = val + match.name.slice(val.length);
-      stateInput.setSelectionRange(val.length, match.name.length);
-    }
-  });
-
-  function normalizeState(){
-    const val = stateInput.value.trim();
-    const exact = STATES.find(s => s.name.toLowerCase() === val.toLowerCase());
-    if(exact){
-      stateInput.value = exact.code;
-    } else if(/^[A-Za-z]{2}$/.test(val)){
-      stateInput.value = val.toUpperCase();
-    }
-  }
-  stateInput.addEventListener('blur', normalizeState);
-  stateInput.addEventListener('change', normalizeState);
 })();
 
 // ── QUIZ QUESTIONS ────────────────────────────────────────────
@@ -885,8 +838,8 @@ function startQuiz() {
   const region = document.getElementById('f-region').value;
   const state = document.getElementById('f-state').value.trim().toUpperCase();
   if (!name) { alert('Please enter your name.'); return; }
-  if (!dealer) { alert('Please enter your dealership name.'); return; }
-  if (!region) { alert('Please select your region.'); return; }
+  if (!dealerCode) { alert('Please enter your dealer code.'); return; }
+  if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
