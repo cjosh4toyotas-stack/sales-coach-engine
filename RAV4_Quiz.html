@@ -817,13 +817,23 @@ let startTime = null;
 let userAnswers = [];
 let userData = {};
 let refreshCount = 0;
+let activeQuestions = questions; // per-attempt shuffled copy; replaced in startQuiz()
 const ACTIVE_SESSION_KEY = 'rav4_active_quiz_session';
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 // ── REGISTRATION ──────────────────────────────────────────────
 function saveActiveSession(){
   try {
     localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
-      userData, currentQ, score, prodScore, compScore, userAnswers, startTime, refreshCount
+      userData, currentQ, score, prodScore, compScore, userAnswers, startTime, refreshCount, activeQuestions
     }));
   } catch(e) {}
 }
@@ -843,6 +853,7 @@ function startQuiz() {
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
+  activeQuestions = shuffleArray(questions); // fresh random order for this attempt
   saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
@@ -856,12 +867,12 @@ function showScreen(id) {
 }
 
 function loadQuestion() {
-  const q = questions[currentQ];
+  const q = activeQuestions[currentQ];
   answered = false;
 
-  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
   document.getElementById('q-score-live').textContent = `Score: ${score}`;
-  document.getElementById('q-progress').style.width = ((currentQ / questions.length) * 100) + '%';
+  document.getElementById('q-progress').style.width = ((currentQ / activeQuestions.length) * 100) + '%';
   document.getElementById('q-category').textContent = q.cat;
   document.getElementById('q-text').textContent = q.q;
   document.getElementById('q-feedback').style.display = 'none';
@@ -910,7 +921,7 @@ function selectAnswer(idx) {
 }
 
 function revealAnswer(selected) {
-  const q = questions[currentQ];
+  const q = activeQuestions[currentQ];
   const btns = document.querySelectorAll('.answer-btn');
   const isCorrect = selected === q.ans;
 
@@ -944,7 +955,7 @@ function revealAnswer(selected) {
 
 function nextQuestion() {
   currentQ++;
-  if (currentQ >= questions.length) {
+  if (currentQ >= activeQuestions.length) {
     showResults();
   } else {
     saveActiveSession();
@@ -957,7 +968,7 @@ function showResults() {
   clearActiveSession();
   showScreen('screen-results');
   const totalTime = Math.round((Date.now() - startTime) / 1000);
-  const pct = Math.round(score / questions.length * 100);
+  const pct = Math.round(score / activeQuestions.length * 100);
   const pass = score >= 12;
 
   document.getElementById('res-score').textContent = score;
@@ -1008,7 +1019,7 @@ function showResults() {
   const reviewEl = document.getElementById('question-review');
   reviewEl.innerHTML = '<div style="font-family:Rajdhani,sans-serif;font-size:20px;font-weight:700;margin-bottom:12px">Question Review</div>' +
     userAnswers.map(a => {
-      const q = questions[a.q];
+      const q = activeQuestions[a.q];
       return `<div class="review-item ${a.correct ? 'c' : 'w'}">
         <div class="review-icon">${a.correct ? '✓' : '✗'}</div>
         <div><div class="review-q">${q.q}</div><div class="review-a">${a.correct ? 'Correct' : 'Your answer: ' + (a.selected >= 0 ? q.opts[a.selected] : 'Timed out') + ' · Correct: ' + q.opts[q.ans]}</div></div>
@@ -1079,8 +1090,9 @@ function retakeQuiz() {
     userAnswers = saved.userAnswers || [];
     startTime = saved.startTime || Date.now();
     refreshCount = (saved.refreshCount || 0) + 1;
+    activeQuestions = (Array.isArray(saved.activeQuestions) && saved.activeQuestions.length) ? saved.activeQuestions : questions;
     saveActiveSession(); // persist the incremented refresh count immediately
-    if (currentQ >= questions.length) {
+    if (currentQ >= activeQuestions.length) {
       // Edge case: they refreshed exactly on the results transition
       showResults();
     } else {
