@@ -829,6 +829,17 @@ function shuffleArray(arr) {
   return a;
 }
 
+// Returns a new question object with its answer options shuffled and .ans
+// re-pointed to wherever the correct option landed. Does not mutate the original.
+function shuffleQuestionOptions(q) {
+  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
+  return {
+    ...q,
+    opts: order.map(i => q.opts[i]),
+    ans: order.indexOf(q.ans)
+  };
+}
+
 // ── REGISTRATION ──────────────────────────────────────────────
 function saveActiveSession(){
   try {
@@ -853,7 +864,7 @@ function startQuiz() {
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
-  activeQuestions = shuffleArray(questions); // fresh random order for this attempt
+  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
   saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
