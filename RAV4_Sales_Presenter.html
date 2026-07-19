@@ -132,6 +132,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
   overflow: hidden;
   display: flex; flex-direction: column;
 }
+.deck { display: none; }
+.deck.active { display: block; }
 
 /* ── SLIDES ───────────────────────────────────────────── */
 .slide {
@@ -491,6 +493,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 }
 .splash-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px var(--red-glow); }
 .splash-version { font-size: 11px; color: var(--text-muted); }
+.deck-select-row { display: flex; gap: 24px; margin: 12px 0; }
+.deck-select-btn {
+  padding: 28px 40px; border-radius: 16px; min-width: 220px;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+  font-family: 'Rajdhani', sans-serif; cursor: pointer; transition: all .2s;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.deck-select-btn:hover {
+  border-color: var(--red); background: var(--surface3);
+  transform: translateY(-4px); box-shadow: 0 0 40px var(--red-glow);
+}
+.deck-select-name { font-size: 26px; font-weight: 700; }
+.deck-select-sub { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
 
 /* ── PHASE TITLE SLIDE ────────────────────────────────── */
 .phase-splash {
@@ -561,7 +576,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- SPLASH / PRESENTATION SELECTOR -->
 <div id="splash">
   <div class="splash-logo">
     <svg width="72" height="48" viewBox="0 0 72 48" fill="none">
@@ -571,9 +586,18 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     </svg>
   </div>
   <div class="splash-red-line"></div>
-  <div class="splash-title">RAV4 2026</div>
-  <div class="splash-sub">Sales Coach · Meeting in a Box</div>
-  <button class="splash-btn" onclick="startPresentation()">▶ &nbsp;BEGIN SESSION</button>
+  <div class="splash-title" style="font-size:32px">Sales Coach Engine</div>
+  <div class="splash-sub">Select a presentation to begin</div>
+  <div class="deck-select-row">
+    <button class="deck-select-btn" onclick="selectDeck('rav4')">
+      <div class="deck-select-name">2026 RAV4</div>
+      <div class="deck-select-sub">Sales Coach · Meeting in a Box</div>
+    </button>
+    <button class="deck-select-btn" onclick="selectDeck('bz')">
+      <div class="deck-select-name">2026 bZ Woodland</div>
+      <div class="deck-select-sub">BEV Sales Coach · Meeting in a Box</div>
+    </button>
+  </div>
   <div class="splash-version">Information current as of March 2026 &nbsp;·&nbsp; Toyota Motor Sales</div>
 </div>
 
@@ -722,6 +746,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
   <!-- MAIN -->
   <div id="main">
+
+    <div id="deck-rav4" class="deck active">
 
     <!-- ═══ PHASE 0: PRODUCT SPOTLIGHT ═══ -->
 
@@ -1130,19 +1156,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
         <div class="modal-field">
           <label class="modal-label">Dealer Code</label>
-          <input class="modal-input" id="pres-reg-dealer-code" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+          <input class="modal-input" id="pres-reg-dealer-code-rav4" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
         </div>
         <div class="modal-field">
           <label class="modal-label">Your Name</label>
-          <input class="modal-input" id="pres-reg-name" type="text" placeholder="First Last" autocomplete="name">
+          <input class="modal-input" id="pres-reg-name-rav4" type="text" placeholder="First Last" autocomplete="name">
         </div>
         <div class="modal-field">
           <label class="modal-label">Dealership Name</label>
-          <input class="modal-input" id="pres-reg-dealer" type="text" placeholder="ABC Toyota" autocomplete="organization">
+          <input class="modal-input" id="pres-reg-dealer-rav4" type="text" placeholder="ABC Toyota" autocomplete="organization">
         </div>
         <div class="modal-field">
           <label class="modal-label">Region</label>
-          <select class="modal-input" id="pres-reg-region">
+          <select class="modal-input" id="pres-reg-region-rav4">
             <option value="">Select Region</option>
             <option>Boston Region</option>
             <option>New York Region</option>
@@ -1160,7 +1186,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         </div>
         <div class="modal-field">
           <label class="modal-label">State</label>
-          <input class="modal-input" id="pres-reg-state" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+          <input class="modal-input" id="pres-reg-state-rav4" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
         </div>
         <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
       </div>
@@ -1175,10 +1201,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
           <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 15 questions. The clock is running!</div>
         </div>
         <div class="qr-wrapper fade-in fade-in-2">
-          <div id="qr-code"></div>
+          <div id="qr-code-rav4"></div>
         </div>
-        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display">Configure URL in Settings ⚙ (top right)</div>
-        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note">Open Settings → enter your network URL → Save to generate QR code</div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-rav4">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-rav4">Open Settings → enter your network URL → Save to generate QR code</div>
       </div>
     </div>
 
@@ -1187,14 +1213,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
       <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
       <div class="fade-in fade-in-2">
-        <div id="live-scoreboard">
-          <div class="scoreboard" id="scoreboard-list">
+        <div id="live-scoreboard-rav4">
+          <div class="scoreboard" id="scoreboard-list-rav4">
             <!-- Populated by JS -->
           </div>
           <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
-            <input id="score-name-input" class="modal-input" style="width:200px" placeholder="Name">
-            <input id="score-dealer-input" class="modal-input" style="width:180px" placeholder="Dealership">
-            <input id="score-val-input" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <input id="score-name-input-rav4" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-rav4" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-rav4" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
             <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
             <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
           </div>
@@ -1226,8 +1252,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <div class="slide" data-phase="4" data-slide="1">
       <div class="slide-eyebrow">Accountability · Recognition</div>
       <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
-      <div id="final-scoreboard-wrap" class="fade-in fade-in-2">
-        <div id="final-scoreboard"></div>
+      <div id="final-scoreboard-wrap-rav4" class="fade-in fade-in-2">
+        <div id="final-scoreboard-rav4"></div>
       </div>
       <div class="two-col mt-24 fade-in fade-in-3">
         <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
@@ -1261,6 +1287,549 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         </div>
       </div>
     </div>
+
+    </div><!-- /deck-rav4 -->
+
+    <div id="deck-bz" class="deck">
+
+    <!-- ═══ PHASE 0: PRODUCT SPOTLIGHT (bZ Woodland) ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Product<br><span class="red">Spotlight</span></div>
+          <div class="phase-splash-subtitle">Build foundational knowledge of the 2026 bZ Woodland — Toyota's most capable BEV yet.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Performance & Battery</div>
+            <div class="phase-splash-item">Range & Charging</div>
+            <div class="phase-splash-item">Capability & Warranty</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: Performance & Battery -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Product Spotlight · Performance</div>
+      <div class="slide-title fade-in fade-in-1">Toyota's Most <span>Powerful bZ</span> Yet</div>
+      <div class="big-stats fade-in fade-in-2">
+        <div class="big-stat">
+          <div class="big-stat-value">375 HP</div>
+          <div class="big-stat-label">Net Combined Horsepower</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">4.4 sec</div>
+          <div class="big-stat-label">0-60 MPH</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">74.7 kWh</div>
+          <div class="big-stat-label">Battery Capacity</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">AWD</div>
+          <div class="big-stat-label">Standard — Not Optional</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3">
+        <div class="card">
+          <div class="card-label">New</div>
+          <div class="card-title">Dual-Motor AWD Standard</div>
+          <div class="card-body">Front and rear motors (167 kW each) work together — standard on every bZ Woodland, not a paid upgrade.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">New</div>
+          <div class="card-title">Two Grades</div>
+          <div class="card-body">bZ Woodland and bZ Woodland Premium — same powertrain, Premium adds comfort and tech.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Capability</div>
+          <div class="card-title">X-MODE with Grip Control</div>
+          <div class="card-body">Automatically manages individual wheel braking and torque distribution on snow, mud, and loose surfaces.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Design</div>
+          <div class="card-title">18-in. Wheels, Removable Aero Covers</div>
+          <div class="card-body">Standard aerodynamic covers can be removed for a different look without sacrificing efficiency.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: Range & Charging -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Product Spotlight · Range & Charging</div>
+      <div class="slide-title fade-in fade-in-1">Range & Charging <span>Made Simple</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>281 miles EPA-estimated range</strong> — 260 miles with optional All-Terrain tires. Standard AWD across the board.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>NACS charging port, standard</strong> — plus complimentary J1772 and CCS1 adapters included with every new Toyota BEV.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>DC fast charging</strong> — approximately 30 minutes for a 10-80% charge under ideal conditions.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>11-kW onboard AC charger</strong> — faster Level 2 home/public charging than many competitors.</div>
+          </div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Battery Pre-Conditioning</strong> — automatically brings the battery to an optimal temperature ahead of DC fast charging, especially helpful in cold weather.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Dual-voltage charging cable, standard</strong> — supports both 120V and 240V charging with no extra equipment.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Toyota App integration</strong> — locate charging stations, see amperage/availability/wait times, plan EV routes, and control charge scheduling remotely.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Plug & Charge + Auto Preconditioning</strong> — both powered by an active Drive Connect trial or subscription.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: Capability & Warranty -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Product Spotlight · Capability & Confidence</div>
+      <div class="slide-title fade-in fade-in-1">Built for the <span>Trail & the Road</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Capability</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>8.4 inches</strong> of ground clearance</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>3,500 lbs</strong> maximum towing capacity</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Standard roof rails</strong> — ready for bikes, kayaks, or a rooftop tent</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>33.8 cu. ft.</strong> cargo behind the second row — flat floor, wide interior, seats fold flat</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Peace of Mind</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Toyota Safety Sense</strong> standard, same driver-assist confidence as every Toyota</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>8-year / 100,000-mile battery warranty</strong> — protects against defects AND capacity loss down to 70%</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Battery degradation is not linear</strong> — a 5% drop one year doesn't predict the same the next</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Per Stanford University research, batteries driven in varied conditions lasted <strong>up to 40% longer</strong> than those held at constant steady speeds</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: COMPETITIVE CHALLENGE (bZ Woodland) ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">Competitive<br><span class="red">Challenge</span></div>
+          <div class="phase-splash-subtitle">Know the top BEV cross-shops — Honda Prologue EX AWD and Hyundai IONIQ 5 XRT — and win with real talking points.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Toyota vs Competitors</div>
+            <div class="phase-splash-item">Objection Handling</div>
+            <div class="phase-splash-item">Real Customer Questions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Competitive Wins Table -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Competitive Challenge · Key Wins</div>
+      <div class="slide-title fade-in fade-in-1">bZ Woodland <span>Real-World Wins</span></div>
+      <div class="fade-in fade-in-2">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>2026 bZ Woodland</th>
+              <th>Key Competitors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Horsepower</strong></td>
+              <td><span class="win-badge">✓ WIN</span> 375 hp, standard dual-motor AWD</td>
+              <td class="dim">Honda Prologue EX AWD: 300 hp. Standard AWD not offered on every Prologue trim.</td>
+            </tr>
+            <tr>
+              <td><strong>Towing</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Up to 3,500 lbs</td>
+              <td class="dim">Honda Prologue: 1,500 lbs max. Hyundai IONIQ 5: 2,700 lbs max.</td>
+            </tr>
+            <tr>
+              <td><strong>Ground Clearance</strong></td>
+              <td><span class="win-badge">✓ WIN</span> 8.4 inches</td>
+              <td class="dim">Honda Prologue: 7.9–8.1 inches.</td>
+            </tr>
+            <tr>
+              <td><strong>Charging Flexibility</strong></td>
+              <td><span class="win-badge">✓ WIN</span> NACS port + included J1772 & CCS1 adapters</td>
+              <td class="dim">Competitors often require separately purchased adapters for full network access.</td>
+            </tr>
+            <tr>
+              <td><strong>Battery Warranty</strong></td>
+              <td><span class="win-badge">✓ WIN</span> 8 yrs/100k mi, protects to 70% capacity</td>
+              <td class="dim">Not all competitors explicitly guarantee a capacity-retention floor.</td>
+            </tr>
+            <tr>
+              <td><strong>Brand Trust</strong></td>
+              <td><span class="win-badge">✓ WIN</span> Toyota reliability & nationwide dealer network</td>
+              <td class="dim">Newer BEV entrants lack Toyota's decades of proven reliability track record.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Objection Handling -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Competitive Challenge · Objection Handling</div>
+      <div class="slide-title fade-in fade-in-1">Handle <span>Objections</span> With Confidence</div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"Aren't all EVs pretty much the same?"</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>bZ Woodland out-tows and out-powers the Prologue and IONIQ 5</li><li>Standard AWD and X-MODE — not an upgrade you have to pay extra for</li><li>NACS port PLUS included J1772/CCS1 adapters means no charging network is off-limits</li><li>Toyota's reliability reputation, backed by an 8yr/100k battery warranty to 70% capacity</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"I've heard EVs have more reliability issues than gas cars."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>This is Toyota — the same engineering discipline behind decades of hybrid leadership</li><li>Battery degradation is not linear; a bad first year doesn't predict a bad second year</li><li>8-year/100,000-mile battery warranty explicitly protects against capacity loss, not just defects</li><li>Toyota's nationwide dealer network means service is never far away</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"The Hyundai has a longer range and faster charging."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Acknowledge it — Hyundai's 800V architecture does charge quickly</li><li>But bZ Woodland tows over 800 lbs more than the IONIQ 5 XRT (3,500 vs 2,700 lbs)</li><li>bZ Woodland includes both J1772 AND CCS1 adapters standard — broader out-of-box compatibility</li><li>Toyota's proven resale value and reliability reputation matter over the life of ownership</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Why Buy Toyota BEV -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Competitive Challenge · Brand Value</div>
+      <div class="slide-title fade-in fade-in-1">Why Buy a <span>Toyota BEV?</span></div>
+      <div class="cards-grid cards-4 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <div class="card-label">Trust</div>
+          <div class="card-title">Decades of Reliability</div>
+          <div class="card-body">Toyota's reputation for reliability carries directly into the bZ lineup.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-label">Charging</div>
+          <div class="card-title">NACS + Included Adapters</div>
+          <div class="card-body">Standard NACS port plus complimentary J1772 and CCS1 adapters — broad access, out of the box.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-label">Warranty</div>
+          <div class="card-title">8yr/100k Battery Coverage</div>
+          <div class="card-body">Protects against defects AND capacity loss down to 70% — real peace of mind.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏔️</div>
+          <div class="card-label">Capability</div>
+          <div class="card-title">Standard AWD + X-MODE</div>
+          <div class="card-body">Not an upgrade — every bZ Woodland is dual-motor AWD with Grip Control.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💪</div>
+          <div class="card-label">Towing</div>
+          <div class="card-title">3,500 lb Capacity</div>
+          <div class="card-body">Beats both the Honda Prologue (1,500 lbs) and Hyundai IONIQ 5 (2,700 lbs) by a wide margin.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <div class="card-label">Technology</div>
+          <div class="card-title">Toyota App Integration</div>
+          <div class="card-body">Charging station locator, EV route planning, charge scheduling, and remote services.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-label">Support</div>
+          <div class="card-title">Nationwide Dealer Network</div>
+          <div class="card-body">Toyota's dealer footprint ensures BEV service and support is never far away.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-label">Innovation</div>
+          <div class="card-title">Most Powerful bZ Yet</div>
+          <div class="card-body">375 hp and a 4.4-second 0-60 make the bZ Woodland Toyota's quickest bZ to date.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: SALES SCENARIO (bZ Woodland Objection Practice) ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">Sales<br><span class="red">Scenario</span></div>
+          <div class="phase-splash-subtitle">Practice the real questions BEV-curious customers ask. Range, cargo, and charging — answer with confidence, not defensiveness.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Live Role Play</div>
+            <div class="phase-splash-item">Objection Practice</div>
+            <div class="phase-splash-item">Closing Confidence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Range Anxiety Objection -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Sales Scenario · Objection Handling</div>
+      <div class="slide-title fade-in fade-in-1">"I'm Worried About <span>Running Out of Charge"</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"I'm worried about the distance the bZ can travel on a single charge, and how easy is it to find charging stations using the Toyota app?"</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>bZ Woodland is designed to make range and charging feel straightforward, not stressful</li><li>Competitive EPA-estimated range (281 mi) plus the Toyota app helps locate compatible charging stations and plan routes</li><li>With NACS support, customers gain access to a massive portion of Tesla Superchargers and other major networks</li><li>Most charging happens at home for daily use — road trips are occasional planning moments, not daily stress</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: Cargo & Off-Road Skepticism -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Sales Scenario · Objection Handling</div>
+      <div class="slide-title fade-in fade-in-1">"Will It Really Handle <span>Trails & Cargo?"</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"Just how rugged is it? Will it handle gravel roads, steep trails, or snow without issue? Also, cargo space doesn't seem that ample."</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>X-MODE with Grip Control comes standard — automatically manages individual wheel braking and torque to help prevent wheel spin in snow, mud, and loose surfaces</li><li>8.4 inches of ground clearance and 3,500 lb towing put it right in line with adventure-focused vehicles</li><li>Standard roof rails accommodate bikes, kayaks, or a rooftop tent — beyond what fits inside</li><li>The bZ isn't trying to be a body-on-frame SUV — flat floor, wide interior, and folding rear seats make it feel far more open than the numbers suggest once you're actually loading it</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: DC Fast Charging Access & Time -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Sales Scenario · Objection Handling</div>
+      <div class="slide-title fade-in fade-in-1">"DC Fast Charging <span>Takes Too Long"</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Customer Says</div>
+            <div class="obj-question">"I'm worried about DC fast charging access and time — won't road trips take forever?"</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Modern Toyota BEVs DC fast charge remarkably quickly — about 30 minutes for a 10-80% charge under ideal conditions</li><li>That's roughly the same amount of time most travelers already stop for food, coffee, or a restroom break</li><li>Battery Pre-Conditioning (automatically triggered when navigating to a fast charger) helps optimize charging speed, especially in cold weather</li><li>Between Toyota app integration, expanding networks, and native NACS/Supercharger access, road trip friction isn't what most people expect</li></ul></div>
+          </div>
+        </div>
+        <div style="margin-top:24px">
+          <table class="data-table">
+            <thead><tr><th>Grade</th><th>Battery / Motor</th><th>Key Differentiator</th><th>Best For</th></tr></thead>
+            <tbody>
+              <tr><td><strong>bZ Woodland</strong></td><td>74.7 kWh, 375 hp dual-motor AWD</td><td>X-MODE, SofTex seats, dual Qi charging, standard roof rails</td><td>Value-focused adventure buyers</td></tr>
+              <tr><td><strong>bZ Woodland Premium</strong></td><td>74.7 kWh, 375 hp dual-motor AWD</td><td>Adds JBL Premium Audio, ventilated seats w/ memory, panoramic moonroof, front radiant heaters</td><td>Comfort & tech-forward buyers</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE (bZ Woodland) ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Team competition time. Scan the QR code, take the quiz, and see who knows bZ Woodland best.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">BEV Product Trivia</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-bz" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-bz" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-bz" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-bz">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-bz" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-bz"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-bz">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-bz">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-bz">
+          <div class="scoreboard" id="scoreboard-list-bz">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-bz" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-bz" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-bz" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD (bZ Woodland) ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-bz" class="fade-in fade-in-2">
+        <div id="final-scoreboard-bz"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">bZ Woodland Product Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn bZ Woodland Product module certification. Check the dashboard for your progress.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today. Next session: deep dive on Toyota app charging tools and objection handling vs Hyundai IONIQ 5.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Check the <strong style="color:var(--text)">bZ Woodland Dashboard</strong> for detailed scores, regional rankings, and certification progress.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Open bZ_Woodland_Dashboard.html</div>
+            <div class="phase-splash-item">Import today's quiz results</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-bz -->
 
   </div><!-- /main -->
 
@@ -1308,7 +1877,7 @@ const phases = [
   { name: 'Accountability', duration: 120 }
 ];
 
-const slideNotes = [
+const slideNotesRav4 = [
   // Phase 0
   'Kick off with energy! Tell participants this session follows the 5-phase Sales Coach Engine. Everyone will be tested on this material.',
   'PERFORMANCE: Emphasize the 100% electrified lineup as a key differentiator. Every RAV4 is now HEV or PHEV — no ICE option.',
@@ -1326,6 +1895,34 @@ const slideNotes = [
   'Review the grade ladder as a team. Can everyone name the horsepower for each powertrain? Quiz them!',
   // Phase 3
   'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
+];
+
+const slideNotesBz = [
+  // Phase 0
+  'Kick off with energy! This is Toyota\'s most rugged BEV yet. Many reps haven\'t sold a BEV before — build confidence here.',
+  'PERFORMANCE: 375 hp is the headline — most powerful bZ Toyota has built. Standard AWD, not optional, is a big deal vs competitors.',
+  'RANGE & CHARGING: 281 miles standard, 260 with All-Terrain tires. NACS port + included J1772/CCS1 adapters means no customer is ever stranded.',
+  'CAPABILITY: X-MODE, 8.4in clearance, 3,500 lb towing beat every competitor in this segment. The 8yr/100k battery warranty removes range-anxiety objections.',
+  // Phase 1
+  'Set the competitive context: Honda Prologue EX AWD and Hyundai IONIQ 5 XRT are the top cross-shops for BEV-curious customers.',
+  'Let participants study this table. Call on people: "In one sentence, why does bZ Woodland WIN on towing vs the Prologue?"',
+  'Role play: Read an objection out loud. Give a rep 30 seconds to respond without looking at notes. Then discuss.',
+  'Ask: "A customer says all EVs are basically the same." Build the habit of leading with Toyota reliability and NACS/adapter advantage.',
+  // Phase 2
+  'This phase is pulled directly from your Objection Handling deck. These are real questions customers ask — practice out loud.',
+  'RANGE ANXIETY: The core answer is always the same shape — competitive range + Toyota app + expanding NACS/Supercharger access = confidence, not stress.',
+  'CARGO & OFF-ROAD SKEPTICISM: Reframe "small on paper" — most people are surprised once they physically load the bZ Woodland. Roof rails close the gap.',
+  'DC FAST CHARGING: Reassure that ~30 min (10-80%) fits naturally into a road trip stop for food/coffee/restroom — it is not "extra" time.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
   'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
   'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
   // Phase 4
@@ -1414,27 +2011,32 @@ const DEALER_LOOKUP = {
   '40022': {name:'Capital City Toyota', state:'SD'}
 };
 
-(function(){
-  const codeInput = document.getElementById('pres-reg-dealer-code');
+function wireDealerCodeLookup(suffix){
+  const codeInput = document.getElementById('pres-reg-dealer-code-' + suffix);
   if(!codeInput) return;
   codeInput.addEventListener('input', function(){
     const code = codeInput.value.trim();
     const match = DEALER_LOOKUP[code];
+    const dealerEl = document.getElementById('pres-reg-dealer-' + suffix);
+    const stateEl = document.getElementById('pres-reg-state-' + suffix);
+    const regionSel = document.getElementById('pres-reg-region-' + suffix);
     if(match){
-      document.getElementById('pres-reg-dealer').value = match.name;
-      document.getElementById('pres-reg-state').value = match.state;
-      const regionSel = document.getElementById('pres-reg-region');
+      if(dealerEl) dealerEl.value = match.name;
+      if(stateEl) stateEl.value = match.state;
       if(regionSel) regionSel.value = 'Kansas City Region';
     }
   });
-})();
+}
+wireDealerCodeLookup('rav4');
+wireDealerCodeLookup('bz');
 
-const allSlides = Array.from(document.querySelectorAll('.slide'));
+let currentDeck = 'rav4';
+let allSlides = [];
 let currentSlideIdx = 0;
-const DEFAULT_QUIZ_URL = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
-let quizUrl = localStorage.getItem('presenter_quiz_url') || DEFAULT_QUIZ_URL;
+const DEFAULT_QUIZ_URL_RAV4 = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
+const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/bZ_Woodland_Quiz.html';
+let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
-let scores = JSON.parse(localStorage.getItem('presenter_scores') || '[]');
 
 // Timer state
 let timerSeconds = 180;
@@ -1443,11 +2045,40 @@ let timerInterval = null;
 let currentPhaseIdx = 0;
 
 // ── INIT ──────────────────────────────────────────────────────
-function startPresentation() {
+let scores = [];
+
+function scoresKey(){ return 'presenter_scores_' + currentDeck; }
+
+function selectDeck(deckName) {
+  currentDeck = deckName;
+
+  // Show only the chosen deck's slides
+  document.getElementById('deck-rav4').classList.toggle('active', deckName === 'rav4');
+  document.getElementById('deck-bz').classList.toggle('active', deckName === 'bz');
+  allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
+  currentSlideIdx = 0;
+
+  // Deck-specific branding
+  const brandSub = document.querySelector('.brand-sub');
+  if (deckName === 'bz') {
+    if (brandSub) brandSub.textContent = 'bZ WOODLAND 2026';
+  } else {
+    if (brandSub) brandSub.textContent = 'RAV4 2026';
+  }
+
+  // Deck-specific quiz URL default (only applied if nothing custom saved for this deck)
+  const savedUrl = localStorage.getItem('presenter_quiz_url_' + deckName);
+  quizUrl = savedUrl || (deckName === 'bz' ? DEFAULT_QUIZ_URL_BZ : DEFAULT_QUIZ_URL_RAV4);
+
+  // Deck-specific scores
+  scores = JSON.parse(localStorage.getItem(scoresKey()) || '[]');
+
   document.getElementById('splash').classList.add('hide');
   setTimeout(() => document.getElementById('splash').remove(), 900);
   updateUI();
   renderScoreboard();
+  generateQR(quizUrl);
+  if (deckName === 'rav4') fetchGoogleFormResults();
 }
 
 function updateUI() {
@@ -1479,8 +2110,9 @@ function updateUI() {
   });
 
   // Top title
+  const deckLabel = currentDeck === 'bz' ? 'bZ Woodland' : 'RAV4';
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = phases[phaseIdx]?.name);
-  document.getElementById('top-phase-title').textContent = 'Phase ' + (phaseIdx + 1) + ' · ' + phases[phaseIdx].name;
+  document.getElementById('top-phase-title').textContent = deckLabel + ' · Phase ' + (phaseIdx + 1) + ' · ' + phases[phaseIdx].name;
 
   // Timer label
   document.getElementById('timer-phase-label').textContent = 'PHASE ' + (phaseIdx + 1);
@@ -1507,7 +2139,8 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  notesEl.textContent = slideNotes[currentSlideIdx] || '';
+  const activeNotes = currentDeck === 'bz' ? slideNotesBz : slideNotesRav4;
+  notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
   // Final scoreboard sync
   if (phaseIdx === 4) renderFinalScoreboard();
@@ -1526,7 +2159,7 @@ function jumpToPhase(phaseIdx) {
 }
 
 function jumpToQR() {
-  const idx = allSlides.findIndex(s => s.querySelector('#qr-code'));
+  const idx = allSlides.findIndex(s => s.querySelector('[id^="qr-code"]'));
   if (idx !== -1) goToSlide(idx);
 }
 
@@ -1564,13 +2197,16 @@ function resetTimer() {
 // ── QR CODE ───────────────────────────────────────────────────
 let qrInstance = null;
 function generateQR(url) {
-  const container = document.getElementById('qr-code');
+  const container = document.getElementById('qr-code-' + currentDeck);
+  if (!container) return;
   container.innerHTML = '';
   if (!url) { container.innerHTML = '<div style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;text-align:center">Configure URL<br>in Settings</div>'; return; }
   try {
     qrInstance = new QRCode(container, { text: url, width: 200, height: 200, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
-    document.getElementById('qr-url-display').textContent = url;
-    document.getElementById('qr-config-note').textContent = 'Scan with phone camera to access quiz';
+    const urlDisplay = document.getElementById('qr-url-display-' + currentDeck);
+    const configNote = document.getElementById('qr-config-note-' + currentDeck);
+    if (urlDisplay) urlDisplay.textContent = url;
+    if (configNote) configNote.textContent = 'Scan with phone camera to access quiz';
   } catch(e) { console.error(e); }
 }
 
@@ -1582,9 +2218,10 @@ function openModal() {
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 function saveSettings() {
-  quizUrl = document.getElementById('quiz-url-input').value.trim() || DEFAULT_QUIZ_URL;
+  const defaultUrl = currentDeck === 'bz' ? DEFAULT_QUIZ_URL_BZ : DEFAULT_QUIZ_URL_RAV4;
+  quizUrl = document.getElementById('quiz-url-input').value.trim() || defaultUrl;
   sessionLabel = document.getElementById('session-label-input').value.trim() || 'LIVE SESSION';
-  localStorage.setItem('presenter_quiz_url', quizUrl);
+  localStorage.setItem('presenter_quiz_url_' + currentDeck, quizUrl);
   localStorage.setItem('presenter_session_label', sessionLabel);
   document.getElementById('session-label-display').textContent = sessionLabel.includes('●') ? sessionLabel : '● ' + sessionLabel;
   generateQR(quizUrl);
@@ -1593,16 +2230,16 @@ function saveSettings() {
 
 // ── SCOREBOARD ────────────────────────────────────────────────
 function addScore() {
-  const name = document.getElementById('score-name-input').value.trim();
-  const dealer = document.getElementById('score-dealer-input').value.trim();
-  const score = parseInt(document.getElementById('score-val-input').value);
+  const name = document.getElementById('score-name-input-' + currentDeck).value.trim();
+  const dealer = document.getElementById('score-dealer-input-' + currentDeck).value.trim();
+  const score = parseInt(document.getElementById('score-val-input-' + currentDeck).value);
   if (!name || isNaN(score)) return;
   scores.push({ name, dealer, score, pct: Math.round(score / 15 * 100), ts: Date.now() });
   scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
-  localStorage.setItem('presenter_scores', JSON.stringify(scores));
-  document.getElementById('score-name-input').value = '';
-  document.getElementById('score-dealer-input').value = '';
-  document.getElementById('score-val-input').value = '';
+  localStorage.setItem(scoresKey(), JSON.stringify(scores));
+  document.getElementById('score-name-input-' + currentDeck).value = '';
+  document.getElementById('score-dealer-input-' + currentDeck).value = '';
+  document.getElementById('score-val-input-' + currentDeck).value = '';
   renderScoreboard();
   renderFinalScoreboard();
 }
@@ -1610,7 +2247,7 @@ function addScore() {
 function clearScores() {
   if (confirm('Clear all scores?')) {
     scores = [];
-    localStorage.removeItem('presenter_scores');
+    localStorage.removeItem(scoresKey());
     renderScoreboard();
     renderFinalScoreboard();
   }
@@ -1628,7 +2265,7 @@ function importJSON() {
       }
     });
     scores.sort((a, b) => b.score - a.score);
-    localStorage.setItem('presenter_scores', JSON.stringify(scores));
+    localStorage.setItem(scoresKey(), JSON.stringify(scores));
     renderScoreboard();
     renderFinalScoreboard();
   } catch(e) { alert('Invalid JSON format.'); }
@@ -1661,6 +2298,7 @@ function parseCSV(text) {
 }
 
 async function fetchGoogleFormResults() {
+  if (currentDeck !== 'rav4') return; // Sheet only has RAV4 data; bZ Woodland has no Form/Sheet set up yet
   try {
     const res = await fetch(GSHEET_CSV_URL, { cache: 'no-store' });
     if (!res.ok) return;
@@ -1689,7 +2327,7 @@ async function fetchGoogleFormResults() {
     });
     if (added > 0) {
       scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
-      localStorage.setItem('presenter_scores', JSON.stringify(scores));
+      localStorage.setItem(scoresKey(), JSON.stringify(scores));
       renderScoreboard();
       renderFinalScoreboard();
     }
@@ -1698,11 +2336,11 @@ async function fetchGoogleFormResults() {
   }
 }
 
-fetchGoogleFormResults();
-setInterval(fetchGoogleFormResults, 15000); // poll every 15s so the live leaderboard updates during a session
+setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops unless the RAV4 deck is active
 
 function renderScoreboard() {
-  const el = document.getElementById('scoreboard-list');
+  const el = document.getElementById('scoreboard-list-' + currentDeck);
+  if (!el) return;
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
   el.innerHTML = scores.slice(0, 8).map((s, i) => `
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
@@ -1715,7 +2353,7 @@ function renderScoreboard() {
 }
 
 function renderFinalScoreboard() {
-  const el = document.getElementById('final-scoreboard');
+  const el = document.getElementById('final-scoreboard-' + currentDeck);
   if (!el) return;
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No quiz results yet.</div>'; return; }
   el.innerHTML = scores.slice(0, 5).map((s, i) => `

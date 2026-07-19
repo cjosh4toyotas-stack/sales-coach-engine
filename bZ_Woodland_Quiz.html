@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>bZ Woodland 2026 · Knowledge Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #EB0A1E;
+  --red-glow: rgba(235,10,30,0.35);
+  --red-dim: rgba(235,10,30,0.12);
+  --black: #060608;
+  --surface: #111115;
+  --surface2: #18181e;
+  --surface3: #202028;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0f4;
+  --text-dim: rgba(240,240,244,0.6);
+  --text-muted: rgba(240,240,244,0.28);
+  --green: #00e5a0;
+  --green-dim: rgba(0,229,160,0.1);
+  --wrong: #ff4444;
+  --wrong-dim: rgba(255,68,68,0.1);
+}
+html, body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+.screen { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px 20px; }
+.screen.active { display: flex; }
+
+/* ── HEADER ── */
+.quiz-header { text-align: center; margin-bottom: 32px; }
+.quiz-logo { width: 48px; height: 32px; margin: 0 auto 12px; }
+.quiz-logo svg { width: 100%; height: 100%; }
+.quiz-brand { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 4px; color: var(--text-dim); }
+.quiz-title { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; line-height: 1.1; }
+.quiz-title .red { color: var(--red); }
+.quiz-sub { font-size: 14px; color: var(--text-dim); margin-top: 6px; }
+
+/* ── FORM ── */
+.form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 420px; }
+.form-field { margin-bottom: 18px; }
+.form-label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 7px; font-weight: 600; }
+.form-input {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-size: 15px; outline: none; transition: border-color .2s;
+  -webkit-appearance: none;
+}
+.form-input:focus { border-color: var(--red); }
+select.form-input { cursor: pointer; }
+.locked-field { background: rgba(255,255,255,0.03); color: rgba(240,240,244,0.55); cursor: not-allowed; }
+.locked-field:focus { border-color: var(--border); }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%; padding: 16px; border-radius: 12px;
+  background: var(--red); border: none; color: white;
+  font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700;
+  letter-spacing: 1px; cursor: pointer; transition: all .2s;
+  box-shadow: 0 0 24px var(--red-glow); margin-top: 8px;
+}
+.btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 14px; cursor: pointer;
+  transition: all .2s; margin-top: 10px;
+}
+.btn-secondary:hover { color: var(--text); }
+
+/* ── QUIZ SCREEN ── */
+.quiz-top { width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.q-counter { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+.q-score-live { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--green); }
+.progress-bar { width: 100%; max-width: 600px; height: 4px; background: var(--surface2); border-radius: 2px; margin-bottom: 24px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--red); border-radius: 2px; transition: width .4s; box-shadow: 0 0 8px var(--red-glow); }
+
+.question-timer { text-align: center; margin-bottom: 16px; }
+.qt-value { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; color: var(--text); }
+.qt-value.warn { color: #ffaa00; }
+.qt-value.danger { color: var(--red); animation: pulse .8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.qt-label { font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+
+.question-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px 24px; width: 100%; max-width: 600px; margin-bottom: 20px; }
+.q-category { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 10px; }
+.q-text { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--text); }
+
+.answers { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 10px; }
+.answer-btn {
+  width: 100%; padding: 14px 18px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; text-align: left;
+  cursor: pointer; transition: all .18s; display: flex; align-items: center; gap: 12px;
+}
+.answer-btn:hover:not(:disabled) { background: var(--surface2); border-color: rgba(255,255,255,0.15); }
+.answer-btn.correct { background: rgba(0,229,160,0.12); border-color: var(--green); color: var(--green); }
+.answer-btn.wrong { background: rgba(255,68,68,0.1); border-color: var(--wrong); color: var(--wrong); }
+.answer-btn:disabled { cursor: default; }
+.answer-letter {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--text-dim);
+  transition: all .18s;
+}
+.answer-btn.correct .answer-letter { background: var(--green); border-color: var(--green); color: #000; }
+.answer-btn.wrong .answer-letter { background: var(--wrong); border-color: var(--wrong); color: white; }
+
+.feedback-box { width: 100%; max-width: 600px; padding: 14px 18px; border-radius: 12px; margin-top: 4px; font-size: 13px; line-height: 1.6; }
+.feedback-box.correct { background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.3); color: var(--green); }
+.feedback-box.wrong { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.3); color: var(--wrong); }
+.next-q-btn { width: 100%; max-width: 600px; margin-top: 12px; }
+
+/* ── RESULTS SCREEN ── */
+.result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 500px; text-align: center; }
+.result-score-big { font-family: 'Rajdhani', sans-serif; font-size: 80px; font-weight: 700; color: var(--red); line-height: 1; }
+.result-out-of { font-size: 18px; color: var(--text-dim); margin-bottom: 4px; }
+.result-pct { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+.cert-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px;
+  border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px;
+}
+.cert-badge.pass { background: var(--green-dim); border: 1px solid var(--green); color: var(--green); }
+.cert-badge.fail { background: var(--wrong-dim); border: 1px solid rgba(255,68,68,0.4); color: var(--wrong); }
+
+.result-breakdown { text-align: left; margin: 16px 0; }
+.rb-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.rb-item:last-child { border-bottom: none; }
+.rb-label { color: var(--text-dim); }
+.rb-val { font-weight: 600; }
+
+.export-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 16px; }
+.export-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.export-code { font-size: 11px; color: var(--text-dim); font-family: monospace; word-break: break-all; line-height: 1.5; max-height: 80px; overflow-y: auto; }
+.copy-btn { margin-top: 8px; padding: 6px 14px; border-radius: 6px; background: var(--surface3); border: 1px solid var(--border); color: var(--text-dim); font-size: 12px; cursor: pointer; }
+.copy-btn:hover { color: var(--text); }
+
+.question-review { width: 100%; max-width: 500px; margin-top: 24px; }
+.review-item { padding: 12px 14px; border-radius: 10px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+.review-item.c { background: rgba(0,229,160,0.07); border: 1px solid rgba(0,229,160,0.2); }
+.review-item.w { background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.2); }
+.review-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.review-q { font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.review-a { color: var(--text-muted); font-size: 12px; }
+
+/* ── SECURITY SYSTEM ─────────────────────────────────────── */
+#sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
+#sec-overlay.fade-out{opacity:0;pointer-events:none}
+#pin-entry{display:flex;flex-direction:column;align-items:center}
+.sec-brand{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:rgba(240,240,244,0.28);margin-bottom:16px}
+.sec-heading{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#f0f0f4;margin-bottom:4px;text-align:center}
+.sec-heading span{color:#EB0A1E}
+.sec-sub{font-size:11px;color:rgba(240,240,244,0.32);letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+.pin-dots{display:flex;gap:14px;margin-bottom:6px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);transition:all .15s}
+.pin-dot.filled{background:#EB0A1E;border-color:#EB0A1E;box-shadow:0 0 10px rgba(235,10,30,0.5)}
+.pin-dot.error{background:#ff4444;border-color:#ff4444}
+@keyframes sec-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.pin-shake{animation:sec-shake .4s}
+.pin-err-msg{font-size:11px;color:#ff4444;letter-spacing:1px;height:14px;margin-bottom:14px;text-align:center}
+.pin-pad{display:grid;grid-template-columns:repeat(3,70px);gap:9px;margin-bottom:18px}
+.pin-key{height:62px;border-radius:14px;background:#16161c;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:20px;font-weight:600;font-family:'Rajdhani',sans-serif;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;user-select:none}
+.pin-key:hover{background:#1e1e26;border-color:rgba(255,255,255,0.14)}
+.pin-key:active{transform:scale(.93);background:rgba(235,10,30,0.15);border-color:rgba(235,10,30,0.35)}
+.pin-key.del{font-size:17px;color:rgba(240,240,244,0.45)}
+.pin-key.clr{font-size:11px;letter-spacing:1px;color:rgba(240,240,244,0.35)}
+.sec-hint-txt{font-size:10px;color:rgba(240,240,244,0.18);letter-spacing:2px;text-transform:uppercase}
+#lock-screen{display:none;flex-direction:column;align-items:center;text-align:center}
+.lock-icon{font-size:54px;margin-bottom:14px}
+.lock-title{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:#EB0A1E;margin-bottom:8px}
+.lock-msg{color:rgba(240,240,244,0.45);font-size:14px;max-width:380px;margin:0 auto 20px;line-height:1.6}
+.lock-admin-link{background:none;border:none;font-size:11px;color:rgba(240,240,244,0.2);cursor:pointer;letter-spacing:1px;transition:color .2s}
+.lock-admin-link:hover{color:rgba(240,240,244,0.45)}
+#admin-fab{position:fixed;bottom:24px;right:18px;z-index:8000;width:38px;height:38px;border-radius:50%;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:15px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s}
+#admin-fab:hover{background:rgba(235,10,30,0.25)}
+#admin-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center}
+#admin-modal.open{display:flex}
+.admin-panel{background:#16161c;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;width:400px;max-width:90vw}
+.admin-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.admin-badge{display:inline-block;padding:2px 10px;border-radius:20px;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:10px;letter-spacing:2px;font-weight:600;margin-bottom:18px}
+.admin-sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,240,244,0.28);margin-bottom:8px;font-weight:600}
+.admin-pin-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.admin-pin-lbl{font-size:12px;color:rgba(240,240,244,0.55);width:96px;flex-shrink:0}
+.admin-pin-inp{flex:1;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:14px;outline:none;font-family:monospace;letter-spacing:4px}
+.admin-pin-inp:focus{border-color:#EB0A1E}
+.admin-lock-ta{width:100%;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:12px;outline:none;resize:none;height:56px;margin-bottom:14px}
+.btn-adm{padding:9px 16px;border-radius:9px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-adm.save{background:#EB0A1E;color:white}
+.btn-adm.lock-btn{background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.35);color:#ffaa00}
+.btn-adm.unlock-btn{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.35);color:#00e5a0}
+.btn-adm.close-btn{background:#1e1e26;color:rgba(240,240,244,0.45)}
+.btn-adm:hover{opacity:.82}
+.admin-status-txt{font-size:11px;color:rgba(240,240,244,0.28);margin-top:10px}
+
+/* Question Editor */
+#qe-modal{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px}
+#qe-modal.open{display:flex}
+.qe-panel{background:#16161c;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px;width:720px;max-width:100%}
+.qe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.qe-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700}
+.qe-sub{font-size:12px;color:rgba(240,240,244,0.4);margin-bottom:18px}
+.qe-card{background:#1e1e26;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:14px}
+.qe-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qe-num{font-size:11px;font-weight:700;color:#EB0A1E;letter-spacing:1px}
+.qe-del-btn{background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer}
+.qe-del-btn:hover{opacity:.8}
+.qe-row{margin-bottom:8px}
+.qe-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(240,240,244,0.3);margin-bottom:4px;display:block}
+.qe-inp,.qe-ta,.qe-sel{width:100%;padding:8px 10px;border-radius:8px;background:#111116;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:13px;outline:none;box-sizing:border-box;font-family:inherit}
+.qe-inp:focus,.qe-ta:focus,.qe-sel:focus{border-color:#EB0A1E}
+.qe-ta{resize:vertical;min-height:36px}
+.qe-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qe-opt-row{display:flex;align-items:center;gap:6px}
+.qe-opt-row input[type=radio]{accent-color:#EB0A1E;flex-shrink:0}
+.qe-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;position:sticky;bottom:0;background:#16161c;padding-top:10px}
+.qe-add-btn{background:#1e1e26;border:1px dashed rgba(255,255,255,0.2);color:rgba(240,240,244,0.6);font-size:13px;padding:12px;border-radius:12px;cursor:pointer;width:100%;margin-bottom:14px;text-align:center}
+.qe-add-btn:hover{border-color:#EB0A1E;color:#EB0A1E}
+</style>
+</head>
+<body>
+
+<div id="qe-modal">
+  <div class="qe-panel">
+    <div class="qe-header">
+      <div>
+        <div class="qe-title">📝 Question Editor</div>
+        <div class="qe-sub">Edit questions below, then Save to preview instantly or Copy Code to make it permanent on GitHub.</div>
+      </div>
+    </div>
+    <div id="qe-list"></div>
+    <button class="qe-add-btn" onclick="qeAddQuestion()">+ Add Question</button>
+    <div class="qe-actions">
+      <button class="btn-adm save" onclick="qeSaveLive()">💾 Save (Preview Live)</button>
+      <button class="btn-adm lock-btn" onclick="qeCopyCode()">📋 Copy Code for GitHub</button>
+      <button class="btn-adm unlock-btn" onclick="qeResetDefault()">↺ Reset to Default</button>
+      <button class="btn-adm close-btn" onclick="closeQuestionEditor()">Close</button>
+    </div>
+    <div class="admin-status-txt" id="qe-status-txt"></div>
+  </div>
+</div>
+
+<!-- SECURITY OVERLAY -->
+<div id="sec-overlay">
+  <div id="lock-screen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">SYSTEM LOCKED</div>
+    <div class="lock-msg" id="lock-msg-text">This training system has been temporarily locked by your administrator.</div>
+    <button class="lock-admin-link" onclick="secShowPin()">Administrator access →</button>
+  </div>
+  <div id="pin-entry">
+    <svg width="50" height="34" viewBox="0 0 72 48" fill="none" style="margin-bottom:10px"><ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/></svg>
+    <div class="sec-brand">TOYOTA · bZ WOODLAND 2026</div>
+    <div class="sec-heading">Knowledge <span>Battle</span></div>
+    <div class="sec-sub" id="sec-access-label">Enter Your Access PIN</div>
+    <div class="pin-dots" id="sec-pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div class="pin-err-msg" id="pin-err-msg"></div>
+    <div class="pin-pad">
+      <div class="pin-key" onclick="secKey('1')">1</div><div class="pin-key" onclick="secKey('2')">2</div><div class="pin-key" onclick="secKey('3')">3</div>
+      <div class="pin-key" onclick="secKey('4')">4</div><div class="pin-key" onclick="secKey('5')">5</div><div class="pin-key" onclick="secKey('6')">6</div>
+      <div class="pin-key" onclick="secKey('7')">7</div><div class="pin-key" onclick="secKey('8')">8</div><div class="pin-key" onclick="secKey('9')">9</div>
+      <div class="pin-key clr" onclick="secClear()">CLR</div><div class="pin-key" onclick="secKey('0')">0</div><div class="pin-key del" onclick="secDel()">⌫</div>
+    </div>
+    <div class="sec-hint-txt">Authorized Personnel Only · Toyota Motor Sales</div>
+  </div>
+</div>
+<div id="admin-fab" onclick="openAdminPanel()" title="Master Admin">⚙</div>
+<div id="admin-modal">
+  <div class="admin-panel">
+    <div class="admin-title">Master Admin</div>
+    <div class="admin-badge">● MASTER ACCESS</div>
+    <div class="admin-sec-label">Access PINs (4 digits each)</div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Master PIN</span><input class="admin-pin-inp" id="ap-master" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Manager PIN</span><input class="admin-pin-inp" id="ap-manager" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row" style="margin-bottom:16px"><span class="admin-pin-lbl">Sales PIN</span><input class="admin-pin-inp" id="ap-sales" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-sec-label">Lock Message</div>
+    <textarea class="admin-lock-ta" id="ap-lock-msg" placeholder="Message displayed when system is locked..."></textarea>
+    <div class="admin-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-adm save" onclick="secSaveAdmin()">Save PINs</button>
+      <button class="btn-adm lock-btn" id="btn-lock-toggle" onclick="secToggleLock()">🔒 Lock System</button>
+      <button class="btn-adm unlock-btn" onclick="openQuestionEditor()">📝 Question Editor</button>
+      <button class="btn-adm close-btn" onclick="closeAdminPanel()">Close</button>
+    </div>
+    <div class="admin-status-txt" id="admin-status-txt"></div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 1: REGISTRATION ════ -->
+<div class="screen active" id="screen-reg">
+  <div class="quiz-header">
+    <div class="quiz-logo">
+      <svg viewBox="0 0 72 48" fill="none">
+        <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="quiz-brand">TOYOTA · bZ WOODLAND 2026</div>
+    <div class="quiz-title">Knowledge<br><span class="red">Battle</span></div>
+    <div class="quiz-sub">15 questions · 20 seconds each · Fastest wins</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-field">
+      <label class="form-label">Dealer Code</label>
+      <input class="form-input" id="f-dealer-code" type="text" placeholder="e.g. 14055" maxlength="5" autocomplete="off" inputmode="numeric">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Your Name</label>
+      <input class="form-input" id="f-name" type="text" placeholder="First Last" autocomplete="name">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Dealership Name</label>
+      <input class="form-input locked-field" id="f-dealer" type="text" placeholder="Auto-filled from Dealer Code" readonly>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Region</label>
+      <select class="form-input locked-field" id="f-region" disabled>
+        <option value="">Select Region</option>
+        <option>Boston Region</option>
+        <option>New York Region</option>
+        <option>Central Atlantic Toyota (CAT)</option>
+        <option>Cincinnati Region</option>
+        <option>Chicago Region</option>
+        <option>Kansas City Region</option>
+        <option>Denver Region</option>
+        <option>Los Angeles Region</option>
+        <option>San Francisco Region</option>
+        <option>Portland Region</option>
+        <option>Southeast Toyota Distributors (SET)</option>
+        <option>Gulf States Toyota (GST)</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label class="form-label">State</label>
+      <input class="form-input locked-field" id="f-state" type="text" placeholder="Auto-filled from Dealer Code" readonly>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">START QUIZ →</button>
+    <div style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
+      Information current as of March 2026 · Toyota Motor Sales
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 2: QUIZ ════ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-top">
+    <div class="q-counter" id="q-counter">Question 1 of 15</div>
+    <div class="q-score-live" id="q-score-live">Score: 0</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="q-progress"></div></div>
+
+  <div class="question-timer">
+    <div class="qt-value" id="qt-value">20</div>
+    <div class="qt-label">seconds</div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-category" id="q-category">PRODUCT</div>
+    <div class="q-text" id="q-text">Loading...</div>
+  </div>
+
+  <div class="answers" id="q-answers"></div>
+  <div class="feedback-box" id="q-feedback" style="display:none"></div>
+  <div class="next-q-btn">
+    <button class="btn-primary" id="btn-next-q" onclick="nextQuestion()" style="display:none">NEXT →</button>
+  </div>
+</div>
+
+<!-- ════ SCREEN 3: RESULTS ════ -->
+<div class="screen" id="screen-results">
+  <div class="quiz-header">
+    <div class="quiz-logo">
+      <svg viewBox="0 0 72 48" fill="none">
+        <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="quiz-brand">TOYOTA · bZ WOODLAND 2026</div>
+    <div class="quiz-title">Your <span class="red">Results</span></div>
+  </div>
+
+  <div class="result-card">
+    <div class="result-score-big" id="res-score">0</div>
+    <div class="result-out-of">out of 15</div>
+    <div class="result-pct" id="res-pct">0%</div>
+    <div class="cert-badge" id="res-cert">
+      <span id="res-cert-icon">●</span>
+      <span id="res-cert-text">Loading...</span>
+    </div>
+    <div class="result-breakdown">
+      <div class="rb-item"><span class="rb-label">Name</span><span class="rb-val" id="res-name">-</span></div>
+      <div class="rb-item"><span class="rb-label">Dealership</span><span class="rb-val" id="res-dealer">-</span></div>
+      <div class="rb-item"><span class="rb-label">Region</span><span class="rb-val" id="res-region">-</span></div>
+      <div class="rb-item"><span class="rb-label">Product Score</span><span class="rb-val" id="res-prod">-</span></div>
+      <div class="rb-item"><span class="rb-label">Competitive Score</span><span class="rb-val" id="res-comp">-</span></div>
+      <div class="rb-item"><span class="rb-label">Time</span><span class="rb-val" id="res-time">-</span></div>
+    </div>
+    <div class="export-box">
+      <div class="export-label">Share with your manager — paste into the dashboard</div>
+      <div class="export-code" id="export-code"></div>
+      <button class="copy-btn" onclick="copyExport()">📋 Copy Result Code</button>
+    </div>
+    <button class="btn-primary" style="margin-top:16px" onclick="retakeQuiz()">RETAKE QUIZ</button>
+  </div>
+
+  <div class="question-review" id="question-review"></div>
+</div>
+
+<script>
+// ── SECURITY SYSTEM ──────────────────────────────────────────
+const _SEC_KEY='bz_sec_v1';
+const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _FILE_REQ='sales';
+let _secPin='',_secCfg={},_secLevel=null;
+function _getSecCfg(){try{const s=localStorage.getItem(_SEC_KEY);return s?{..._SEC_DEF,...JSON.parse(s)}:{..._SEC_DEF}}catch(e){return{..._SEC_DEF}}}
+function _saveSecCfg(c){localStorage.setItem(_SEC_KEY,JSON.stringify(c))}
+function secInit(){
+  _secCfg=_getSecCfg();
+  const ov=document.getElementById('sec-overlay');
+  const sl=sessionStorage.getItem('bz_sec_level');
+  if(sl&&!_secCfg.locked){_secLevel=sl;ov.style.display='none';if(sl==='master')document.getElementById('admin-fab').style.display='flex';return}
+  ov.style.display='flex';
+  const lk=document.getElementById('lock-screen'),pe=document.getElementById('pin-entry');
+  if(_secCfg.locked){document.getElementById('lock-msg-text').textContent=_secCfg.lockMsg||_SEC_DEF.lockMsg;lk.style.display='flex';lk.style.flexDirection='column';lk.style.alignItems='center';pe.style.display='none'}
+  else{lk.style.display='none';pe.style.display='flex'}
+}
+function secShowPin(){document.getElementById('lock-screen').style.display='none';const pe=document.getElementById('pin-entry');pe.style.display='flex';document.getElementById('sec-access-label').textContent='Master PIN Required'}
+function secKey(k){if(_secPin.length>=4)return;_secPin+=k;_secUpdateDots();if(_secPin.length===4)setTimeout(_secCheck,130)}
+function secDel(){_secPin=_secPin.slice(0,-1);_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function secClear(){_secPin='';_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function _secUpdateDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<_secPin.length);d.classList.remove('error')}}
+function _secCheck(){
+  _secCfg=_getSecCfg();
+  let level=null;
+  if(_secPin===_secCfg.masterPin)level='master';
+  else if(_FILE_REQ!=='master'&&_secPin===_secCfg.managerPin)level='manager';
+  else if(_FILE_REQ==='sales'&&_secPin===_secCfg.salesPin)level='sales';
+  if(_secCfg.locked&&level!=='master')level=null;
+  if(level){
+    _secLevel=level;sessionStorage.setItem('bz_sec_level',level);
+    const ov=document.getElementById('sec-overlay');ov.classList.add('fade-out');
+    setTimeout(()=>{ov.style.display='none'},400);
+    if(level==='master'){document.getElementById('admin-fab').style.display='flex';if(_secCfg.locked){_secCfg.locked=false;_saveSecCfg(_secCfg)}}
+  }else{
+    const dots=document.getElementById('sec-pin-dots');dots.classList.add('pin-shake');
+    for(let i=0;i<4;i++)document.getElementById('pd'+i).classList.add('error');
+    document.getElementById('pin-err-msg').textContent='Incorrect PIN. Try again.';
+    setTimeout(()=>{_secPin='';_secUpdateDots();dots.classList.remove('pin-shake')},700)
+  }
+}
+function openAdminPanel(){
+  _secCfg=_getSecCfg();
+  document.getElementById('ap-master').value='';document.getElementById('ap-manager').value='';document.getElementById('ap-sales').value='';
+  document.getElementById('ap-lock-msg').value=_secCfg.lockMsg||'';
+  const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='System is currently '+(lk?'LOCKED':'active');
+  document.getElementById('admin-modal').classList.add('open');
+}
+function secSaveAdmin(){
+  _secCfg=_getSecCfg();
+  const m=document.getElementById('ap-master').value.trim(),mg=document.getElementById('ap-manager').value.trim(),s=document.getElementById('ap-sales').value.trim();
+  if(m.length===4&&/^\d+$/.test(m))_secCfg.masterPin=m;
+  if(mg.length===4&&/^\d+$/.test(mg))_secCfg.managerPin=mg;
+  if(s.length===4&&/^\d+$/.test(s))_secCfg.salesPin=s;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);document.getElementById('admin-status-txt').textContent='✓ PINs saved · '+new Date().toLocaleTimeString();
+}
+function secToggleLock(){
+  _secCfg=_getSecCfg();_secCfg.locked=!_secCfg.locked;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='✓ System '+(lk?'LOCKED':'unlocked')+' · '+new Date().toLocaleTimeString();
+}
+function closeAdminPanel(){document.getElementById('admin-modal').classList.remove('open')}
+
+// ── QUESTION EDITOR ─────────────────────────────────────────────
+let qeWorking = [];
+
+function openQuestionEditor(){
+  qeWorking = JSON.parse(JSON.stringify(questions)); // deep clone working copy
+  qeRenderList();
+  document.getElementById('qe-modal').classList.add('open');
+}
+function closeQuestionEditor(){
+  document.getElementById('qe-modal').classList.remove('open');
+}
+
+function qeRenderList(){
+  const list = document.getElementById('qe-list');
+  list.innerHTML = qeWorking.map((q, i) => `
+    <div class="qe-card">
+      <div class="qe-card-head">
+        <span class="qe-num">QUESTION ${i + 1}</span>
+        <button class="qe-del-btn" onclick="qeDeleteQuestion(${i})">🗑 Delete</button>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Category</label>
+        <select class="qe-sel" onchange="qeUpdate(${i},'cat',this.value)">
+          <option value="PRODUCT" ${q.cat === 'PRODUCT' ? 'selected' : ''}>PRODUCT</option>
+          <option value="COMPETITIVE" ${q.cat === 'COMPETITIVE' ? 'selected' : ''}>COMPETITIVE</option>
+        </select>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Question</label>
+        <textarea class="qe-ta" oninput="qeUpdate(${i},'q',this.value)">${qeEsc(q.q)}</textarea>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Answer Options (select the correct one)</label>
+        <div class="qe-opts-grid">
+          ${q.opts.map((opt, j) => `
+            <div class="qe-opt-row">
+              <input type="radio" name="qe-ans-${i}" ${q.ans === j ? 'checked' : ''} onchange="qeUpdate(${i},'ans',${j})">
+              <input class="qe-inp" value="${qeEsc(opt)}" oninput="qeUpdateOpt(${i},${j},this.value)">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Explanation</label>
+        <textarea class="qe-ta" oninput="qeUpdate(${i},'exp',this.value)">${qeEsc(q.exp)}</textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+function qeEsc(s){
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function qeUpdate(i, field, value){ qeWorking[i][field] = value; }
+function qeUpdateOpt(i, j, value){ qeWorking[i].opts[j] = value; }
+
+function qeDeleteQuestion(i){
+  if(!confirm('Delete this question?')) return;
+  qeWorking.splice(i, 1);
+  qeRenderList();
+}
+
+function qeAddQuestion(){
+  qeWorking.push({
+    cat: 'PRODUCT',
+    q: 'New question text...',
+    opts: ['Option A', 'Option B', 'Option C', 'Option D'],
+    ans: 0,
+    exp: 'Explanation of the correct answer...'
+  });
+  qeRenderList();
+  // scroll to bottom so the new card is visible
+  setTimeout(() => document.getElementById('qe-list').lastElementChild?.scrollIntoView({behavior:'smooth', block:'center'}), 50);
+}
+
+function qeSaveLive(){
+  localStorage.setItem(QE_KEY, JSON.stringify(qeWorking));
+  questions = JSON.parse(JSON.stringify(qeWorking));
+  document.getElementById('qe-status-txt').textContent = '✓ Saved · Live in this browser now (' + questions.length + ' questions) · ' + new Date().toLocaleTimeString();
+}
+
+function qeCopyCode(){
+  const code = 'const DEFAULT_QUESTIONS = ' + JSON.stringify(qeWorking, null, 2) + ';';
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById('qe-status-txt').textContent = '📋 Copied! Paste this over the DEFAULT_QUESTIONS array in the file, then commit to GitHub.';
+  });
+}
+
+function qeResetDefault(){
+  if(!confirm('Reset to the original default questions? This clears any local edits.')) return;
+  localStorage.removeItem(QE_KEY);
+  questions = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+  qeWorking = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+  qeRenderList();
+  document.getElementById('qe-status-txt').textContent = '↺ Reset to default questions.';
+}
+document.addEventListener('keydown',function(e){
+  if(document.getElementById('admin-modal').classList.contains('open'))return;
+  if(document.getElementById('sec-overlay').style.display==='none')return;
+  if(e.key>='0'&&e.key<='9')secKey(e.key);
+  else if(e.key==='Backspace')secDel();
+  else if(e.key==='Escape')secClear();
+});
+secInit();
+
+// ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
+const DEALER_LOOKUP = {
+  '15047': {name:'Hendrick Toyota Merriam', state:'KS'},
+  '15050': {name:'Olathe Toyota', state:'KS'},
+  '15051': {name:'Crown Toyota', state:'KS'},
+  '15056': {name:'Legends Toyota', state:'KS'},
+  '24026': {name:"Adams Toyota Lee's Summit", state:'MO'},
+  '24061': {name:'Molle Toyota', state:'MO'},
+  '24074': {name:'Jay Wolfe Toyota', state:'MO'},
+  '24079': {name:'Rolling Hills Toyota', state:'MO'},
+  '24022': {name:'Seeger Toyota', state:'MO'},
+  '24036': {name:'Tom Pappas Toyota', state:'MO'},
+  '24045': {name:'Lou Fusz Toyota', state:'MO'},
+  '24052': {name:'Straatmann Toyota', state:'MO'},
+  '24063': {name:'Jerry Ackerman Toyota', state:'MO'},
+  '24067': {name:'Twin City Toyota', state:'MO'},
+  '24077': {name:'Jay Wolfe Toyota of West County', state:'MO'},
+  '24078': {name:'Coad Toyota', state:'MO'},
+  '24085': {name:'Bommarito Toyota', state:'MO'},
+  '24088': {name:'Victory Toyota of St. Louis', state:'MO'},
+  '15060': {name:'Briggs Toyota of Fort Scott', state:'KS'},
+  '24053': {name:'Seeger Toyota of St. Robert', state:'MO'},
+  '24059': {name:'Baldwin Toyota', state:'MO'},
+  '24068': {name:'Toyota of West Plains', state:'MO'},
+  '24071': {name:'Reliable Toyota', state:'MO'},
+  '24076': {name:'Frank Fletcher Toyota', state:'MO'},
+  '24080': {name:'McCarthy Toyota of Sedalia', state:'MO'},
+  '24084': {name:'Joe Machens Toyota', state:'MO'},
+  '24087': {name:'Rusty Drewing Toyota', state:'MO'},
+  '15010': {name:'Lewis Toyota of Topeka', state:'KS'},
+  '15012': {name:"Eddy's Toyota of Wichita", state:'KS'},
+  '15021': {name:'Lewis Toyota of Dodge City', state:'KS'},
+  '15034': {name:'Quality Toyota of Independence', state:'KS'},
+  '15046': {name:'Lewis Toyota of Hays', state:'KS'},
+  '15052': {name:'Conklin Toyota Salina', state:'KS'},
+  '15053': {name:'Little Apple Toyota', state:'KS'},
+  '15054': {name:'Midwest Toyota', state:'KS'},
+  '15057': {name:'Clint Bowyer Toyota', state:'KS'},
+  '15059': {name:'Lewis Toyota of Garden City', state:'KS'},
+  '26021': {name:'Baxter Toyota of La Vista', state:'NE'},
+  '26023': {name:'Premier Toyota', state:'NE'},
+  '26024': {name:'Baxter Toyota of Lincoln', state:'NE'},
+  '26027': {name:'Wagner Toyota', state:'NE'},
+  '26029': {name:'Team Toyota', state:'NE'},
+  '26030': {name:'Village Pointe Toyota', state:'NE'},
+  '26031': {name:'Corwin Toyota of Bellevue', state:'NE'},
+  '26032': {name:'Gregg Young Toyota of Columbus', state:'NE'},
+  '26033': {name:'Woodhouse Toyota', state:'NE'},
+  '14011': {name:'Anderson-Weber Toyota', state:'IA'},
+  '14015': {name:'Cedar Rapids Toyota, Inc.', state:'IA'},
+  '14036': {name:'Deery Brothers Toyota', state:'IA'},
+  '14050': {name:'Toyota of Muscatine', state:'IA'},
+  '14052': {name:'Smart Toyota of Quad Cities', state:'IA'},
+  '14054': {name:'Billion Toyota of Clinton', state:'IA'},
+  '14055': {name:'McGrath Toyota of Iowa City', state:'IA'},
+  '14056': {name:'Gregg Young Toyota Ottumwa', state:'IA'},
+  '24083': {name:'Kirksville Toyota', state:'MO'},
+  '14017': {name:'Hosmer Toyota', state:'IA'},
+  '14041': {name:'Dan Deery Toyota', state:'IA'},
+  '14044': {name:'Toyota of Des Moines', state:'IA'},
+  '14046': {name:'Wilson Toyota', state:'IA'},
+  '14048': {name:'Fort Dodge Ford Lincoln Toyota', state:'IA'},
+  '14049': {name:'Okoboji Toyota', state:'IA'},
+  '14051': {name:'Rick Collins Toyota', state:'IA'},
+  '14053': {name:'Motor Inn Toyota of Carroll', state:'IA'},
+  '33010': {name:'Lloyds Toyota', state:'ND'},
+  '33017': {name:'Lake Toyota', state:'ND'},
+  '33021': {name:'Corwin Toyota', state:'ND'},
+  '33024': {name:'Dan Porter Honda-Toyota', state:'ND'},
+  '33025': {name:'Cedric Theel Toyota', state:'ND'},
+  '33031': {name:'Rydell Toyota of Grand Forks', state:'ND'},
+  '33032': {name:'Minot Toyota', state:'ND'},
+  '40009': {name:'Harr Toyota', state:'SD'},
+  '40011': {name:'Billion Toyota', state:'SD'},
+  '40017': {name:'Sharp Chevrolet-Toyota', state:'SD'},
+  '40021': {name:'Denny Menholt Toyota', state:'SD'},
+  '40022': {name:'Capital City Toyota', state:'SD'}
+};
+
+(function(){
+  const codeInput = document.getElementById('f-dealer-code');
+  if(!codeInput) return;
+  codeInput.addEventListener('input', function(){
+    const code = codeInput.value.trim();
+    const match = DEALER_LOOKUP[code];
+    const regionSel = document.getElementById('f-region');
+    if(match){
+      document.getElementById('f-dealer').value = match.name;
+      document.getElementById('f-state').value = match.state;
+      if(regionSel) regionSel.value = 'Kansas City Region';
+    } else {
+      document.getElementById('f-dealer').value = '';
+      document.getElementById('f-state').value = '';
+      if(regionSel) regionSel.value = '';
+    }
+  });
+})();
+
+// ── QUIZ QUESTIONS ────────────────────────────────────────────
+const DEFAULT_QUESTIONS = [
+  // PRODUCT
+  {
+    cat: 'PRODUCT',
+    q: 'Which EPA-estimated driving range figure is correctly associated with the standard all-wheel-drive configuration?',
+    opts: ['314 miles', '288 miles', '281 miles', '278 miles'],
+    ans: 2,
+    exp: 'The 2026 bZ Woodland is EPA-estimated at 281 miles of total driving range with standard all-season tires.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which connected service is required for Plug & Charge capability?',
+    opts: ['Safety Connect', 'Drive Connect', 'Wi-Fi Connect', 'Remote Connect'],
+    ans: 1,
+    exp: 'Plug & Charge ties into Drive Connect, which also powers Cloud Navigation and the Intelligent Assistant.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which connected service enables Automatic Battery Preconditioning when a DC fast charging station is set as a navigation destination?',
+    opts: ['Remote Connect', 'Service Connect', 'Drive Connect', 'Safety Connect'],
+    ans: 2,
+    exp: 'With an active Drive Connect trial or subscription, setting a fast-charging station as your nav destination automatically preconditions the battery for faster charging.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which charging connector adapters are included with every new Toyota BEV?',
+    opts: ['NACS and CHAdeMO adapters', 'SAE J1772 and CCS1 adapters', 'CCS1 and Tesla Supercharger adapters', 'AC and DC type adapters'],
+    ans: 1,
+    exp: 'Every 2026+ Toyota BEV comes standard with the NACS charging port, plus complimentary J1772 and CCS1 adapters for backward compatibility with older charging networks.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which charging specification correctly matches the bZ Woodland\'s onboard AC charger?',
+    opts: ['9.2-kW onboard AC Charger', '7.7-kW onboard AC Charger', '11-kW onboard AC charger', '15-kW onboard AC Charger'],
+    ans: 2,
+    exp: 'The bZ Woodland has an 11-kW onboard AC charger, supporting Level 1 and Level 2 home/public charging.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which factor is specifically stated to reduce EPA-estimated driving range to approximately 260 miles?',
+    opts: ['Repeated DC fast charging', 'Premium Trim Level', 'Optional All-Terrain Tires', 'Roof Cross Bars/Cargo accessories'],
+    ans: 2,
+    exp: 'Optional All-Terrain tires drop the EPA-estimated range from 281 miles to approximately 260 miles.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which standard wheel specification is correctly paired with the factory wheel-cover configuration?',
+    opts: ['18-inch aluminum wheels with removable aerodynamic covers', '19-inch low-drag alloy wheels with fixed aero shielding', '20-inch machined aluminum wheels with integrated aerodynamic inserts', '18-inch cast-aluminum off-road wheels with non-removable matte-black covers'],
+    ans: 0,
+    exp: 'The bZ Woodland rides on standard 18-inch wheels with removable black aero covers for efficiency, with the option to remove them for a different look.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which feature helps improve DC fast charging performance in cold weather?',
+    opts: ['Thermal Battery Management', 'Battery Pre-Conditioning', 'Predictive Charge Optimization', 'Adaptive Charging Logic'],
+    ans: 1,
+    exp: 'Battery Pre-Conditioning brings the pack to an optimal temperature ahead of DC fast charging, which meaningfully helps charging speed in cold climates.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which Toyota charging-related component is included to support both 120V and 240V charging capability?',
+    opts: ['CCS1 adapter', 'Dual-voltage charging cable', 'Battery pre-conditioning system', 'NACS & J1772 adapter'],
+    ans: 1,
+    exp: 'The standard dual-voltage (120V/240V) charging cable lets owners charge from either a standard household outlet or a 240V home setup, no extra equipment needed.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'What is Toyota\'s factory BEV battery warranty coverage?',
+    opts: ['10 years or 150,000 miles', '8 years or 100,000 miles', '5 years or 60,000 miles', '7 years or 120,000 miles'],
+    ans: 1,
+    exp: 'Toyota\'s 8-year, 100,000-mile battery warranty protects against defects AND against capacity loss down to 70% — a strong reassurance point for range-anxious customers.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'What is the net combined horsepower of the 2026 bZ Woodland\'s dual-motor AWD system?',
+    opts: ['268 hp', '308 hp', '375 hp', '402 hp'],
+    ans: 2,
+    exp: 'The bZ Woodland\'s front and rear motors (167 kW each) combine for a net 375 horsepower — the most powerful bZ Toyota has built, with a 0-60 time of about 4.4 seconds.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'What ground clearance does the 2026 bZ Woodland offer?',
+    opts: ['7.5 inches', '8.0 inches', '8.4 inches', '9.2 inches'],
+    ans: 2,
+    exp: '8.4 inches of ground clearance, paired with standard AWD and X-MODE with Grip Control, backs up the Woodland\'s trail-ready positioning.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which feature is exclusive to the bZ Woodland Premium grade (not standard on base bZ Woodland)?',
+    opts: ['X-MODE with Grip Control', 'Dual Qi wireless charging pads', 'Panoramic moonroof', 'SofTex-trimmed seats'],
+    ans: 2,
+    exp: 'Premium adds JBL Premium Audio, ventilated front seats with memory, a fixed-glass panoramic moonroof, and front radiant heaters. X-MODE, Qi charging, and SofTex seating are standard on both grades.'
+  },
+  // COMPETITIVE
+  {
+    cat: 'COMPETITIVE',
+    q: 'How does the bZ Woodland\'s maximum towing capacity compare to its key competitors?',
+    opts: ['Matches the Honda Prologue\'s 1,500 lbs', 'Falls short of both competitors', 'Exceeds both the Honda Prologue EX AWD (1,500 lbs) and Hyundai IONIQ 5 XRT (2,700 lbs) at 3,500 lbs', 'Only exceeds the IONIQ 5 XRT'],
+    ans: 2,
+    exp: 'At 3,500 lbs, the bZ Woodland out-tows both the Honda Prologue EX AWD (1,500 lbs) and the Hyundai IONIQ 5 XRT (2,700 lbs) by a wide margin — a strong differentiator for adventure-minded customers.'
+  },
+  {
+    cat: 'COMPETITIVE',
+    q: 'What horsepower advantage does the bZ Woodland have over the Honda Prologue EX AWD?',
+    opts: ['bZ Woodland: 375 hp vs. Prologue EX AWD: 300 hp — a 75 hp advantage', 'They are equal at 300 hp', 'The Prologue EX AWD has more horsepower', 'bZ Woodland: 260 hp vs. Prologue EX AWD: 300 hp'],
+    ans: 0,
+    exp: 'The bZ Woodland\'s 375 hp beats the Honda Prologue EX AWD\'s 300 hp by 75 hp, while also offering more standard capability (AWD, X-MODE, higher towing).'
+  }
+];
+
+const QE_KEY = 'bz_custom_questions';
+let questions = (function(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(QE_KEY) || 'null');
+    if (Array.isArray(saved) && saved.length) return saved;
+  } catch(e) {}
+  return DEFAULT_QUESTIONS;
+})();
+
+// ── STATE ─────────────────────────────────────────────────────
+let currentQ = 0;
+let score = 0;
+let prodScore = 0;
+let compScore = 0;
+let answered = false;
+let qtInterval = null;
+let qtSeconds = 20;
+let startTime = null;
+let userAnswers = [];
+let userData = {};
+let refreshCount = 0;
+let activeQuestions = questions; // per-attempt shuffled copy; replaced in startQuiz()
+const ACTIVE_SESSION_KEY = 'bz_active_quiz_session';
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Returns a new question object with its answer options shuffled and .ans
+// re-pointed to wherever the correct option landed. Does not mutate the original.
+function shuffleQuestionOptions(q) {
+  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
+  return {
+    ...q,
+    opts: order.map(i => q.opts[i]),
+    ans: order.indexOf(q.ans)
+  };
+}
+
+// ── REGISTRATION ──────────────────────────────────────────────
+function saveActiveSession(){
+  try {
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
+      userData, currentQ, score, prodScore, compScore, userAnswers, startTime, refreshCount, activeQuestions
+    }));
+  } catch(e) {}
+}
+function clearActiveSession(){
+  try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
+}
+
+function startQuiz() {
+  const name = document.getElementById('f-name').value.trim();
+  const dealerCode = document.getElementById('f-dealer-code').value.trim();
+  const dealer = document.getElementById('f-dealer').value.trim();
+  const region = document.getElementById('f-region').value;
+  const state = document.getElementById('f-state').value.trim().toUpperCase();
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!dealerCode) { alert('Please enter your dealer code.'); return; }
+  if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
+  userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
+  startTime = Date.now();
+  refreshCount = 0;
+  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
+  saveActiveSession();
+  showScreen('screen-quiz');
+  loadQuestion();
+}
+
+// ── QUIZ FLOW ─────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function loadQuestion() {
+  const q = activeQuestions[currentQ];
+  answered = false;
+
+  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+  document.getElementById('q-score-live').textContent = `Score: ${score}`;
+  document.getElementById('q-progress').style.width = ((currentQ / activeQuestions.length) * 100) + '%';
+  document.getElementById('q-category').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-feedback').style.display = 'none';
+  document.getElementById('btn-next-q').style.display = 'none';
+
+  const answersEl = document.getElementById('q-answers');
+  const letters = ['A', 'B', 'C', 'D'];
+  answersEl.innerHTML = q.opts.map((opt, i) => `
+    <button class="answer-btn" onclick="selectAnswer(${i})" data-idx="${i}">
+      <div class="answer-letter">${letters[i]}</div>
+      <span>${opt}</span>
+    </button>
+  `).join('');
+
+  startQuestionTimer();
+}
+
+function startQuestionTimer() {
+  clearInterval(qtInterval);
+  qtSeconds = 20;
+  updateQTimer();
+  qtInterval = setInterval(() => {
+    qtSeconds--;
+    updateQTimer();
+    if (qtSeconds <= 0) { clearInterval(qtInterval); timeOut(); }
+  }, 1000);
+}
+
+function updateQTimer() {
+  const el = document.getElementById('qt-value');
+  el.textContent = qtSeconds;
+  el.className = 'qt-value' + (qtSeconds <= 5 ? ' danger' : qtSeconds <= 10 ? ' warn' : '');
+}
+
+function timeOut() {
+  if (answered) return;
+  answered = true;
+  revealAnswer(-1);
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(qtInterval);
+  revealAnswer(idx);
+}
+
+function revealAnswer(selected) {
+  const q = activeQuestions[currentQ];
+  const btns = document.querySelectorAll('.answer-btn');
+  const isCorrect = selected === q.ans;
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === selected) btn.classList.add('wrong');
+  });
+
+  const feedback = document.getElementById('q-feedback');
+  feedback.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    if (q.cat === 'PRODUCT') prodScore++;
+    else compScore++;
+    feedback.className = 'feedback-box correct';
+    feedback.innerHTML = `✓ Correct! ${q.exp}`;
+  } else if (selected === -1) {
+    feedback.className = 'feedback-box wrong';
+    feedback.innerHTML = `⏱ Time's up! The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
+  } else {
+    feedback.className = 'feedback-box wrong';
+    feedback.innerHTML = `✗ Incorrect. The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
+  }
+
+  userAnswers.push({ q: currentQ, selected, correct: isCorrect });
+  document.getElementById('btn-next-q').style.display = 'block';
+  document.getElementById('q-score-live').textContent = `Score: ${score}`;
+  saveActiveSession();
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= activeQuestions.length) {
+    showResults();
+  } else {
+    saveActiveSession();
+    loadQuestion();
+  }
+}
+
+// ── RESULTS ───────────────────────────────────────────────────
+function showResults() {
+  clearActiveSession();
+  showScreen('screen-results');
+  const totalTime = Math.round((Date.now() - startTime) / 1000);
+  const pct = Math.round(score / activeQuestions.length * 100);
+  const pass = score >= 12;
+
+  document.getElementById('res-score').textContent = score;
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-name').textContent = userData.name;
+  document.getElementById('res-dealer').textContent = userData.dealer;
+  document.getElementById('res-region').textContent = userData.region + (userData.state ? ' · ' + userData.state : '');
+  document.getElementById('res-prod').textContent = prodScore + ' / 10';
+  document.getElementById('res-comp').textContent = compScore + ' / 5';
+  document.getElementById('res-time').textContent = Math.floor(totalTime / 60) + 'm ' + (totalTime % 60) + 's';
+
+  const certEl = document.getElementById('res-cert');
+  document.getElementById('res-cert-icon').textContent = pass ? '🏆' : '📚';
+  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — bZ Woodland Product Module' : 'Score 12+ to Certify';
+  certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
+
+  // Export JSON
+  const exportData = {
+    name: userData.name,
+    dealerCode: userData.dealerCode,
+    dealerName: userData.dealer,
+    region: userData.region,
+    state: userData.state,
+    score,
+    total: 15,
+    pct,
+    productScore: prodScore,
+    competitiveScore: compScore,
+    certified: pass,
+    timeSec: totalTime,
+    refreshCount,
+    sessionDate: new Date().toISOString()
+  };
+  const json = JSON.stringify(exportData);
+  document.getElementById('export-code').textContent = json;
+
+  // Save to localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('bz_quiz_results') || '[]');
+    existing.push(exportData);
+    localStorage.setItem('bz_quiz_results', JSON.stringify(existing));
+  } catch(e) {}
+
+  // Silently auto-submit to Google Form (feeds the dashboard automatically)
+  submitToGoogleForm(exportData);
+
+  // Question review
+  const reviewEl = document.getElementById('question-review');
+  reviewEl.innerHTML = '<div style="font-family:Rajdhani,sans-serif;font-size:20px;font-weight:700;margin-bottom:12px">Question Review</div>' +
+    userAnswers.map(a => {
+      const q = activeQuestions[a.q];
+      return `<div class="review-item ${a.correct ? 'c' : 'w'}">
+        <div class="review-icon">${a.correct ? '✓' : '✗'}</div>
+        <div><div class="review-q">${q.q}</div><div class="review-a">${a.correct ? 'Correct' : 'Your answer: ' + (a.selected >= 0 ? q.opts[a.selected] : 'Timed out') + ' · Correct: ' + q.opts[q.ans]}</div></div>
+      </div>`;
+    }).join('');
+}
+
+function copyExport() {
+  const txt = document.getElementById('export-code').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy Result Code', 2000);
+  });
+}
+
+// ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
+// NOT YET CONFIGURED for bZ Woodland — this must NOT point at the RAV4 Form/Sheet,
+// or bZ Woodland results would get mixed into the RAV4 dashboard data.
+// Once a dedicated bZ Woodland Google Form + Sheet exists, fill in GFORM_ACTION and
+// GFORM_ENTRIES the same way the RAV4 quiz's were set up, and this will start working
+// automatically — no other code changes needed.
+const GFORM_ACTION = '';
+const GFORM_ENTRIES = {
+  name: '',
+  dealerName: '',
+  region: '',
+  state: '',
+  score: '',
+  total: '',
+  pct: '',
+  productScore: '',
+  competitiveScore: '',
+  certified: '',
+  timeSec: '',
+  sessionDate: ''
+};
+
+function submitToGoogleForm(data) {
+  if (!GFORM_ACTION) return; // no-op until a bZ Woodland Form is configured
+  try {
+    const formData = new FormData();
+    Object.keys(GFORM_ENTRIES).forEach(key => {
+      formData.append(GFORM_ENTRIES[key], String(data[key]));
+    });
+    fetch(GFORM_ACTION, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).catch(() => {}); // no-cors means we can't read the response; fire-and-forget
+  } catch(e) {
+    // Fails silently — localStorage + manual copy/import remain as fallback
+  }
+}
+
+function retakeQuiz() {
+  currentQ = 0; score = 0; prodScore = 0; compScore = 0;
+  answered = false; userAnswers = []; refreshCount = 0;
+  clearInterval(qtInterval);
+  clearActiveSession();
+  showScreen('screen-reg');
+}
+
+// ── RESUME ON REFRESH (closes the "refresh to reroll" loophole) ──
+(function resumeSessionIfActive(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (!saved || !saved.userData || !saved.userData.name) return;
+    userData = saved.userData;
+    currentQ = saved.currentQ || 0;
+    score = saved.score || 0;
+    prodScore = saved.prodScore || 0;
+    compScore = saved.compScore || 0;
+    userAnswers = saved.userAnswers || [];
+    startTime = saved.startTime || Date.now();
+    refreshCount = (saved.refreshCount || 0) + 1;
+    activeQuestions = (Array.isArray(saved.activeQuestions) && saved.activeQuestions.length) ? saved.activeQuestions : questions;
+    saveActiveSession(); // persist the incremented refresh count immediately
+    if (currentQ >= activeQuestions.length) {
+      // Edge case: they refreshed exactly on the results transition
+      showResults();
+    } else {
+      showScreen('screen-quiz');
+      loadQuestion();
+    }
+  } catch(e) {
+    // If anything's malformed, fall back to the normal registration screen
+  }
+})();
+</script>
+</body>
+</html>
