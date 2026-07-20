@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Del-EV-ery · Knowledge Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #EB0A1E;
+  --red-glow: rgba(235,10,30,0.35);
+  --red-dim: rgba(235,10,30,0.12);
+  --black: #060608;
+  --surface: #111115;
+  --surface2: #18181e;
+  --surface3: #202028;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0f4;
+  --text-dim: rgba(240,240,244,0.6);
+  --text-muted: rgba(240,240,244,0.28);
+  --green: #00e5a0;
+  --green-dim: rgba(0,229,160,0.1);
+  --wrong: #ff4444;
+  --wrong-dim: rgba(255,68,68,0.1);
+}
+html, body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+.screen { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px 20px; }
+.screen.active { display: flex; }
+
+/* ── HEADER ── */
+.quiz-header { text-align: center; margin-bottom: 32px; }
+.quiz-logo { width: 48px; height: 32px; margin: 0 auto 12px; }
+.quiz-logo svg { width: 100%; height: 100%; }
+.quiz-brand { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 4px; color: var(--text-dim); }
+.quiz-title { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; line-height: 1.1; }
+.quiz-title .red { color: var(--red); }
+.quiz-sub { font-size: 14px; color: var(--text-dim); margin-top: 6px; }
+
+/* ── FORM ── */
+.form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 420px; }
+.form-field { margin-bottom: 18px; }
+.form-label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 7px; font-weight: 600; }
+.form-input {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-size: 15px; outline: none; transition: border-color .2s;
+  -webkit-appearance: none;
+}
+.form-input:focus { border-color: var(--red); }
+select.form-input { cursor: pointer; }
+.locked-field { background: rgba(255,255,255,0.03); color: rgba(240,240,244,0.55); cursor: not-allowed; }
+.locked-field:focus { border-color: var(--border); }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%; padding: 16px; border-radius: 12px;
+  background: var(--red); border: none; color: white;
+  font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700;
+  letter-spacing: 1px; cursor: pointer; transition: all .2s;
+  box-shadow: 0 0 24px var(--red-glow); margin-top: 8px;
+}
+.btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text-dim); font-size: 14px; cursor: pointer;
+  transition: all .2s; margin-top: 10px;
+}
+.btn-secondary:hover { color: var(--text); }
+
+/* ── QUIZ SCREEN ── */
+.quiz-top { width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.q-counter { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+.q-score-live { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--green); }
+.progress-bar { width: 100%; max-width: 600px; height: 4px; background: var(--surface2); border-radius: 2px; margin-bottom: 24px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--red); border-radius: 2px; transition: width .4s; box-shadow: 0 0 8px var(--red-glow); }
+
+.question-timer { text-align: center; margin-bottom: 16px; }
+.qt-value { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; color: var(--text); }
+.qt-value.warn { color: #ffaa00; }
+.qt-value.danger { color: var(--red); animation: pulse .8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.qt-label { font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+
+.question-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px 24px; width: 100%; max-width: 600px; margin-bottom: 20px; }
+.q-category { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 10px; }
+.q-text { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.35; color: var(--text); }
+
+.answers { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 10px; }
+.answer-btn {
+  width: 100%; padding: 14px 18px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font-size: 14px; text-align: left;
+  cursor: pointer; transition: all .18s; display: flex; align-items: center; gap: 12px;
+}
+.answer-btn:hover:not(:disabled) { background: var(--surface2); border-color: rgba(255,255,255,0.15); }
+.answer-btn.correct { background: rgba(0,229,160,0.12); border-color: var(--green); color: var(--green); }
+.answer-btn.wrong { background: rgba(255,68,68,0.1); border-color: var(--wrong); color: var(--wrong); }
+.answer-btn:disabled { cursor: default; }
+.answer-letter {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--text-dim);
+  transition: all .18s;
+}
+.answer-btn.correct .answer-letter { background: var(--green); border-color: var(--green); color: #000; }
+.answer-btn.wrong .answer-letter { background: var(--wrong); border-color: var(--wrong); color: white; }
+
+.feedback-box { width: 100%; max-width: 600px; padding: 14px 18px; border-radius: 12px; margin-top: 4px; font-size: 13px; line-height: 1.6; }
+.feedback-box.correct { background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.3); color: var(--green); }
+.feedback-box.wrong { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.3); color: var(--wrong); }
+.next-q-btn { width: 100%; max-width: 600px; margin-top: 12px; }
+
+/* ── RESULTS SCREEN ── */
+.result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 500px; text-align: center; }
+.result-score-big { font-family: 'Rajdhani', sans-serif; font-size: 80px; font-weight: 700; color: var(--red); line-height: 1; }
+.result-out-of { font-size: 18px; color: var(--text-dim); margin-bottom: 4px; }
+.result-pct { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+.cert-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px;
+  border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px;
+}
+.cert-badge.pass { background: var(--green-dim); border: 1px solid var(--green); color: var(--green); }
+.cert-badge.fail { background: var(--wrong-dim); border: 1px solid rgba(255,68,68,0.4); color: var(--wrong); }
+
+.result-breakdown { text-align: left; margin: 16px 0; }
+.rb-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.rb-item:last-child { border-bottom: none; }
+.rb-label { color: var(--text-dim); }
+.rb-val { font-weight: 600; }
+
+.export-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 16px; }
+.export-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.export-code { font-size: 11px; color: var(--text-dim); font-family: monospace; word-break: break-all; line-height: 1.5; max-height: 80px; overflow-y: auto; }
+.copy-btn { margin-top: 8px; padding: 6px 14px; border-radius: 6px; background: var(--surface3); border: 1px solid var(--border); color: var(--text-dim); font-size: 12px; cursor: pointer; }
+.copy-btn:hover { color: var(--text); }
+
+.question-review { width: 100%; max-width: 500px; margin-top: 24px; }
+.review-item { padding: 12px 14px; border-radius: 10px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+.review-item.c { background: rgba(0,229,160,0.07); border: 1px solid rgba(0,229,160,0.2); }
+.review-item.w { background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.2); }
+.review-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.review-q { font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.review-a { color: var(--text-muted); font-size: 12px; }
+
+/* ── SECURITY SYSTEM ─────────────────────────────────────── */
+#sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
+#sec-overlay.fade-out{opacity:0;pointer-events:none}
+#pin-entry{display:flex;flex-direction:column;align-items:center}
+.sec-brand{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:rgba(240,240,244,0.28);margin-bottom:16px}
+.sec-heading{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#f0f0f4;margin-bottom:4px;text-align:center}
+.sec-heading span{color:#EB0A1E}
+.sec-sub{font-size:11px;color:rgba(240,240,244,0.32);letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
+.pin-dots{display:flex;gap:14px;margin-bottom:6px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.18);transition:all .15s}
+.pin-dot.filled{background:#EB0A1E;border-color:#EB0A1E;box-shadow:0 0 10px rgba(235,10,30,0.5)}
+.pin-dot.error{background:#ff4444;border-color:#ff4444}
+@keyframes sec-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.pin-shake{animation:sec-shake .4s}
+.pin-err-msg{font-size:11px;color:#ff4444;letter-spacing:1px;height:14px;margin-bottom:14px;text-align:center}
+.pin-pad{display:grid;grid-template-columns:repeat(3,70px);gap:9px;margin-bottom:18px}
+.pin-key{height:62px;border-radius:14px;background:#16161c;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:20px;font-weight:600;font-family:'Rajdhani',sans-serif;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;user-select:none}
+.pin-key:hover{background:#1e1e26;border-color:rgba(255,255,255,0.14)}
+.pin-key:active{transform:scale(.93);background:rgba(235,10,30,0.15);border-color:rgba(235,10,30,0.35)}
+.pin-key.del{font-size:17px;color:rgba(240,240,244,0.45)}
+.pin-key.clr{font-size:11px;letter-spacing:1px;color:rgba(240,240,244,0.35)}
+.sec-hint-txt{font-size:10px;color:rgba(240,240,244,0.18);letter-spacing:2px;text-transform:uppercase}
+#lock-screen{display:none;flex-direction:column;align-items:center;text-align:center}
+.lock-icon{font-size:54px;margin-bottom:14px}
+.lock-title{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;color:#EB0A1E;margin-bottom:8px}
+.lock-msg{color:rgba(240,240,244,0.45);font-size:14px;max-width:380px;margin:0 auto 20px;line-height:1.6}
+.lock-admin-link{background:none;border:none;font-size:11px;color:rgba(240,240,244,0.2);cursor:pointer;letter-spacing:1px;transition:color .2s}
+.lock-admin-link:hover{color:rgba(240,240,244,0.45)}
+#admin-fab{position:fixed;bottom:24px;right:18px;z-index:8000;width:38px;height:38px;border-radius:50%;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:15px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s}
+#admin-fab:hover{background:rgba(235,10,30,0.25)}
+#admin-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center}
+#admin-modal.open{display:flex}
+.admin-panel{background:#16161c;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;width:400px;max-width:90vw}
+.admin-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.admin-badge{display:inline-block;padding:2px 10px;border-radius:20px;background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:10px;letter-spacing:2px;font-weight:600;margin-bottom:18px}
+.admin-sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,240,244,0.28);margin-bottom:8px;font-weight:600}
+.admin-pin-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.admin-pin-lbl{font-size:12px;color:rgba(240,240,244,0.55);width:96px;flex-shrink:0}
+.admin-pin-inp{flex:1;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:14px;outline:none;font-family:monospace;letter-spacing:4px}
+.admin-pin-inp:focus{border-color:#EB0A1E}
+.admin-lock-ta{width:100%;padding:8px 12px;border-radius:8px;background:#1e1e26;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:12px;outline:none;resize:none;height:56px;margin-bottom:14px}
+.btn-adm{padding:9px 16px;border-radius:9px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-adm.save{background:#EB0A1E;color:white}
+.btn-adm.lock-btn{background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.35);color:#ffaa00}
+.btn-adm.unlock-btn{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.35);color:#00e5a0}
+.btn-adm.close-btn{background:#1e1e26;color:rgba(240,240,244,0.45)}
+.btn-adm:hover{opacity:.82}
+.admin-status-txt{font-size:11px;color:rgba(240,240,244,0.28);margin-top:10px}
+
+/* Question Editor */
+#qe-modal{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px}
+#qe-modal.open{display:flex}
+.qe-panel{background:#16161c;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px;width:720px;max-width:100%}
+.qe-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.qe-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700}
+.qe-sub{font-size:12px;color:rgba(240,240,244,0.4);margin-bottom:18px}
+.qe-card{background:#1e1e26;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:14px}
+.qe-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.qe-num{font-size:11px;font-weight:700;color:#EB0A1E;letter-spacing:1px}
+.qe-del-btn{background:rgba(235,10,30,0.12);border:1px solid rgba(235,10,30,0.35);color:#EB0A1E;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer}
+.qe-del-btn:hover{opacity:.8}
+.qe-row{margin-bottom:8px}
+.qe-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(240,240,244,0.3);margin-bottom:4px;display:block}
+.qe-inp,.qe-ta,.qe-sel{width:100%;padding:8px 10px;border-radius:8px;background:#111116;border:1px solid rgba(255,255,255,0.07);color:#f0f0f4;font-size:13px;outline:none;box-sizing:border-box;font-family:inherit}
+.qe-inp:focus,.qe-ta:focus,.qe-sel:focus{border-color:#EB0A1E}
+.qe-ta{resize:vertical;min-height:36px}
+.qe-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qe-opt-row{display:flex;align-items:center;gap:6px}
+.qe-opt-row input[type=radio]{accent-color:#EB0A1E;flex-shrink:0}
+.qe-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;position:sticky;bottom:0;background:#16161c;padding-top:10px}
+.qe-add-btn{background:#1e1e26;border:1px dashed rgba(255,255,255,0.2);color:rgba(240,240,244,0.6);font-size:13px;padding:12px;border-radius:12px;cursor:pointer;width:100%;margin-bottom:14px;text-align:center}
+.qe-add-btn:hover{border-color:#EB0A1E;color:#EB0A1E}
+</style>
+</head>
+<body>
+
+<div id="qe-modal">
+  <div class="qe-panel">
+    <div class="qe-header">
+      <div>
+        <div class="qe-title">📝 Question Editor</div>
+        <div class="qe-sub">Edit questions below, then Save to preview instantly or Copy Code to make it permanent on GitHub.</div>
+      </div>
+    </div>
+    <div id="qe-list"></div>
+    <button class="qe-add-btn" onclick="qeAddQuestion()">+ Add Question</button>
+    <div class="qe-actions">
+      <button class="btn-adm save" onclick="qeSaveLive()">💾 Save (Preview Live)</button>
+      <button class="btn-adm lock-btn" onclick="qeCopyCode()">📋 Copy Code for GitHub</button>
+      <button class="btn-adm unlock-btn" onclick="qeResetDefault()">↺ Reset to Default</button>
+      <button class="btn-adm close-btn" onclick="closeQuestionEditor()">Close</button>
+    </div>
+    <div class="admin-status-txt" id="qe-status-txt"></div>
+  </div>
+</div>
+
+<!-- SECURITY OVERLAY -->
+<div id="sec-overlay">
+  <div id="lock-screen">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">SYSTEM LOCKED</div>
+    <div class="lock-msg" id="lock-msg-text">This training system has been temporarily locked by your administrator.</div>
+    <button class="lock-admin-link" onclick="secShowPin()">Administrator access →</button>
+  </div>
+  <div id="pin-entry">
+    <svg width="50" height="34" viewBox="0 0 72 48" fill="none" style="margin-bottom:10px"><ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/><ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/></svg>
+    <div class="sec-brand">TOYOTA · DEL-EV-ERY</div>
+    <div class="sec-heading">Knowledge <span>Battle</span></div>
+    <div class="sec-sub" id="sec-access-label">Enter Your Access PIN</div>
+    <div class="pin-dots" id="sec-pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div class="pin-err-msg" id="pin-err-msg"></div>
+    <div class="pin-pad">
+      <div class="pin-key" onclick="secKey('1')">1</div><div class="pin-key" onclick="secKey('2')">2</div><div class="pin-key" onclick="secKey('3')">3</div>
+      <div class="pin-key" onclick="secKey('4')">4</div><div class="pin-key" onclick="secKey('5')">5</div><div class="pin-key" onclick="secKey('6')">6</div>
+      <div class="pin-key" onclick="secKey('7')">7</div><div class="pin-key" onclick="secKey('8')">8</div><div class="pin-key" onclick="secKey('9')">9</div>
+      <div class="pin-key clr" onclick="secClear()">CLR</div><div class="pin-key" onclick="secKey('0')">0</div><div class="pin-key del" onclick="secDel()">⌫</div>
+    </div>
+    <div class="sec-hint-txt">Authorized Personnel Only · Toyota Motor Sales</div>
+  </div>
+</div>
+<div id="admin-fab" onclick="openAdminPanel()" title="Master Admin">⚙</div>
+<div id="admin-modal">
+  <div class="admin-panel">
+    <div class="admin-title">Master Admin</div>
+    <div class="admin-badge">● MASTER ACCESS</div>
+    <div class="admin-sec-label">Access PINs (4 digits each)</div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Master PIN</span><input class="admin-pin-inp" id="ap-master" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Manager PIN</span><input class="admin-pin-inp" id="ap-manager" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row" style="margin-bottom:16px"><span class="admin-pin-lbl">Sales PIN</span><input class="admin-pin-inp" id="ap-sales" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-sec-label">Lock Message</div>
+    <textarea class="admin-lock-ta" id="ap-lock-msg" placeholder="Message displayed when system is locked..."></textarea>
+    <div class="admin-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-adm save" onclick="secSaveAdmin()">Save PINs</button>
+      <button class="btn-adm lock-btn" id="btn-lock-toggle" onclick="secToggleLock()">🔒 Lock System</button>
+      <button class="btn-adm unlock-btn" onclick="openQuestionEditor()">📝 Question Editor</button>
+      <button class="btn-adm close-btn" onclick="closeAdminPanel()">Close</button>
+    </div>
+    <div class="admin-status-txt" id="admin-status-txt"></div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 1: REGISTRATION ════ -->
+<div class="screen active" id="screen-reg">
+  <div class="quiz-header">
+    <div class="quiz-logo">
+      <svg viewBox="0 0 72 48" fill="none">
+        <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="quiz-brand">TOYOTA · DEL-EV-ERY</div>
+    <div class="quiz-title">Knowledge<br><span class="red">Battle</span></div>
+    <div class="quiz-sub">15 questions · 20 seconds each · Fastest wins</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-field">
+      <label class="form-label">Dealer Code</label>
+      <input class="form-input" id="f-dealer-code" type="text" placeholder="e.g. 14055" maxlength="5" autocomplete="off" inputmode="numeric">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Your Name</label>
+      <input class="form-input" id="f-name" type="text" placeholder="First Last" autocomplete="name">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Dealership Name</label>
+      <input class="form-input locked-field" id="f-dealer" type="text" placeholder="Auto-filled from Dealer Code" readonly>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Region</label>
+      <select class="form-input locked-field" id="f-region" disabled>
+        <option value="">Select Region</option>
+        <option>Boston Region</option>
+        <option>New York Region</option>
+        <option>Central Atlantic Toyota (CAT)</option>
+        <option>Cincinnati Region</option>
+        <option>Chicago Region</option>
+        <option>Kansas City Region</option>
+        <option>Denver Region</option>
+        <option>Los Angeles Region</option>
+        <option>San Francisco Region</option>
+        <option>Portland Region</option>
+        <option>Southeast Toyota Distributors (SET)</option>
+        <option>Gulf States Toyota (GST)</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label class="form-label">State</label>
+      <input class="form-input locked-field" id="f-state" type="text" placeholder="Auto-filled from Dealer Code" readonly>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">START QUIZ →</button>
+    <div style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
+      Information current as of March 2026 · Toyota Motor Sales
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 2: QUIZ ════ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-top">
+    <div class="q-counter" id="q-counter">Question 1 of 15</div>
+    <div class="q-score-live" id="q-score-live">Score: 0</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="q-progress"></div></div>
+
+  <div class="question-timer">
+    <div class="qt-value" id="qt-value">20</div>
+    <div class="qt-label">seconds</div>
+  </div>
+
+  <div class="question-card">
+    <div class="q-category" id="q-category">DELIVER IT RIGHT</div>
+    <div class="q-text" id="q-text">Loading...</div>
+  </div>
+
+  <div class="answers" id="q-answers"></div>
+  <div class="feedback-box" id="q-feedback" style="display:none"></div>
+  <div class="next-q-btn">
+    <button class="btn-primary" id="btn-next-q" onclick="nextQuestion()" style="display:none">NEXT →</button>
+  </div>
+</div>
+
+<!-- ════ SCREEN 3: RESULTS ════ -->
+<div class="screen" id="screen-results">
+  <div class="quiz-header">
+    <div class="quiz-logo">
+      <svg viewBox="0 0 72 48" fill="none">
+        <ellipse cx="36" cy="24" rx="34" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="24" rx="13" ry="22" stroke="#EB0A1E" stroke-width="2.5"/>
+        <ellipse cx="36" cy="9" rx="23" ry="8" stroke="#EB0A1E" stroke-width="2.5"/>
+      </svg>
+    </div>
+    <div class="quiz-brand">TOYOTA · DEL-EV-ERY</div>
+    <div class="quiz-title">Your <span class="red">Results</span></div>
+  </div>
+
+  <div class="result-card">
+    <div class="result-score-big" id="res-score">0</div>
+    <div class="result-out-of">out of 15</div>
+    <div class="result-pct" id="res-pct">0%</div>
+    <div class="cert-badge" id="res-cert">
+      <span id="res-cert-icon">●</span>
+      <span id="res-cert-text">Loading...</span>
+    </div>
+    <div class="result-breakdown">
+      <div class="rb-item"><span class="rb-label">Name</span><span class="rb-val" id="res-name">-</span></div>
+      <div class="rb-item"><span class="rb-label">Dealership</span><span class="rb-val" id="res-dealer">-</span></div>
+      <div class="rb-item"><span class="rb-label">Region</span><span class="rb-val" id="res-region">-</span></div>
+      <div class="rb-item"><span class="rb-label">Deliver It Right</span><span class="rb-val" id="res-deliver">-</span></div>
+      <div class="rb-item"><span class="rb-label">Connect & Resources</span><span class="rb-val" id="res-connect">-</span></div>
+      <div class="rb-item"><span class="rb-label">Delivery Practice</span><span class="rb-val" id="res-practice">-</span></div>
+      <div class="rb-item"><span class="rb-label">Real-World Readiness</span><span class="rb-val" id="res-realworld">-</span></div>
+      <div class="rb-item"><span class="rb-label">Time</span><span class="rb-val" id="res-time">-</span></div>
+    </div>
+    <div class="export-box">
+      <div class="export-label">Share with your manager — paste into the dashboard</div>
+      <div class="export-code" id="export-code"></div>
+      <button class="copy-btn" onclick="copyExport()">📋 Copy Result Code</button>
+    </div>
+    <button class="btn-primary" style="margin-top:16px" onclick="retakeQuiz()">RETAKE QUIZ</button>
+  </div>
+
+  <div class="question-review" id="question-review"></div>
+</div>
+
+<script>
+// ── SECURITY SYSTEM ──────────────────────────────────────────
+const _SEC_KEY='delev_sec_v1';
+const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _FILE_REQ='sales';
+let _secPin='',_secCfg={},_secLevel=null;
+function _getSecCfg(){try{const s=localStorage.getItem(_SEC_KEY);return s?{..._SEC_DEF,...JSON.parse(s)}:{..._SEC_DEF}}catch(e){return{..._SEC_DEF}}}
+function _saveSecCfg(c){localStorage.setItem(_SEC_KEY,JSON.stringify(c))}
+function secInit(){
+  _secCfg=_getSecCfg();
+  const ov=document.getElementById('sec-overlay');
+  const sl=sessionStorage.getItem('delev_sec_level');
+  if(sl&&!_secCfg.locked){_secLevel=sl;ov.style.display='none';if(sl==='master')document.getElementById('admin-fab').style.display='flex';return}
+  ov.style.display='flex';
+  const lk=document.getElementById('lock-screen'),pe=document.getElementById('pin-entry');
+  if(_secCfg.locked){document.getElementById('lock-msg-text').textContent=_secCfg.lockMsg||_SEC_DEF.lockMsg;lk.style.display='flex';lk.style.flexDirection='column';lk.style.alignItems='center';pe.style.display='none'}
+  else{lk.style.display='none';pe.style.display='flex'}
+}
+function secShowPin(){document.getElementById('lock-screen').style.display='none';const pe=document.getElementById('pin-entry');pe.style.display='flex';document.getElementById('sec-access-label').textContent='Master PIN Required'}
+function secKey(k){if(_secPin.length>=4)return;_secPin+=k;_secUpdateDots();if(_secPin.length===4)setTimeout(_secCheck,130)}
+function secDel(){_secPin=_secPin.slice(0,-1);_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function secClear(){_secPin='';_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
+function _secUpdateDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<_secPin.length);d.classList.remove('error')}}
+function _secCheck(){
+  _secCfg=_getSecCfg();
+  let level=null;
+  if(_secPin===_secCfg.masterPin)level='master';
+  else if(_FILE_REQ!=='master'&&_secPin===_secCfg.managerPin)level='manager';
+  else if(_FILE_REQ==='sales'&&_secPin===_secCfg.salesPin)level='sales';
+  if(_secCfg.locked&&level!=='master')level=null;
+  if(level){
+    _secLevel=level;sessionStorage.setItem('delev_sec_level',level);
+    const ov=document.getElementById('sec-overlay');ov.classList.add('fade-out');
+    setTimeout(()=>{ov.style.display='none'},400);
+    if(level==='master'){document.getElementById('admin-fab').style.display='flex';if(_secCfg.locked){_secCfg.locked=false;_saveSecCfg(_secCfg)}}
+  }else{
+    const dots=document.getElementById('sec-pin-dots');dots.classList.add('pin-shake');
+    for(let i=0;i<4;i++)document.getElementById('pd'+i).classList.add('error');
+    document.getElementById('pin-err-msg').textContent='Incorrect PIN. Try again.';
+    setTimeout(()=>{_secPin='';_secUpdateDots();dots.classList.remove('pin-shake')},700)
+  }
+}
+function openAdminPanel(){
+  _secCfg=_getSecCfg();
+  document.getElementById('ap-master').value='';document.getElementById('ap-manager').value='';document.getElementById('ap-sales').value='';
+  document.getElementById('ap-lock-msg').value=_secCfg.lockMsg||'';
+  const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='System is currently '+(lk?'LOCKED':'active');
+  document.getElementById('admin-modal').classList.add('open');
+}
+function secSaveAdmin(){
+  _secCfg=_getSecCfg();
+  const m=document.getElementById('ap-master').value.trim(),mg=document.getElementById('ap-manager').value.trim(),s=document.getElementById('ap-sales').value.trim();
+  if(m.length===4&&/^\d+$/.test(m))_secCfg.masterPin=m;
+  if(mg.length===4&&/^\d+$/.test(mg))_secCfg.managerPin=mg;
+  if(s.length===4&&/^\d+$/.test(s))_secCfg.salesPin=s;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);document.getElementById('admin-status-txt').textContent='✓ PINs saved · '+new Date().toLocaleTimeString();
+}
+function secToggleLock(){
+  _secCfg=_getSecCfg();_secCfg.locked=!_secCfg.locked;
+  _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
+  _saveSecCfg(_secCfg);const lk=_secCfg.locked;
+  document.getElementById('btn-lock-toggle').textContent=lk?'🔓 Unlock System':'🔒 Lock System';
+  document.getElementById('btn-lock-toggle').className='btn-adm '+(lk?'unlock-btn':'lock-btn');
+  document.getElementById('admin-status-txt').textContent='✓ System '+(lk?'LOCKED':'unlocked')+' · '+new Date().toLocaleTimeString();
+}
+function closeAdminPanel(){document.getElementById('admin-modal').classList.remove('open')}
+
+// ── QUESTION EDITOR ─────────────────────────────────────────────
+let qeWorking = [];
+
+function openQuestionEditor(){
+  qeWorking = JSON.parse(JSON.stringify(questions)); // deep clone working copy
+  qeRenderList();
+  document.getElementById('qe-modal').classList.add('open');
+}
+function closeQuestionEditor(){
+  document.getElementById('qe-modal').classList.remove('open');
+}
+
+function qeRenderList(){
+  const list = document.getElementById('qe-list');
+  list.innerHTML = qeWorking.map((q, i) => `
+    <div class="qe-card">
+      <div class="qe-card-head">
+        <span class="qe-num">QUESTION ${i + 1}</span>
+        <button class="qe-del-btn" onclick="qeDeleteQuestion(${i})">🗑 Delete</button>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Category</label>
+        <select class="qe-sel" onchange="qeUpdate(${i},'cat',this.value)">
+          <option value="DELIVER IT RIGHT" ${q.cat === 'DELIVER IT RIGHT' ? 'selected' : ''}>DELIVER IT RIGHT</option>
+          <option value="CONNECT & RESOURCES" ${q.cat === 'CONNECT & RESOURCES' ? 'selected' : ''}>CONNECT & RESOURCES</option>
+          <option value="DELIVERY PRACTICE" ${q.cat === 'DELIVERY PRACTICE' ? 'selected' : ''}>DELIVERY PRACTICE</option>
+          <option value="REAL-WORLD READINESS" ${q.cat === 'REAL-WORLD READINESS' ? 'selected' : ''}>REAL-WORLD READINESS</option>
+        </select>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Question</label>
+        <textarea class="qe-ta" oninput="qeUpdate(${i},'q',this.value)">${qeEsc(q.q)}</textarea>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Answer Options (select the correct one)</label>
+        <div class="qe-opts-grid">
+          ${q.opts.map((opt, j) => `
+            <div class="qe-opt-row">
+              <input type="radio" name="qe-ans-${i}" ${q.ans === j ? 'checked' : ''} onchange="qeUpdate(${i},'ans',${j})">
+              <input class="qe-inp" value="${qeEsc(opt)}" oninput="qeUpdateOpt(${i},${j},this.value)">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="qe-row">
+        <label class="qe-lbl">Explanation</label>
+        <textarea class="qe-ta" oninput="qeUpdate(${i},'exp',this.value)">${qeEsc(q.exp)}</textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+function qeEsc(s){
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function qeUpdate(i, field, value){ qeWorking[i][field] = value; }
+function qeUpdateOpt(i, j, value){ qeWorking[i].opts[j] = value; }
+
+function qeDeleteQuestion(i){
+  if(!confirm('Delete this question?')) return;
+  qeWorking.splice(i, 1);
+  qeRenderList();
+}
+
+function qeAddQuestion(){
+  qeWorking.push({
+    cat: 'DELIVER IT RIGHT',
+    q: 'New question text...',
+    opts: ['Option A', 'Option B', 'Option C', 'Option D'],
+    ans: 0,
+    exp: 'Explanation of the correct answer...'
+  });
+  qeRenderList();
+  // scroll to bottom so the new card is visible
+  setTimeout(() => document.getElementById('qe-list').lastElementChild?.scrollIntoView({behavior:'smooth', block:'center'}), 50);
+}
+
+function qeSaveLive(){
+  localStorage.setItem(QE_KEY, JSON.stringify(qeWorking));
+  questions = JSON.parse(JSON.stringify(qeWorking));
+  document.getElementById('qe-status-txt').textContent = '✓ Saved · Live in this browser now (' + questions.length + ' questions) · ' + new Date().toLocaleTimeString();
+}
+
+function qeCopyCode(){
+  const code = 'const DEFAULT_QUESTIONS = ' + JSON.stringify(qeWorking, null, 2) + ';';
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById('qe-status-txt').textContent = '📋 Copied! Paste this over the DEFAULT_QUESTIONS array in the file, then commit to GitHub.';
+  });
+}
+
+function qeResetDefault(){
+  if(!confirm('Reset to the original default questions? This clears any local edits.')) return;
+  localStorage.removeItem(QE_KEY);
+  questions = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+  qeWorking = JSON.parse(JSON.stringify(DEFAULT_QUESTIONS));
+  qeRenderList();
+  document.getElementById('qe-status-txt').textContent = '↺ Reset to default questions.';
+}
+document.addEventListener('keydown',function(e){
+  if(document.getElementById('admin-modal').classList.contains('open'))return;
+  if(document.getElementById('sec-overlay').style.display==='none')return;
+  if(e.key>='0'&&e.key<='9')secKey(e.key);
+  else if(e.key==='Backspace')secDel();
+  else if(e.key==='Escape')secClear();
+});
+secInit();
+
+// ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
+const DEALER_LOOKUP = {
+  '15047': {name:'Hendrick Toyota Merriam', state:'KS'},
+  '15050': {name:'Olathe Toyota', state:'KS'},
+  '15051': {name:'Crown Toyota', state:'KS'},
+  '15056': {name:'Legends Toyota', state:'KS'},
+  '24026': {name:"Adams Toyota Lee's Summit", state:'MO'},
+  '24061': {name:'Molle Toyota', state:'MO'},
+  '24074': {name:'Jay Wolfe Toyota', state:'MO'},
+  '24079': {name:'Rolling Hills Toyota', state:'MO'},
+  '24022': {name:'Seeger Toyota', state:'MO'},
+  '24036': {name:'Tom Pappas Toyota', state:'MO'},
+  '24045': {name:'Lou Fusz Toyota', state:'MO'},
+  '24052': {name:'Straatmann Toyota', state:'MO'},
+  '24063': {name:'Jerry Ackerman Toyota', state:'MO'},
+  '24067': {name:'Twin City Toyota', state:'MO'},
+  '24077': {name:'Jay Wolfe Toyota of West County', state:'MO'},
+  '24078': {name:'Coad Toyota', state:'MO'},
+  '24085': {name:'Bommarito Toyota', state:'MO'},
+  '24088': {name:'Victory Toyota of St. Louis', state:'MO'},
+  '15060': {name:'Briggs Toyota of Fort Scott', state:'KS'},
+  '24053': {name:'Seeger Toyota of St. Robert', state:'MO'},
+  '24059': {name:'Baldwin Toyota', state:'MO'},
+  '24068': {name:'Toyota of West Plains', state:'MO'},
+  '24071': {name:'Reliable Toyota', state:'MO'},
+  '24076': {name:'Frank Fletcher Toyota', state:'MO'},
+  '24080': {name:'McCarthy Toyota of Sedalia', state:'MO'},
+  '24084': {name:'Joe Machens Toyota', state:'MO'},
+  '24087': {name:'Rusty Drewing Toyota', state:'MO'},
+  '15010': {name:'Lewis Toyota of Topeka', state:'KS'},
+  '15012': {name:"Eddy's Toyota of Wichita", state:'KS'},
+  '15021': {name:'Lewis Toyota of Dodge City', state:'KS'},
+  '15034': {name:'Quality Toyota of Independence', state:'KS'},
+  '15046': {name:'Lewis Toyota of Hays', state:'KS'},
+  '15052': {name:'Conklin Toyota Salina', state:'KS'},
+  '15053': {name:'Little Apple Toyota', state:'KS'},
+  '15054': {name:'Midwest Toyota', state:'KS'},
+  '15057': {name:'Clint Bowyer Toyota', state:'KS'},
+  '15059': {name:'Lewis Toyota of Garden City', state:'KS'},
+  '26021': {name:'Baxter Toyota of La Vista', state:'NE'},
+  '26023': {name:'Premier Toyota', state:'NE'},
+  '26024': {name:'Baxter Toyota of Lincoln', state:'NE'},
+  '26027': {name:'Wagner Toyota', state:'NE'},
+  '26029': {name:'Team Toyota', state:'NE'},
+  '26030': {name:'Village Pointe Toyota', state:'NE'},
+  '26031': {name:'Corwin Toyota of Bellevue', state:'NE'},
+  '26032': {name:'Gregg Young Toyota of Columbus', state:'NE'},
+  '26033': {name:'Woodhouse Toyota', state:'NE'},
+  '14011': {name:'Anderson-Weber Toyota', state:'IA'},
+  '14015': {name:'Cedar Rapids Toyota, Inc.', state:'IA'},
+  '14036': {name:'Deery Brothers Toyota', state:'IA'},
+  '14050': {name:'Toyota of Muscatine', state:'IA'},
+  '14052': {name:'Smart Toyota of Quad Cities', state:'IA'},
+  '14054': {name:'Billion Toyota of Clinton', state:'IA'},
+  '14055': {name:'McGrath Toyota of Iowa City', state:'IA'},
+  '14056': {name:'Gregg Young Toyota Ottumwa', state:'IA'},
+  '24083': {name:'Kirksville Toyota', state:'MO'},
+  '14017': {name:'Hosmer Toyota', state:'IA'},
+  '14041': {name:'Dan Deery Toyota', state:'IA'},
+  '14044': {name:'Toyota of Des Moines', state:'IA'},
+  '14046': {name:'Wilson Toyota', state:'IA'},
+  '14048': {name:'Fort Dodge Ford Lincoln Toyota', state:'IA'},
+  '14049': {name:'Okoboji Toyota', state:'IA'},
+  '14051': {name:'Rick Collins Toyota', state:'IA'},
+  '14053': {name:'Motor Inn Toyota of Carroll', state:'IA'},
+  '33010': {name:'Lloyds Toyota', state:'ND'},
+  '33017': {name:'Lake Toyota', state:'ND'},
+  '33021': {name:'Corwin Toyota', state:'ND'},
+  '33024': {name:'Dan Porter Honda-Toyota', state:'ND'},
+  '33025': {name:'Cedric Theel Toyota', state:'ND'},
+  '33031': {name:'Rydell Toyota of Grand Forks', state:'ND'},
+  '33032': {name:'Minot Toyota', state:'ND'},
+  '40009': {name:'Harr Toyota', state:'SD'},
+  '40011': {name:'Billion Toyota', state:'SD'},
+  '40017': {name:'Sharp Chevrolet-Toyota', state:'SD'},
+  '40021': {name:'Denny Menholt Toyota', state:'SD'},
+  '40022': {name:'Capital City Toyota', state:'SD'}
+};
+
+(function(){
+  const codeInput = document.getElementById('f-dealer-code');
+  if(!codeInput) return;
+  codeInput.addEventListener('input', function(){
+    const code = codeInput.value.trim();
+    const match = DEALER_LOOKUP[code];
+    const regionSel = document.getElementById('f-region');
+    if(match){
+      document.getElementById('f-dealer').value = match.name;
+      document.getElementById('f-state').value = match.state;
+      if(regionSel) regionSel.value = 'Kansas City Region';
+    } else {
+      document.getElementById('f-dealer').value = '';
+      document.getElementById('f-state').value = '';
+      if(regionSel) regionSel.value = '';
+    }
+  });
+})();
+
+// ── QUIZ QUESTIONS ────────────────────────────────────────────
+const DEFAULT_QUESTIONS = [
+  // DELIVER IT RIGHT
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'Why is there simply more essential information to convey during a BEV delivery than during a typical gas-vehicle delivery?',
+    opts: ['There isn\'t — the content is the same either way', 'A gas-vehicle buyer already understands how to fuel up, but a BEV buyer needs to newly understand range and charging on top of everything else', 'BEV buyers ask more questions about financing', 'BEVs have simpler technology overall, so less needs to be explained'],
+    ans: 1,
+    exp: 'A gas-vehicle buyer already knows how to fuel up. A BEV buyer needs range and charging understanding added on top of the standard delivery content — genuinely more to cover in the same appointment.'
+  },
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'Why is it riskier for a BEV owner to leave delivery without understanding range and charging, compared to a gas, hybrid, or plug-in hybrid owner in the same situation?',
+    opts: ['It isn\'t riskier — all owners face the same risk either way', 'A gas, hybrid, or plug-in hybrid owner can always just pull into a gas station if something goes wrong; a BEV owner who misjudges range or charging can genuinely get stranded', 'BEVs have shorter range than other vehicles, so the risk is unrelated to owner understanding', 'Dealerships are legally required to follow up if a BEV owner has questions'],
+    ans: 1,
+    exp: 'Gas, hybrid, and plug-in hybrid owners always have a fallback — a gas station. A BEV owner who doesn\'t understand range and charging has no equivalent fallback and can end up genuinely stranded.'
+  },
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'A guest seems rushed and eager to leave before you\'ve covered charging basics. What\'s the best approach?',
+    opts: ['Let them go — they can figure it out on their own later', 'Quickly and clearly cover the single most critical charging concept before they leave, even if it means trimming less essential content', 'Insist they stay exactly as long as you originally planned, regardless of their schedule', 'Skip straight to paperwork and mention charging only if they ask'],
+    ans: 1,
+    exp: 'Respect their time, but don\'t let a rushed guest walk out without the one or two most critical charging concepts — that\'s the difference between a confident new owner and a frustrated or stranded one.'
+  },
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'What\'s the real risk of completing a guest\'s app or account setup entirely FOR them, instead of walking through it together?',
+    opts: ['There is no real risk — the setup is what matters, not who does the clicking', 'The guest won\'t learn how to use it themselves, and will likely struggle the first time they need to on their own', 'It takes longer than doing it together', 'It voids part of the vehicle warranty'],
+    ans: 1,
+    exp: 'If you just do the setup for them, they haven\'t actually learned anything — the first time they need to check their charge level or find a station alone, they\'ll be stuck.'
+  },
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'What\'s the most effective way to make sure a new BEV owner doesn\'t struggle with charging in their first few weeks of ownership?',
+    opts: ['Hand them a printed manual and let them read it on their own time', 'Educate them on both home and public charging before they leave, not just complete a setup checklist', 'Tell them to call the dealership if anything comes up', 'Assume they\'ll figure it out the same way they learned to pump gas'],
+    ans: 1,
+    exp: 'Genuine understanding of both home and public charging — not just a completed checklist — is what actually prevents a guest from struggling in their first weeks of ownership.'
+  },
+  {
+    cat: 'DELIVER IT RIGHT',
+    q: 'Which best describes what a truly successful BEV delivery looks like from the guest\'s point of view?',
+    opts: ['Every checklist item was technically completed, however briefly', 'The guest leaves feeling confident and capable of using their vehicle independently', 'The appointment finished faster than the guest expected', 'The guest signed all required paperwork'],
+    ans: 1,
+    exp: 'A checklist can be technically complete and the delivery can still fail the guest. Success means the guest leaves genuinely confident and able to manage their vehicle on their own.'
+  },
+  // CONNECT & RESOURCES
+  {
+    cat: 'CONNECT & RESOURCES',
+    q: 'Compared to a typical gas-vehicle owner, how does a new BEV owner\'s day-to-day relationship with the Toyota App usually differ?',
+    opts: ['It\'s essentially the same — most owners rarely open the app either way', 'A BEV owner is likely to use it frequently, even daily, to monitor charge level, manage charging, and find public stations', 'BEV owners are discouraged from using the app for charging-related tasks', 'The Toyota App doesn\'t support any BEV-specific charging features'],
+    ans: 1,
+    exp: 'A gas-vehicle owner might open the app sporadically for service reminders. A BEV owner is far more likely to use it frequently — checking charge level, managing settings, and finding public charging.'
+  },
+  {
+    cat: 'CONNECT & RESOURCES',
+    q: 'You\'re struggling to get a strong cell signal while helping a guest set up their account at the dealership. What\'s a smart first step?',
+    opts: ['Tell the guest it can\'t be done today and to try again at home', 'Move to a more open area, away from ceilings or structures that may be blocking the signal', 'Restart the guest\'s phone repeatedly until it connects', 'Use a different guest\'s phone instead'],
+    ans: 1,
+    exp: 'Physical signal blockers (ceilings, structures, too many nearby devices) are a common and fixable cause — moving to a more open area often solves it immediately.'
+  },
+  {
+    cat: 'CONNECT & RESOURCES',
+    q: 'If your first attempts to resolve an account or app issue during delivery don\'t work, what\'s a good next move before involving the guest further?',
+    opts: ['Tell the guest the issue is unsolvable and to contact support themselves', 'Know where to turn for further help — such as creating a new account, resetting a password, or contacting your BEC', 'Cancel the delivery appointment and reschedule for another day', 'Ignore the issue since it doesn\'t affect the vehicle itself'],
+    ans: 1,
+    exp: 'Basic troubleshooting (new account, password reset, contacting your BEC) resolves most issues on the spot — know these before you need them, so a hiccup doesn\'t derail the appointment.'
+  },
+  {
+    cat: 'CONNECT & RESOURCES',
+    q: 'A guest asks where they can find a step-by-step delivery checklist specific to their new BEV model. Where would that live?',
+    opts: ['It doesn\'t exist — delivery checklists are the same for every model', 'Dedicated checklists exist for specific BEV/PHEV models and are accessible to Sales Consultants through internal dealer resources', 'Only the manufacturer can provide this, not the dealership', 'It\'s only available after the guest creates an account'],
+    ans: 1,
+    exp: 'Model-specific delivery checklists exist and are accessible to you as a Sales Consultant — know where to find yours before the appointment, not during it.'
+  },
+  {
+    cat: 'CONNECT & RESOURCES',
+    q: 'A guest is nervous about finding public charging stations on an upcoming road trip. What should you make sure they know how to do before they leave?',
+    opts: ['Nothing — public charging isn\'t something Sales Consultants need to address', 'Use the Toyota App to locate charging stations and manage payment, including partner charging networks', 'Only charge at home and avoid road trips in their BEV', 'Call the dealership every time they need to find a charger'],
+    ans: 1,
+    exp: 'Guests should leave knowing how to independently find and pay for public charging through the Toyota App — that\'s what actually resolves road-trip anxiety, not a promise to call the dealership.'
+  },
+  // DELIVERY PRACTICE
+  {
+    cat: 'DELIVERY PRACTICE',
+    q: 'You have about 10 minutes left in a delivery appointment and haven\'t yet covered charging setup. What should you do?',
+    opts: ['Skip charging entirely — it can wait for another day', 'Prioritize the single most critical charging concept clearly, and offer a clear path for the guest to get help with the rest', 'Rush through everything you planned at equal, faster speed', 'End the appointment early and reschedule the whole thing'],
+    ans: 1,
+    exp: 'When time runs short, prioritize ruthlessly — cover the one or two things that prevent a guest from being stranded, and give them a clear next step for the rest.'
+  },
+  {
+    cat: 'DELIVERY PRACTICE',
+    q: 'Which is more important to make sure a first-time BEV guest understands before they leave: how to adjust their seat memory settings, or how to check their charge level and estimated range?',
+    opts: ['Seat memory settings — comfort features come first', 'Charge level and estimated range — that\'s essential to avoid the guest getting stranded; seat settings can be learned anytime', 'Both are equally urgent and neither can be deprioritized', 'Neither — both can be covered in a follow-up call'],
+    ans: 1,
+    exp: 'Comfort features are nice-to-know and can be learned anytime. Charge level and range understanding is need-to-know before the guest ever drives away — that\'s where your limited time should go.'
+  },
+  {
+    cat: 'DELIVERY PRACTICE',
+    q: 'You realize partway through a delivery that you won\'t have time to cover everything a BEV guest genuinely needs. What\'s the most professional approach?',
+    opts: ['Rush through the remaining content as fast as possible so it\'s technically "covered"', 'Proactively find another moment — earlier in the sales process or a quick follow-up — to cover what\'s left, rather than rushing or silently skipping it', 'Quietly skip whatever doesn\'t fit and hope the guest doesn\'t notice', 'Ask the guest to research the remaining topics on their own'],
+    ans: 1,
+    exp: 'Rushing or silently skipping content isn\'t "right the first time" — it just delays the problem. Proactively planning another moment to finish shows the guest their understanding actually matters to you.'
+  },
+  {
+    cat: 'DELIVERY PRACTICE',
+    q: 'A guest tells you they feel overwhelmed by how much there is to learn about their new BEV. What\'s the best response?',
+    opts: ['Agree that BEVs are complicated and there\'s nothing you can do about it', 'Acknowledge it, then narrow the focus to the few things that matter most right now, with a clear plan for the rest', 'Speed up and get through the remaining content faster so the appointment ends sooner', 'Suggest they consider returning the vehicle for a gas model instead'],
+    ans: 1,
+    exp: 'Overwhelm is a signal to narrow focus, not to speed up or brush it off. Acknowledge the feeling, prioritize what matters most right now, and set clear expectations for covering the rest.'
+  },
+  // REAL-WORLD READINESS
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest asks if they can just charge every night using the regular outlet already in their garage. What should you tell them?',
+    opts: ['That\'s plenty — any standard outlet fully charges a BEV overnight', 'A standard 120V outlet only adds a few miles of range per hour; for meaningful overnight charging, they should look into a Level 2 home charger soon, since installation can take time to schedule', 'They should avoid charging at home entirely and rely only on public chargers', 'All homes are automatically wired for BEV charging already'],
+    ans: 1,
+    exp: 'This is the single biggest real-world frustration point for new BEV owners. A standard outlet is slow, and Level 2 installation (electrician scheduling, possible panel upgrade, permitting) takes real time — set this expectation now, not after they\'re stuck.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest calls a week after delivery, worried their BEV only got 190 miles on a cold highway trip with the heat running, instead of the 281-mile EPA estimate. What\'s the most likely explanation?',
+    opts: ['The battery is probably defective and needs to be replaced', 'Cold weather, highway speeds, and cabin heating all meaningfully reduce range — this is expected, not a malfunction', 'The EPA estimate is inaccurate and should be disregarded entirely', 'They most likely used DC fast charging incorrectly'],
+    ans: 1,
+    exp: 'Real-world range dips below the EPA number in cold weather, at highway speed, and with the heat on — normal physics, not a defect. A guest who hears this at delivery won\'t panic later.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest\'s BEV won\'t start one morning, and they\'re confused because they assumed an electric vehicle couldn\'t have a "dead battery" in the traditional sense. What\'s going on?',
+    opts: ['This shouldn\'t be possible in any BEV', 'BEVs still have a small 12V battery for accessories, separate from the main traction battery, and it can die just like in a gas car', 'This means the main traction battery has completely failed', 'BEVs never require jump-starting under any circumstances'],
+    ans: 1,
+    exp: 'The 12V accessory battery is separate from the traction battery and can fail independently, just like in a gas vehicle. A quick mention at delivery prevents genuine confusion later.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest\'s BEV breaks down and needs to be towed. What\'s the critical thing they need to already know before that moment happens?',
+    opts: ['Any standard tow truck and towing method works fine for a BEV', 'Most BEVs, especially dual-motor AWD models, must be towed on a flatbed only — dolly towing can damage the drivetrain', 'BEVs should never be towed under any circumstance', 'Only the original dealership is able to arrange BEV towing'],
+    ans: 1,
+    exp: 'Flatbed-only towing is a real, easy-to-miss requirement for most BEVs. A guest needs to know this before an emergency — not while arguing with a confused tow truck driver at 11pm.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest mentions their spouse will also be driving the new BEV regularly, but only the guest completed Toyota App setup during delivery. What should you do?',
+    opts: ['Nothing — one enrolled driver per household is sufficient', 'Proactively ask if other regular drivers should be enrolled too, and get them set up in the same appointment', 'Suggest the spouse set up their own account after driving without it for a while', 'Recommend the spouse simply borrow the guest\'s phone whenever needed'],
+    ans: 1,
+    exp: 'It costs one sentence — "will anyone else be driving this regularly?" — to prevent a real gap where a household driver has none of the tools the buyer was walked through.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest calls, frustrated that they plugged into a public charger but nothing happened. Before assuming it\'s an account problem, what should you ask about first?',
+    opts: ['Immediately assume their Toyota App account is broken and needs to be reset', 'Whether the cable is fully seated, and whether the charging session needed to be started or unlocked through the Toyota App first', 'That the charger itself must be broken, and they should find a different location', 'That their vehicle\'s charging port is likely defective'],
+    ans: 1,
+    exp: 'A failed charge is often a physical issue (cable not seated) or a session that needs to be started through the app — a distinct problem from an account/login issue, and usually the faster fix.'
+  },
+  {
+    cat: 'REAL-WORLD READINESS',
+    q: 'A guest is comparing the ongoing cost of a BEV against a gas vehicle. Beyond the obvious fuel savings, what\'s a specific tip that could strengthen the value case?',
+    opts: ['There\'s no way to meaningfully reduce charging costs beyond what\'s already obvious', 'Many utilities offer discounted overnight EV-specific rate plans, which can meaningfully lower charging costs further', 'Public charging is always cheaper than charging at home', 'BEV owners should avoid charging at home entirely to save money'],
+    ans: 1,
+    exp: 'Overnight utility rate plans for EVs are a real, often-overlooked savings opportunity — worth mentioning since it costs nothing and reinforces the cost-of-ownership case right when the guest is most receptive.'
+  }
+];
+
+const QE_KEY = 'delev_custom_questions';
+let questions = (function(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(QE_KEY) || 'null');
+    if (Array.isArray(saved) && saved.length) return saved;
+  } catch(e) {}
+  return DEFAULT_QUESTIONS;
+})();
+
+// ── STATE ─────────────────────────────────────────────────────
+let currentQ = 0;
+let score = 0;
+let deliverScore = 0;
+let connectScore = 0;
+let practiceScore = 0;
+let realWorldScore = 0;
+let answered = false;
+let qtInterval = null;
+let qtSeconds = 20;
+let startTime = null;
+let userAnswers = [];
+let userData = {};
+let refreshCount = 0;
+let activeQuestions = questions; // per-attempt shuffled copy; replaced in startQuiz()
+const ACTIVE_SESSION_KEY = 'delev_active_quiz_session';
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Returns a new question object with its answer options shuffled and .ans
+// re-pointed to wherever the correct option landed. Does not mutate the original.
+function shuffleQuestionOptions(q) {
+  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
+  return {
+    ...q,
+    opts: order.map(i => q.opts[i]),
+    ans: order.indexOf(q.ans)
+  };
+}
+
+// ── REGISTRATION ──────────────────────────────────────────────
+function saveActiveSession(){
+  try {
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
+      userData, currentQ, score, deliverScore, connectScore, practiceScore, realWorldScore, userAnswers, startTime, refreshCount, activeQuestions
+    }));
+  } catch(e) {}
+}
+function clearActiveSession(){
+  try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
+}
+
+function startQuiz() {
+  const name = document.getElementById('f-name').value.trim();
+  const dealerCode = document.getElementById('f-dealer-code').value.trim();
+  const dealer = document.getElementById('f-dealer').value.trim();
+  const region = document.getElementById('f-region').value;
+  const state = document.getElementById('f-state').value.trim().toUpperCase();
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!dealerCode) { alert('Please enter your dealer code.'); return; }
+  if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
+  userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
+  startTime = Date.now();
+  refreshCount = 0;
+  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
+  saveActiveSession();
+  showScreen('screen-quiz');
+  loadQuestion();
+}
+
+// ── QUIZ FLOW ─────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function loadQuestion() {
+  const q = activeQuestions[currentQ];
+  answered = false;
+
+  document.getElementById('q-counter').textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+  document.getElementById('q-score-live').textContent = `Score: ${score}`;
+  document.getElementById('q-progress').style.width = ((currentQ / activeQuestions.length) * 100) + '%';
+  document.getElementById('q-category').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-feedback').style.display = 'none';
+  document.getElementById('btn-next-q').style.display = 'none';
+
+  const answersEl = document.getElementById('q-answers');
+  const letters = ['A', 'B', 'C', 'D'];
+  answersEl.innerHTML = q.opts.map((opt, i) => `
+    <button class="answer-btn" onclick="selectAnswer(${i})" data-idx="${i}">
+      <div class="answer-letter">${letters[i]}</div>
+      <span>${opt}</span>
+    </button>
+  `).join('');
+
+  startQuestionTimer();
+}
+
+function startQuestionTimer() {
+  clearInterval(qtInterval);
+  qtSeconds = 20;
+  updateQTimer();
+  qtInterval = setInterval(() => {
+    qtSeconds--;
+    updateQTimer();
+    if (qtSeconds <= 0) { clearInterval(qtInterval); timeOut(); }
+  }, 1000);
+}
+
+function updateQTimer() {
+  const el = document.getElementById('qt-value');
+  el.textContent = qtSeconds;
+  el.className = 'qt-value' + (qtSeconds <= 5 ? ' danger' : qtSeconds <= 10 ? ' warn' : '');
+}
+
+function timeOut() {
+  if (answered) return;
+  answered = true;
+  revealAnswer(-1);
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(qtInterval);
+  revealAnswer(idx);
+}
+
+function revealAnswer(selected) {
+  const q = activeQuestions[currentQ];
+  const btns = document.querySelectorAll('.answer-btn');
+  const isCorrect = selected === q.ans;
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === selected) btn.classList.add('wrong');
+  });
+
+  const feedback = document.getElementById('q-feedback');
+  feedback.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    if (q.cat === 'DELIVER IT RIGHT') deliverScore++;
+    else if (q.cat === 'CONNECT & RESOURCES') connectScore++;
+    else if (q.cat === 'DELIVERY PRACTICE') practiceScore++;
+    else realWorldScore++;
+    feedback.className = 'feedback-box correct';
+    feedback.innerHTML = `✓ Correct! ${q.exp}`;
+  } else if (selected === -1) {
+    feedback.className = 'feedback-box wrong';
+    feedback.innerHTML = `⏱ Time's up! The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
+  } else {
+    feedback.className = 'feedback-box wrong';
+    feedback.innerHTML = `✗ Incorrect. The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
+  }
+
+  userAnswers.push({ q: currentQ, selected, correct: isCorrect });
+  document.getElementById('btn-next-q').style.display = 'block';
+  document.getElementById('q-score-live').textContent = `Score: ${score}`;
+  saveActiveSession();
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= activeQuestions.length) {
+    showResults();
+  } else {
+    saveActiveSession();
+    loadQuestion();
+  }
+}
+
+// ── RESULTS ───────────────────────────────────────────────────
+function showResults() {
+  clearActiveSession();
+  showScreen('screen-results');
+  const totalTime = Math.round((Date.now() - startTime) / 1000);
+  const pct = Math.round(score / activeQuestions.length * 100);
+  const pass = score >= 18;
+
+  document.getElementById('res-score').textContent = score;
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-name').textContent = userData.name;
+  document.getElementById('res-dealer').textContent = userData.dealer;
+  document.getElementById('res-region').textContent = userData.region + (userData.state ? ' · ' + userData.state : '');
+  document.getElementById('res-deliver').textContent = deliverScore + ' / 6';
+  document.getElementById('res-connect').textContent = connectScore + ' / 5';
+  document.getElementById('res-practice').textContent = practiceScore + ' / 4';
+  document.getElementById('res-realworld').textContent = realWorldScore + ' / 7';
+  document.getElementById('res-time').textContent = Math.floor(totalTime / 60) + 'm ' + (totalTime % 60) + 's';
+
+  const certEl = document.getElementById('res-cert');
+  document.getElementById('res-cert-icon').textContent = pass ? '🏆' : '📚';
+  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — Del-EV-ery Delivery Module' : 'Score 12+ to Certify';
+  certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
+
+  // Export JSON
+  const exportData = {
+    name: userData.name,
+    dealerCode: userData.dealerCode,
+    dealerName: userData.dealer,
+    region: userData.region,
+    state: userData.state,
+    score,
+    total: 22,
+    pct,
+    deliverScore: deliverScore,
+    connectScore: connectScore,
+    practiceScore: practiceScore,
+    realWorldScore: realWorldScore,
+    certified: pass,
+    timeSec: totalTime,
+    refreshCount,
+    sessionDate: new Date().toISOString()
+  };
+  const json = JSON.stringify(exportData);
+  document.getElementById('export-code').textContent = json;
+
+  // Save to localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('delev_quiz_results') || '[]');
+    existing.push(exportData);
+    localStorage.setItem('delev_quiz_results', JSON.stringify(existing));
+  } catch(e) {}
+
+  // Silently auto-submit to Google Form (feeds the dashboard automatically)
+  submitToGoogleForm(exportData);
+
+  // Question review
+  const reviewEl = document.getElementById('question-review');
+  reviewEl.innerHTML = '<div style="font-family:Rajdhani,sans-serif;font-size:20px;font-weight:700;margin-bottom:12px">Question Review</div>' +
+    userAnswers.map(a => {
+      const q = activeQuestions[a.q];
+      return `<div class="review-item ${a.correct ? 'c' : 'w'}">
+        <div class="review-icon">${a.correct ? '✓' : '✗'}</div>
+        <div><div class="review-q">${q.q}</div><div class="review-a">${a.correct ? 'Correct' : 'Your answer: ' + (a.selected >= 0 ? q.opts[a.selected] : 'Timed out') + ' · Correct: ' + q.opts[q.ans]}</div></div>
+      </div>`;
+    }).join('');
+}
+
+function copyExport() {
+  const txt = document.getElementById('export-code').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy Result Code', 2000);
+  });
+}
+
+// ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeOYzCND3521YGR-bagoPTM7d1LwEzq1rLmFahu7HoNwObCIg/formResponse';
+const GFORM_ENTRIES = {
+  name: 'entry.1807880254',
+  dealerCode: 'entry.457261319',
+  dealerName: 'entry.2091338007',
+  region: 'entry.1399658972',
+  state: 'entry.1895563575',
+  score: 'entry.1675427313',
+  total: 'entry.2120799115',
+  pct: 'entry.817329531',
+  deliverScore: 'entry.1671818667',
+  connectScore: 'entry.137862683',
+  practiceScore: 'entry.1413256055',
+  certified: 'entry.597098970',
+  timeSec: 'entry.723989167',
+  sessionDate: 'entry.868305902'
+};
+
+function submitToGoogleForm(data) {
+  if (!GFORM_ACTION) return; // no-op until a Del-EV-ery Form is configured
+  try {
+    const formData = new FormData();
+    Object.keys(GFORM_ENTRIES).forEach(key => {
+      formData.append(GFORM_ENTRIES[key], String(data[key]));
+    });
+    fetch(GFORM_ACTION, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).catch(() => {}); // no-cors means we can't read the response; fire-and-forget
+  } catch(e) {
+    // Fails silently — localStorage + manual copy/import remain as fallback
+  }
+}
+
+function retakeQuiz() {
+  currentQ = 0; score = 0; deliverScore = 0; connectScore = 0; practiceScore = 0; realWorldScore = 0;
+  answered = false; userAnswers = []; refreshCount = 0;
+  clearInterval(qtInterval);
+  clearActiveSession();
+  showScreen('screen-reg');
+}
+
+// ── RESUME ON REFRESH (closes the "refresh to reroll" loophole) ──
+(function resumeSessionIfActive(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (!saved || !saved.userData || !saved.userData.name) return;
+    userData = saved.userData;
+    currentQ = saved.currentQ || 0;
+    score = saved.score || 0;
+    deliverScore = saved.deliverScore || 0;
+    connectScore = saved.connectScore || 0;
+    practiceScore = saved.practiceScore || 0;
+    realWorldScore = saved.realWorldScore || 0;
+    userAnswers = saved.userAnswers || [];
+    startTime = saved.startTime || Date.now();
+    refreshCount = (saved.refreshCount || 0) + 1;
+    activeQuestions = (Array.isArray(saved.activeQuestions) && saved.activeQuestions.length) ? saved.activeQuestions : questions;
+    saveActiveSession(); // persist the incremented refresh count immediately
+    if (currentQ >= activeQuestions.length) {
+      // Edge case: they refreshed exactly on the results transition
+      showResults();
+    } else {
+      showScreen('screen-quiz');
+      loadQuestion();
+    }
+  } catch(e) {
+    // If anything's malformed, fall back to the normal registration screen
+  }
+})();
+</script>
+</body>
+</html>
