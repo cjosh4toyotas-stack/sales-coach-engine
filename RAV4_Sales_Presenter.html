@@ -254,6 +254,25 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 #qr-code canvas { display: block; }
 .qr-instructions { text-align: center; max-width: 480px; }
 .qr-title { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+
+/* ── RESOURCE QR GRID ─────────────────────────────────── */
+.resource-qr-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
+}
+.resource-qr-card {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.resource-qr-box {
+  background: white; border-radius: 8px; padding: 6px; width: 90px; height: 90px;
+  display: flex; align-items: center; justify-content: center;
+}
+.resource-qr-box canvas { display: block; width: 78px !important; height: 78px !important; }
+.resource-qr-box-lg { width: 140px !important; height: 140px !important; }
+.resource-qr-box-lg canvas { width: 128px !important; height: 128px !important; }
+.resource-qr-label {
+  font-size: 11px; text-align: center; color: var(--text-dim); line-height: 1.3;
+}
 .qr-title span { color: var(--red); }
 .qr-sub { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
 .qr-url-display {
@@ -596,6 +615,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <button class="deck-select-btn" onclick="selectDeck('bz')">
       <div class="deck-select-name">2026 bZ Woodland</div>
       <div class="deck-select-sub">BEV Sales Coach · Meeting in a Box</div>
+    </button>
+    <button class="deck-select-btn" onclick="selectDeck('delev')">
+      <div class="deck-select-name">Del-EV-ery</div>
+      <div class="deck-select-sub">BEV Delivery Training</div>
     </button>
   </div>
   <div class="splash-version">Information current as of March 2026 &nbsp;·&nbsp; Toyota Motor Sales</div>
@@ -1831,6 +1854,736 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     </div><!-- /deck-bz -->
 
+    <div id="deck-delev" class="deck">
+
+    <!-- ═══ PHASE 0: DELIVER IT RIGHT ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Deliver It<br><span class="red">Right</span></div>
+          <div class="phase-splash-subtitle">Understand the uniquely connected experience of BEV ownership, the high stakes of BEV Delivery, and how to deliver it right the first time.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">ICE vs BEV Delivery</div>
+            <div class="phase-splash-item">Delivery Challenges</div>
+            <div class="phase-splash-item">Delivery Solutions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: ICE vs BEV Delivery -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Deliver It Right · ICE vs BEV</div>
+      <div class="slide-title fade-in fade-in-1">What Changes for a <span>BEV Delivery?</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">ICE Delivery Covers</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Delivery checklist items: vehicle settings, TSS, AMM pairing</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Basic functions/features (wipers, mirrors, etc.)</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">BEV Delivery Adds</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Range</strong> — State-of-Charge, how range estimates work</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Charging</strong> — day-to-day access/plan, familiarity with local public charging infrastructure</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:20px">
+        <div class="card">
+          <div class="card-label">Key Takeaway</div>
+          <div class="card-title">We Already Have a Lot to Cover</div>
+          <div class="card-body">Delivery already has a lot to cover no matter the model — BEVs just add more.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Key Takeaway</div>
+          <div class="card-title">Higher Volume, Faster Complexity</div>
+          <div class="card-body">ICE buyers already understand how to fuel up. BEV Delivery has a much higher volume of information that can get complicated quickly.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: BEV Delivery Challenges -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Deliver It Right · The Challenge</div>
+      <div class="slide-title fade-in fade-in-1">Why BEV Deliveries Are <span>Harder</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">What Makes It Difficult</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Not enough time to cover everything</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Tired buyers get overwhelmed and want to leave ASAP</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">What Can Go Wrong</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Frustration in daily use from not understanding range/charging</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Stranded if they run out of charge</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Missed appointments or travel delays</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:20px">
+        <div>
+          <div class="obj-label obj-label-q">The Stakes</div>
+          <div class="obj-question">Why does an unsuccessful BEV Delivery matter more than an unsuccessful ICE Delivery?</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Key Takeaway</div>
+          <div class="obj-answer"><ul><li>ICE, HEV, and PHEV buyers can always just go to a gas station if something goes wrong</li><li>BEV owners need to be ready to go fully electric from Day 1, or they can wind up frustrated or stranded</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: BEV Delivery Solutions -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Deliver It Right · The Solution</div>
+      <div class="slide-title fade-in fade-in-1">Deliver It Right <span>The First Time</span></div>
+      <div class="big-stats fade-in fade-in-2">
+        <div class="big-stat">
+          <div class="big-stat-value">C + E</div>
+          <div class="big-stat-label">Communication + Education = Success</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">1st Time</div>
+          <div class="big-stat-label">Best Bet: Deliver It Right the First Time</div>
+        </div>
+      </div>
+      <div class="two-col fade-in fade-in-3">
+        <div class="feature-list">
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Set expectations prior to Delivery re: time and content to cover</div></div>
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Set up Toyota App and AMM, download the EVgo app during the Delivery appointment</div></div>
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Educate on both home and public charging throughout the sales process — not just at Delivery</div></div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Make sure App/AMM connectivity and charging knowledge are squared away <strong>before</strong> the guest leaves</div></div>
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Don't just do the set-up <strong>for</strong> them — walk through it together, or they won't learn to use it themselves</div></div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-4" style="margin-top:20px">
+        <div>
+          <div class="obj-label obj-label-q">If a Guest Is Rushed</div>
+          <div class="obj-question">Quickly cover the 1-2 most critical charging basics before they leave, even if it means trimming less-essential content.</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">What "Success" Actually Means</div>
+          <div class="obj-answer">Not "the checklist was technically completed" — success means the guest leaves feeling <strong>confident and capable</strong> of using their vehicle independently.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-4: The Charging Reality Check -->
+    <div class="slide" data-phase="0" data-slide="4">
+      <div class="slide-eyebrow">Deliver It Right · Set This Expectation</div>
+      <div class="slide-title fade-in fade-in-1">The <span>Charging Reality Check</span></div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">What Guests Assume</div>
+          <div class="obj-question">"I'll just plug it into a regular outlet at home and it'll be full by morning."</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">What's Actually True</div>
+          <div class="obj-answer"><ul><li>A standard 120V household outlet (Level 1) typically adds only about 3-5 miles of range per hour</li><li>Meaningful overnight charging usually requires a Level 2 home charger installation</li><li>Level 2 installation can take days to weeks — electrician scheduling, a possible panel upgrade, and permitting all take time</li></ul></div>
+        </div>
+      </div>
+      <div class="feature-list fade-in fade-in-3" style="margin-top:16px">
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">This is the single most common source of new-BEV-owner frustration — a guest surprised by this in week one, not at Delivery</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Set this expectation explicitly, even if they haven't asked — don't wait for them to discover it the hard way</div></div>
+      </div>
+    </div>
+
+    <!-- Slide 0-5: Real-World Range vs. the EPA Number -->
+    <div class="slide" data-phase="0" data-slide="5">
+      <div class="slide-eyebrow">Deliver It Right · Set This Expectation</div>
+      <div class="slide-title fade-in fade-in-1">Real-World Range <span>vs. the EPA Number</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">What Meaningfully Reduces Range</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Sustained highway speeds</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Cold weather</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Climate control — especially heat — more so than in a gas vehicle</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">A Free Tip Worth Sharing</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Precondition the cabin (heat or cooling) <strong>while still plugged in</strong></div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">That pulls from the grid instead of the battery — meaningful range saved for free</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:16px">
+        <div>
+          <div class="obj-label obj-label-q">Why This Matters</div>
+          <div class="obj-question">A guest expecting 281 EPA miles who sees 190 on a cold highway drive with the heat on will think something's wrong with the car.</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Set This Expectation</div>
+          <div class="obj-answer">It's not a malfunction — it's physics. Telling them this at Delivery turns a future "is my car broken?" call into a confident "oh right, they told me about this."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-6: Two Things Guests Don't Expect -->
+    <div class="slide" data-phase="0" data-slide="6">
+      <div class="slide-eyebrow">Deliver It Right · Set This Expectation</div>
+      <div class="slide-title fade-in fade-in-1">Two Things Guests <span>Don't Expect</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">The 12V Battery</div>
+          <div class="card-title">Yes, It Can Still Die</div>
+          <div class="card-body">BEVs have a small conventional 12V battery for accessories, separate from the traction battery — and it can die just like in any gas car. A quick mention prevents "my electric car has a dead battery?!" confusion later.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚛</div>
+          <div class="card-label">Towing</div>
+          <div class="card-title">Flatbed Only — Never Dolly</div>
+          <div class="card-body">Most BEVs, especially dual-motor AWD models, require flatbed-only towing. Dolly towing can damage the drivetrain. Guests need to know this before an emergency, not while arguing with a confused tow truck driver at 11pm.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: CONNECT & RESOURCES ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 5 Minutes</div>
+          <div class="phase-splash-title">Connect &<br><span class="red">Resources</span></div>
+          <div class="phase-splash-subtitle">Explore the importance of Toyota App and AMM connectivity for BEV owners, troubleshooting go-tos, and your go-to Delivery resources.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">App & AMM Strategy</div>
+            <div class="phase-splash-item">Troubleshooting</div>
+            <div class="phase-splash-item">Know Your Resources</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: App & AMM Challenges + Strategies -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Connect & Resources · Toyota App & AMM</div>
+      <div class="slide-title fade-in fade-in-1">Getting Guests <span>Set Up & Connected</span></div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">Typical Gas-Vehicle Owner</div>
+          <div class="obj-question">Opens the app sporadically — maybe to book service or check maintenance history.</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">A New BEV Owner</div>
+          <div class="obj-answer">Uses it far more, often daily — to monitor charge level and range, manage charging settings, and find/pay for public charging. Getting them comfortable here isn't optional.</div>
+        </div>
+      </div>
+      <div class="two-col fade-in fade-in-3" style="margin-top:20px">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Common Challenges</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Variances by model rollout</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Completing set-up before the guest leaves the appointment</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Set-up connectivity issues and system changes</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Strategies That Work</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Set expectations up front, including that setup can take time</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Educate on the value of App/AMM to the ownership experience — lead with guest benefits</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Ask the guest to download the App while waiting for F&I</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Start Delivery with AMM set up already streamlined where possible</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Troubleshooting Go-Tos -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Connect & Resources · Troubleshooting</div>
+      <div class="slide-title fade-in fade-in-1">Know Your <span>Troubleshooting Go-Tos</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔑</div>
+          <div class="card-title">Account & Access</div>
+          <div class="card-body">Create new account, reset password, call BEC</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <div class="card-title">Toyota Talk Forum</div>
+          <div class="card-body">Collaborate with peers nationwide — the latest alerts, troubleshooting, and shared best practices</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📶</div>
+          <div class="card-title">Signal & Location</div>
+          <div class="card-body">Get out in the open where a signal can get through, free from ceilings blocking connection</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <div class="card-title">Device Factors</div>
+          <div class="card-body">Device/OS compatibility, cell signal strength, interference from too many nearby devices</div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:20px">
+        <div>
+          <div class="obj-label obj-label-q">Ask the Room</div>
+          <div class="obj-question">How many Sales Consultants here have registered on Toyota Talk Forum?</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">If Not — Do It Right Now!</div>
+          <div class="obj-answer"><ul><li>Know common troubleshooting solutions to try in the moment</li><li>Know where to go for answers when those attempts aren't enough</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Delivery Checklists -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Connect & Resources · Delivery Checklists</div>
+      <div class="slide-title fade-in fade-in-1">Scan Your <span>Delivery Checklist</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Model-specific checklists, also available on Engage and Dealer Daily.</div>
+      <div class="resource-qr-grid fade-in fade-in-3" style="grid-template-columns:repeat(3,1fr);max-width:520px">
+        <div class="resource-qr-card"><div class="resource-qr-box" id="qr-res-bz4x"></div><div class="resource-qr-label">bZ4X Delivery Checklist</div></div>
+        <div class="resource-qr-card"><div class="resource-qr-box" id="qr-res-rav4phev"></div><div class="resource-qr-label">RAV4 PHEV Delivery Checklist</div></div>
+        <div class="resource-qr-card"><div class="resource-qr-box" id="qr-res-priusphev"></div><div class="resource-qr-label">Prius PHEV Delivery Checklist</div></div>
+      </div>
+    </div>
+
+    <!-- Slide 1-4: Fueling ICE vs Charging BEV -->
+    <div class="slide" data-phase="1" data-slide="4">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Fueling ICE vs <span>Charging a BEV</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">AC vs. DC power — what the difference actually means for a guest</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Differentiating charging levels and charger ports/types</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Factors that affect real-world range</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">EVgo partnership and the Toyota App's charger finder</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-fueling"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-5: BEV Cold Weather Tips -->
+    <div class="slide" data-phase="1" data-slide="5">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">BEV Cold <span>Weather Tips</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">How cold weather affects efficiency for ALL vehicles, not just BEVs</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Strategies to maximize BEV traction battery efficiency in cold weather</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-coldweather"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-6: Toyota App Enrollment -->
+    <div class="slide" data-phase="1" data-slide="6">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Best Practices: Toyota <span>App Enrollment</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Step-by-step instructions to get guests enrolled on the Toyota App</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">A must-do for every new BEV owner, ideally completed before they leave Delivery</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-appenroll"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-7: Charge on the Go -->
+    <div class="slide" data-phase="1" data-slide="7">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Charge on <span>the Go</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Basics of public BEV charging: level availability and what to expect</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Using the Toyota App to find a station and manage payment</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Partnerships with EVgo and ChargePoint</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-chargepublic"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-8: Finding a Charger with the Toyota App -->
+    <div class="slide" data-phase="1" data-slide="8">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Finding a Charger <span>with the Toyota App</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Step-by-step instructions, with screenshots, for using the Toyota App</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Exactly what a guest needs the first time they search for a charger on their own</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-findcharger"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-9: TAMM Feature Guide -->
+    <div class="slide" data-phase="1" data-slide="9">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Toyota Audio Multimedia <span>Feature Guide</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Step-by-step instructions covering the full Toyota Audio Multimedia experience</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Useful reference beyond just charging — the guest's whole in-car tech experience</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-tamm"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-10: Toyota Talk Forum -->
+    <div class="slide" data-phase="1" data-slide="10">
+      <div class="slide-eyebrow">Connect & Resources · Resource Guide</div>
+      <div class="two-col fade-in fade-in-1" style="align-items:center">
+        <div>
+          <div class="slide-title" style="font-size:36px">Toyota Talk <span>Forum</span></div>
+          <div class="feature-list" style="margin-top:16px">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Online community to collaborate with peers nationwide</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Latest alerts, troubleshooting, and shared best practices</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">If you're not registered yet — scan this and do it now</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="resource-qr-box resource-qr-box-lg" id="qr-res-talkforum"></div>
+          <div class="resource-qr-label">Scan to save this guide</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-11: Enroll Every Driver, Not Just the Buyer -->
+    <div class="slide" data-phase="1" data-slide="11">
+      <div class="slide-eyebrow">Connect & Resources · Easy to Miss</div>
+      <div class="slide-title fade-in fade-in-1">Enroll <span>Every Driver</span></div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">The Common Gap</div>
+          <div class="obj-question">Only the person who signed the paperwork gets set up on the Toyota App — but a spouse or family member drives the car regularly too.</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Ask This Directly</div>
+          <div class="obj-answer">"Will anyone else be driving this regularly?" If yes, get them enrolled during Delivery too — not as an afterthought weeks later when they're the one stuck without charging tools.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-12: What a Failed Charge Actually Looks Like -->
+    <div class="slide" data-phase="1" data-slide="12">
+      <div class="slide-eyebrow">Connect & Resources · Physical Troubleshooting</div>
+      <div class="slide-title fade-in fade-in-1">When Charging <span>Doesn't Start</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:16px">This is different from an account/app issue — it's a physical charging problem, and guests need to recognize the difference.</div>
+      <div class="feature-list fade-in fade-in-3">
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Cable not fully seated in the port — the most common fix, and the easiest to overlook</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Many public chargers require unlocking or starting the session through the Toyota App before power flows — plugging in alone isn't always enough</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Make sure the guest knows this before their first public charging attempt, not after a frustrating one</div></div>
+      </div>
+    </div>
+
+    <!-- Slide 1-13: The Money-Saving Tip Guests Don't Know -->
+    <div class="slide" data-phase="1" data-slide="13">
+      <div class="slide-eyebrow">Connect & Resources · A Selling Point, Too</div>
+      <div class="slide-title fade-in fade-in-1">The Cost-Saving Tip <span>Worth Mentioning</span></div>
+      <div class="feature-list fade-in fade-in-2">
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Many utilities offer discounted overnight EV-specific rate plans — often a meaningful savings vs. standard household rates</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">This costs nothing to mention and directly reinforces "why owning a BEV can be cheaper" — right when the guest is most receptive to hearing it</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Encourage guests to check with their local utility provider about EV rate plans or time-of-use discounts</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: DELIVERY PRACTICE ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 15 Minutes</div>
+          <div class="phase-splash-title">Delivery<br><span class="red">Practice</span></div>
+          <div class="phase-splash-subtitle">Build real judgment for when time runs short — what to prioritize, what to defer, and how to keep a guest confident instead of overwhelmed.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Prioritize Under Pressure</div>
+            <div class="phase-splash-item">When Time Runs Out</div>
+            <div class="phase-splash-item">What Guests Actually Ask</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Prioritize Under Pressure -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Delivery Practice · Prioritize Under Pressure</div>
+      <div class="slide-title fade-in fade-in-1">Not Everything Is <span>Equally Urgent</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Scenario</div>
+            <div class="obj-question">You have about 10 minutes left and haven't covered charging setup yet. What do you do?</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">The Right Move</div>
+            <div class="obj-answer"><ul><li>Prioritize ruthlessly — cover the ONE thing that prevents them from getting stranded (how to start a charge at home)</li><li>Comfort features (seat memory, mirror settings) can wait — they're nice-to-know, not need-to-know</li><li>Give them a clear next step for anything you don't get to</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card" style="margin-top:16px">
+          <div>
+            <div class="obj-label obj-label-q">Scenario</div>
+            <div class="obj-question">A guest says they feel overwhelmed by how much there is to learn.</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">The Right Move</div>
+            <div class="obj-answer"><ul><li>Don't speed up or brush it off — that makes overwhelm worse</li><li>Acknowledge how they feel, then narrow to the 2-3 things that matter most right now</li><li>Set a clear, low-pressure plan for covering the rest later</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: When You Can't Cover Everything -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Delivery Practice · When Time Runs Out</div>
+      <div class="slide-title fade-in fade-in-1">Rushing and Skipping <span>Aren't the Same as Finishing</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Don't Do This</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Rush through remaining content just to technically "cover" it</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Quietly skip topics and hope the guest doesn't notice</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Tell the guest to "figure it out" or research it themselves</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">Do This Instead</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Proactively find another moment — earlier in the sales process, or a quick follow-up — to finish what's left</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Tell the guest directly what you'll cover now vs. later, so they're not left wondering</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Remember: success means the guest leaves confident and capable — not just "the appointment ended"</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Guest Objections in the Moment -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Delivery Practice · Handle It With Confidence</div>
+      <div class="slide-title fade-in fade-in-1">What Guests <span>Actually Ask</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="obj-card">
+          <div>
+            <div class="obj-label obj-label-q">Guest Asks</div>
+            <div class="obj-question">"Why is this taking so much longer than picking up my old car?"</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Acknowledge it honestly — a BEV delivery does take a little more time upfront</li><li>Frame it as an investment: a few extra minutes now means real confidence for months of ownership, not confusion later</li><li>Reassure them you're covering exactly what matters most, not padding the appointment</li></ul></div>
+          </div>
+        </div>
+        <div class="obj-card" style="margin-top:16px">
+          <div>
+            <div class="obj-label obj-label-q">Guest Asks</div>
+            <div class="obj-question">"What if I forget everything you're telling me once I get home?"</div>
+          </div>
+          <div>
+            <div class="obj-label obj-label-a">Your Response</div>
+            <div class="obj-answer"><ul><li>Completely normal to worry about that — reassure them it's expected, not a sign they're behind</li><li>Point them to their saved resources: the Delivery Checklist and Toyota App guides they can revisit anytime</li><li>Let them know the Toyota App and dealership support are there if something doesn't click later</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Team competition time. Scan the QR code, take the quiz, and see who knows Del-EV-ery best.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">Delivery Process Trivia</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-delev" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-delev" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-delev" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-delev">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-delev" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-delev"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-delev">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-delev">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-delev">
+          <div class="scoreboard" id="scoreboard-list-delev">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-delev" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-delev" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-delev" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-delev" class="fade-in fade-in-2">
+        <div id="final-scoreboard-delev"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">Del-EV-ery Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn Del-EV-ery module certification. Check the dashboard for your progress.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today. Next session: deep dive on the EV Delivery Strategies activity and real dealership Delivery role-play.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Check the <strong style="color:var(--text)">Del-EV-ery Dashboard</strong> for detailed scores, regional rankings, and certification progress.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Open DelEVery_Dashboard.html</div>
+            <div class="phase-splash-item">Import today's quiz results</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-delev -->
+
   </div><!-- /main -->
 
   <!-- BOTTOM BAR -->
@@ -1920,6 +2673,46 @@ const slideNotesBz = [
   'RANGE ANXIETY: The core answer is always the same shape — competitive range + Toyota app + expanding NACS/Supercharger access = confidence, not stress.',
   'CARGO & OFF-ROAD SKEPTICISM: Reframe "small on paper" — most people are surprised once they physically load the bZ Woodland. Roof rails close the gap.',
   'DC FAST CHARGING: Reassure that ~30 min (10-80%) fits naturally into a road trip stop for food/coffee/restroom — it is not "extra" time.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
+];
+
+const slideNotesDelev = [
+  // Phase 0
+  'Kick off with energy! This training supports success at the point of sale AND beyond — Delivery is where BEV ownership actually begins for the customer.',
+  'Ask the room: what do we already cover for ICE Delivery? Then layer on what BEV adds — Range and Charging. Make clear this isn\'t replacing the checklist, it\'s adding to it.',
+  'This is the emotional core of the phase: higher stakes. Unlike ICE/HEV/PHEV, a BEV owner who doesn\'t understand range/charging can genuinely get stranded. Let that land.',
+  'Communication + Education = Success. Emphasize: don\'t just DO the setup for the guest — walk through it together, or they won\'t learn to do it themselves later.',
+  'This is the single biggest real-world frustration point for new BEV owners industry-wide. Don\'t undersell it — a guest who doesn\'t hear this at Delivery may show up to work on empty a few days later.',
+  'Make the cold-weather example vivid — a guest expecting 281 miles who sees 190 on a cold highway drive will assume something\'s broken unless you\'ve set this expectation first.',
+  'These two are quick but memorable — the 12V battery point especially gets a laugh of recognition once reps hear it. Keep this slide brisk.',
+  // Phase 1
+  'Set the context: App/AMM setup is low-stakes for an ICE buyer but high-stakes for a BEV buyer, since BEVs are designed to be a more connected experience day-to-day.',
+  'Highlight the "download the App while waiting for F&I" strategy — it\'s a simple, practical way to use otherwise dead time.',
+  'Ask the room directly: how many of you are registered on Toyota Talk Forum? If hands stay down, have them register right now, live, in the room.',
+  'Give the room a moment to physically scan all three checklists — encourage them to actually save the pages, not just glance at the slide.',
+  'This guide explains the AC/DC distinction guests are often confused by. Worth a quick read-aloud of the key points before moving on.',
+  'Cold weather range loss is one of the most common guest complaints post-Delivery. This resource gets ahead of it.',
+  'App enrollment is the single highest-leverage thing to complete during Delivery — make sure everyone actually scans and skims this one.',
+  'This pairs directly with the "Finding a Charger" guide next — together they cover the full public charging picture for a guest.',
+  'Screenshots make this one especially easy to walk a guest through live, right on their own phone during Delivery.',
+  'This one goes beyond charging — it is the guest\'s whole in-car tech reference. Worth mentioning even outside BEV-specific conversations.',
+  'Close the phase by making sure everyone is actually registered on Toyota Talk Forum, not just aware it exists.',
+  'Simple habit to build: always ask "will anyone else be driving this?" It costs one sentence and prevents a real gap.',
+  'Distinguish this clearly from the earlier app/account troubleshooting — this is about the physical charging handshake, a completely different failure mode.',
+  'This slide doubles as a value pitch, not just a tip — it\'s worth connecting back to overall cost-of-ownership if that came up earlier in the sales process.',
+  // Phase 2
+  'This phase is about judgment under pressure — the quiz will test whether reps can prioritize correctly, not whether they remember an activity.',
+  'These two scenarios are the core teaching moment. Make the room commit to an answer before revealing it — this is exactly what the quiz will ask them.',
+  'The key phrase here is "rushing and skipping aren\'t the same as finishing." Repeat that line — it directly answers one of the harder quiz questions.',
+  'These are real guest questions — have reps practice answering out loud before revealing the suggested response. Confidence comes from saying it, not just reading it.',
   // Phase 3
   'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
   'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
@@ -2029,12 +2822,14 @@ function wireDealerCodeLookup(suffix){
 }
 wireDealerCodeLookup('rav4');
 wireDealerCodeLookup('bz');
+wireDealerCodeLookup('delev');
 
 let currentDeck = 'rav4';
 let allSlides = [];
 let currentSlideIdx = 0;
 const DEFAULT_QUIZ_URL_RAV4 = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
 const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/bZ_Woodland_Quiz.html';
+const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/DelEVery_Quiz.html';
 let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 
@@ -2047,28 +2842,50 @@ let currentPhaseIdx = 0;
 // ── INIT ──────────────────────────────────────────────────────
 let scores = [];
 
+const DECK_CONFIG = {
+  rav4: {
+    brand: 'RAV4 2026',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_RAV4,
+    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard']
+  },
+  bz: {
+    brand: 'bZ WOODLAND 2026',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_BZ,
+    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard']
+  },
+  delev: {
+    brand: 'DEL-EV-ERY',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_DELEV,
+    phaseNames: ['Deliver It Right', 'Connect & Resources', 'Delivery Practice', 'Knowledge Battle', 'Scoreboard']
+  }
+};
+
 function scoresKey(){ return 'presenter_scores_' + currentDeck; }
 
 function selectDeck(deckName) {
   currentDeck = deckName;
+  const cfg = DECK_CONFIG[deckName];
 
   // Show only the chosen deck's slides
   document.getElementById('deck-rav4').classList.toggle('active', deckName === 'rav4');
   document.getElementById('deck-bz').classList.toggle('active', deckName === 'bz');
+  document.getElementById('deck-delev').classList.toggle('active', deckName === 'delev');
   allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
   currentSlideIdx = 0;
 
   // Deck-specific branding
   const brandSub = document.querySelector('.brand-sub');
-  if (deckName === 'bz') {
-    if (brandSub) brandSub.textContent = 'bZ WOODLAND 2026';
-  } else {
-    if (brandSub) brandSub.textContent = 'RAV4 2026';
-  }
+  if (brandSub) brandSub.textContent = cfg.brand;
+
+  // Deck-specific sidebar phase names
+  document.querySelectorAll('.phase-item').forEach((el, i) => {
+    const nameEl = el.querySelector('.phase-name');
+    if (nameEl && cfg.phaseNames[i]) nameEl.textContent = cfg.phaseNames[i];
+  });
 
   // Deck-specific quiz URL default (only applied if nothing custom saved for this deck)
   const savedUrl = localStorage.getItem('presenter_quiz_url_' + deckName);
-  quizUrl = savedUrl || (deckName === 'bz' ? DEFAULT_QUIZ_URL_BZ : DEFAULT_QUIZ_URL_RAV4);
+  quizUrl = savedUrl || cfg.defaultQuizUrl;
 
   // Deck-specific scores
   scores = JSON.parse(localStorage.getItem(scoresKey()) || '[]');
@@ -2078,7 +2895,8 @@ function selectDeck(deckName) {
   updateUI();
   renderScoreboard();
   generateQR(quizUrl);
-  if (deckName === 'rav4') fetchGoogleFormResults();
+  if (GSHEET_CSV_URL_MAP[deckName]) fetchGoogleFormResults();
+  if (deckName === 'delev') generateResourceQRs();
 }
 
 function updateUI() {
@@ -2110,9 +2928,11 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabel = currentDeck === 'bz' ? 'bZ Woodland' : 'RAV4';
-  document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = phases[phaseIdx]?.name);
-  document.getElementById('top-phase-title').textContent = deckLabel + ' · Phase ' + (phaseIdx + 1) + ' · ' + phases[phaseIdx].name;
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery' };
+  const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
+  const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
+  document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
+  document.getElementById('top-phase-title').textContent = deckLabel + ' · Phase ' + (phaseIdx + 1) + ' · ' + activePhaseName;
 
   // Timer label
   document.getElementById('timer-phase-label').textContent = 'PHASE ' + (phaseIdx + 1);
@@ -2139,7 +2959,8 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const activeNotes = currentDeck === 'bz' ? slideNotesBz : slideNotesRav4;
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev };
+  const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
   // Final scoreboard sync
@@ -2210,6 +3031,35 @@ function generateQR(url) {
   } catch(e) { console.error(e); }
 }
 
+// Static Toyota resource QR codes (Del-EV-ery deck) — real URLs extracted from
+// Toyota's official EV Delivery Resources Quick Reference Guide.
+const RESOURCE_QR_LINKS = {
+  'qr-res-bz4x': 'https://engage.toyota.com/static/articles/12_7_2023_2024_new_vehicle_delivery_checklist_bz4x/2024_New_Vehicle_Delivery_Checklist_bZ4X.pdf',
+  'qr-res-rav4phev': 'https://engage.toyota.com/static/articles/12_7_2023_2024_new_vehicle_delivery_checklist_rav4_prime/2024_New_Vehicle_Delivery_Checklist_RAV4_Prime.pdf',
+  'qr-res-priusphev': 'https://engage.toyota.com/static/articles/12_7_2023_2024_new_vehicle_delivery_checklist_prius_prime/2024_New_Vehicle_Delivery_Checklist_Prius_Prime.pdf',
+  'qr-res-fueling': 'https://engage.toyota.com/static/articles/12_9_2024_fueling_an_ice_vehicle_vs_charging_a_battery_ev/Fueling_an_ICE_Vehicle_vs_Charging_a_Battery_EV.pdf',
+  'qr-res-coldweather': 'https://engage.toyota.com/static/articles/12_23_2024_bev_cold_weather_tips/BEV_Cold_Weather_Tips.pdf',
+  'qr-res-appenroll': 'https://engage.toyota.com/static/articles/8_24_2020_howto_toyota_app_customer_enrollment/How_To_Toyota_App_Customer_Enrollment.pdf',
+  'qr-res-chargepublic': 'https://engage.toyota.com/static/articles/5_23_2023_charging_an_ev_in_public_pdf/Charging_an_EV_in_Public.pdf',
+  'qr-res-findcharger': 'https://engage.toyota.com/static/articles/10_15_2024_howto_finding_a_charger_with_the_toyota_app/Finding_a_Charger.pdf',
+  'qr-res-tamm': 'https://engage.toyota.com/static/articles/9_26_2022_toyota_audio_multimedia_overview/Audio_Multimedia_Publication_Booklet.pdf',
+  'qr-res-talkforum': 'https://toyotatalk.toyota.com/'
+};
+let resourceQRsGenerated = false;
+function generateResourceQRs() {
+  if (resourceQRsGenerated) return; // only need to render these once, ever
+  const smallIds = ['qr-res-bz4x', 'qr-res-rav4phev', 'qr-res-priusphev'];
+  Object.keys(RESOURCE_QR_LINKS).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const size = smallIds.includes(id) ? 78 : 128;
+    try {
+      new QRCode(el, { text: RESOURCE_QR_LINKS[id], width: size, height: size, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+    } catch(e) { console.error(e); }
+  });
+  resourceQRsGenerated = true;
+}
+
 // ── SETTINGS ──────────────────────────────────────────────────
 function openModal() {
   document.getElementById('quiz-url-input').value = quizUrl;
@@ -2218,7 +3068,7 @@ function openModal() {
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 function saveSettings() {
-  const defaultUrl = currentDeck === 'bz' ? DEFAULT_QUIZ_URL_BZ : DEFAULT_QUIZ_URL_RAV4;
+  const defaultUrl = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].defaultQuizUrl) || DEFAULT_QUIZ_URL_RAV4;
   quizUrl = document.getElementById('quiz-url-input').value.trim() || defaultUrl;
   sessionLabel = document.getElementById('session-label-input').value.trim() || 'LIVE SESSION';
   localStorage.setItem('presenter_quiz_url_' + currentDeck, quizUrl);
@@ -2271,8 +3121,12 @@ function importJSON() {
   } catch(e) { alert('Invalid JSON format.'); }
 }
 
-// ── AUTO-IMPORT FROM GOOGLE SHEET (fed by quiz's silent Form submits) ──
-const GSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv';
+// ── AUTO-IMPORT FROM GOOGLE SHEET (fed by each quiz's silent Form submits) ──
+const GSHEET_CSV_URL_MAP = {
+  rav4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
+  delev: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSsETW4W953XE5QWnMNSvoUrgKu5dG6vUxRYeievFPmYzqAfZmX7flVu9VU28v_R3hlNaHYMKLf-JaH/pub?output=csv'
+  // bz: not yet configured — no Google Form/Sheet set up for bZ Woodland
+};
 
 function parseCSV(text) {
   const rows = [];
@@ -2298,9 +3152,10 @@ function parseCSV(text) {
 }
 
 async function fetchGoogleFormResults() {
-  if (currentDeck !== 'rav4') return; // Sheet only has RAV4 data; bZ Woodland has no Form/Sheet set up yet
+  const csvUrl = GSHEET_CSV_URL_MAP[currentDeck];
+  if (!csvUrl) return; // no-ops for any deck without a configured Sheet
   try {
-    const res = await fetch(GSHEET_CSV_URL, { cache: 'no-store' });
+    const res = await fetch(csvUrl, { cache: 'no-store' });
     if (!res.ok) return;
     const text = await res.text();
     const rows = parseCSV(text);
@@ -2336,7 +3191,7 @@ async function fetchGoogleFormResults() {
   }
 }
 
-setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops unless the RAV4 deck is active
+setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops for decks without a configured Sheet
 
 function renderScoreboard() {
   const el = document.getElementById('scoreboard-list-' + currentDeck);
