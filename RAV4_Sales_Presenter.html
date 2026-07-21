@@ -2851,19 +2851,24 @@ const DECK_CONFIG = {
   rav4: {
     brand: 'RAV4 2026',
     defaultQuizUrl: DEFAULT_QUIZ_URL_RAV4,
-    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard']
+    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15
   },
   bz: {
     brand: 'bZ WOODLAND 2026',
     defaultQuizUrl: DEFAULT_QUIZ_URL_BZ,
-    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard']
+    phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15
   },
   delev: {
     brand: 'DEL-EV-ERY',
     defaultQuizUrl: DEFAULT_QUIZ_URL_DELEV,
-    phaseNames: ['Deliver It Right', 'Connect & Resources', 'Delivery Practice', 'Knowledge Battle', 'Scoreboard']
+    phaseNames: ['Deliver It Right', 'Connect & Resources', 'Delivery Practice', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 22
   }
 };
+
+function deckTotal(){ return (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].quizTotal) || 15; }
 
 function scoresKey(){ return 'presenter_scores_' + currentDeck; }
 
@@ -3089,7 +3094,7 @@ function addScore() {
   const dealer = document.getElementById('score-dealer-input-' + currentDeck).value.trim();
   const score = parseInt(document.getElementById('score-val-input-' + currentDeck).value);
   if (!name || isNaN(score)) return;
-  scores.push({ name, dealer, score, pct: Math.round(score / 15 * 100), ts: Date.now() });
+  scores.push({ name, dealer, score, pct: Math.round(score / deckTotal() * 100), ts: Date.now() });
   scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
   localStorage.setItem(scoresKey(), JSON.stringify(scores));
   document.getElementById('score-name-input-' + currentDeck).value = '';
@@ -3116,7 +3121,7 @@ function importJSON() {
     const entries = Array.isArray(data) ? data : [data];
     entries.forEach(e => {
       if (e.name && e.score !== undefined) {
-        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, pct: e.pct || Math.round(e.score / 15 * 100), ts: Date.now() });
+        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, pct: e.pct || Math.round(e.score / deckTotal() * 100), ts: Date.now() });
       }
     });
     scores.sort((a, b) => b.score - a.score);
@@ -3179,7 +3184,7 @@ async function fetchGoogleFormResults() {
         name,
         dealer: r[idx.dealerName] || '',
         score,
-        pct: Number(r[idx.pct]) || Math.round(score / 15 * 100),
+        pct: Number(r[idx.pct]) || Math.round(score / deckTotal() * 100),
         ts: Date.now(),
         _sessionDate: sessionDate
       });
@@ -3202,12 +3207,12 @@ function renderScoreboard() {
   const el = document.getElementById('scoreboard-list-' + currentDeck);
   if (!el) return;
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
-  el.innerHTML = scores.slice(0, 8).map((s, i) => `
+  el.innerHTML = scores.slice(0, 25).map((s, i) => `
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
       <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
-      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/15</span></div>
+      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${deckTotal()}</span></div>
     </div>
   `).join('');
 }
@@ -3221,7 +3226,7 @@ function renderFinalScoreboard() {
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
       <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
-      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/15</span></div>
+      <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${deckTotal()}</span></div>
     </div>
   `).join('');
 }
