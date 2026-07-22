@@ -410,6 +410,31 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 #modal-overlay.open .modal { transform: scale(1); }
 .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; }
 .modal-field { margin-bottom: 16px; }
+
+#detail-modal-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+#detail-modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-wide {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px; width: 560px; max-width: 90vw; max-height: 80vh;
+  overflow-y: auto; transform: scale(.95); transition: transform .3s;
+}
+#detail-modal-overlay.open .modal-wide { transform: scale(1); }
+.clickable-card { cursor: pointer; transition: border-color .2s, transform .15s; }
+.clickable-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.card-click-hint { font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic; }
+.cert-list-item, .focus-list-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cert-list-item:last-child, .focus-list-item:last-child { border-bottom: none; }
+.focus-list-item { align-items: flex-start; flex-direction: column; gap: 4px; }
+.focus-q-text { font-size: 14px; color: var(--text); line-height: 1.4; }
+.focus-q-stat { font-size: 12px; color: var(--red); font-weight: 700; }
 .modal-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; display: block; }
 .modal-input {
   width: 100%; padding: 10px 14px; border-radius: 8px;
@@ -690,6 +715,17 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <div class="modal-actions">
       <button class="btn-modal secondary" onclick="closeModal()">Cancel</button>
       <button class="btn-modal primary" onclick="saveSettings()">Save & Generate QR</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL (Certification list / Focus Area detail) -->
+<div id="detail-modal-overlay" onclick="if(event.target===this) closeDetailModal()">
+  <div class="modal-wide">
+    <div class="modal-title" id="detail-modal-title"></div>
+    <div id="detail-modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn-modal secondary" onclick="closeDetailModal()">Close</button>
     </div>
   </div>
 </div>
@@ -1275,17 +1311,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         <div id="final-scoreboard-rav4"></div>
       </div>
       <div class="two-col mt-24 fade-in fade-in-3">
-        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
           <div class="card-icon">🎯</div>
           <div class="card-label" style="color:var(--green)">Certification Progress</div>
           <div class="card-title">RAV4 Product Certified</div>
-          <div class="card-body">Score 12/15 or higher to earn RAV4 Product module certification. Check the dashboard for your progress.</div>
+          <div class="card-body">Score 12/15 or higher to earn RAV4 Product module certification.</div>
+          <div id="cert-summary-rav4"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
         </div>
-        <div class="card">
+        <div class="card clickable-card" onclick="openFocusModal()">
           <div class="card-icon">📅</div>
           <div class="card-label">Next Session</div>
           <div class="card-title">Focus Area</div>
-          <div class="card-body">Review missed questions from today. Next session: deep dive on PHEV features and competitive objections against Kia Sportage.</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-rav4"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
         </div>
       </div>
     </div>
@@ -1816,17 +1856,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         <div id="final-scoreboard-bz"></div>
       </div>
       <div class="two-col mt-24 fade-in fade-in-3">
-        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
           <div class="card-icon">🎯</div>
           <div class="card-label" style="color:var(--green)">Certification Progress</div>
           <div class="card-title">bZ Woodland Product Certified</div>
-          <div class="card-body">Score 12/15 or higher to earn bZ Woodland Product module certification. Check the dashboard for your progress.</div>
+          <div class="card-body">Score 12/15 or higher to earn bZ Woodland Product module certification.</div>
+          <div id="cert-summary-bz"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
         </div>
-        <div class="card">
+        <div class="card clickable-card" onclick="openFocusModal()">
           <div class="card-icon">📅</div>
           <div class="card-label">Next Session</div>
           <div class="card-title">Focus Area</div>
-          <div class="card-body">Review missed questions from today. Next session: deep dive on Toyota app charging tools and objection handling vs Hyundai IONIQ 5.</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-bz"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
         </div>
       </div>
     </div>
@@ -2547,17 +2591,21 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         <div id="final-scoreboard-delev"></div>
       </div>
       <div class="two-col mt-24 fade-in fade-in-3">
-        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
           <div class="card-icon">🎯</div>
           <div class="card-label" style="color:var(--green)">Certification Progress</div>
           <div class="card-title">Del-EV-ery Certified</div>
-          <div class="card-body">Score 12/15 or higher to earn Del-EV-ery module certification. Check the dashboard for your progress.</div>
+          <div class="card-body">Score 18/22 or higher to earn Del-EV-ery module certification.</div>
+          <div id="cert-summary-delev"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
         </div>
-        <div class="card">
+        <div class="card clickable-card" onclick="openFocusModal()">
           <div class="card-icon">📅</div>
           <div class="card-label">Next Session</div>
           <div class="card-title">Focus Area</div>
-          <div class="card-body">Review missed questions from today. Next session: deep dive on the EV Delivery Strategies activity and real dealership Delivery role-play.</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-delev"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
         </div>
       </div>
     </div>
@@ -2844,23 +2892,30 @@ const DECK_CONFIG = {
     brand: 'RAV4 2026',
     defaultQuizUrl: DEFAULT_QUIZ_URL_RAV4,
     phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard'],
-    quizTotal: 15
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'RAV4 Certified'
   },
   bz: {
     brand: 'bZ WOODLAND 2026',
     defaultQuizUrl: DEFAULT_QUIZ_URL_BZ,
     phaseNames: ['Product Spotlight', 'Competitive', 'Sales Scenario', 'Knowledge Battle', 'Scoreboard'],
-    quizTotal: 15
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'bZ Woodland Certified'
   },
   delev: {
     brand: 'DEL-EV-ERY',
     defaultQuizUrl: DEFAULT_QUIZ_URL_DELEV,
     phaseNames: ['Deliver It Right', 'Connect & Resources', 'Delivery Practice', 'Knowledge Battle', 'Scoreboard'],
-    quizTotal: 22
+    quizTotal: 22,
+    passThreshold: 18,
+    certLabel: 'Del-EV-ery Certified'
   }
 };
 
 function deckTotal(){ return (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].quizTotal) || 15; }
+function deckPassThreshold(){ return (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].passThreshold) || 12; }
 
 function scoresKey(){ return 'presenter_scores_' + currentDeck; }
 
@@ -3086,7 +3141,7 @@ function addScore() {
   const dealer = document.getElementById('score-dealer-input-' + currentDeck).value.trim();
   const score = parseInt(document.getElementById('score-val-input-' + currentDeck).value);
   if (!name || isNaN(score)) return;
-  scores.push({ name, dealer, score, pct: Math.round(score / deckTotal() * 100), ts: Date.now() });
+  scores.push({ name, dealer, score, pct: Math.round(score / deckTotal() * 100), ts: Date.now(), missedQuestions: [] });
   scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
   localStorage.setItem(scoresKey(), JSON.stringify(scores));
   document.getElementById('score-name-input-' + currentDeck).value = '';
@@ -3113,7 +3168,7 @@ function importJSON() {
     const entries = Array.isArray(data) ? data : [data];
     entries.forEach(e => {
       if (e.name && e.score !== undefined) {
-        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, pct: e.pct || Math.round(e.score / deckTotal() * 100), ts: Date.now() });
+        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, pct: e.pct || Math.round(e.score / deckTotal() * 100), ts: Date.now(), missedQuestions: Array.isArray(e.missedQuestions) ? e.missedQuestions : [] });
       }
     });
     scores.sort((a, b) => b.score - a.score);
@@ -3178,7 +3233,8 @@ async function fetchGoogleFormResults() {
         score,
         pct: Number(r[idx.pct]) || Math.round(score / deckTotal() * 100),
         ts: Date.now(),
-        _sessionDate: sessionDate
+        _sessionDate: sessionDate,
+        missedQuestions: []
       });
       added++;
     });
@@ -3221,6 +3277,86 @@ function renderFinalScoreboard() {
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${deckTotal()}</span></div>
     </div>
   `).join('');
+  renderCertSummary();
+  renderFocusSummary();
+}
+
+// ── CERTIFICATION PROGRESS & FOCUS AREA ──────────────────────
+function getCertifiedList() {
+  return scores.filter(s => s.score >= deckPassThreshold()).sort((a, b) => b.score - a.score);
+}
+
+function getMissedQuestionStats() {
+  const tracked = scores.filter(s => Array.isArray(s.missedQuestions));
+  const counts = {};
+  tracked.forEach(s => {
+    s.missedQuestions.forEach(q => { counts[q] = (counts[q] || 0) + 1; });
+  });
+  const denom = tracked.length || 1;
+  return Object.keys(counts)
+    .map(q => ({ q, count: counts[q], pct: Math.round(counts[q] / denom * 100) }))
+    .sort((a, b) => b.count - a.count);
+}
+
+function renderCertSummary() {
+  const el = document.getElementById('cert-summary-' + currentDeck);
+  if (!el) return;
+  const certified = getCertifiedList();
+  if (!certified.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text-muted);margin-top:8px">No one has certified yet this session.</div>'; return; }
+  const preview = certified.slice(0, 3).map(s => `🏆 ${s.name}`).join(', ');
+  const more = certified.length > 3 ? ` +${certified.length - 3} more` : '';
+  el.innerHTML = `<div style="font-size:13px;color:var(--text);margin-top:8px"><strong>${certified.length}</strong> certified: ${preview}${more}</div>`;
+}
+
+function renderFocusSummary() {
+  const el = document.getElementById('focus-summary-' + currentDeck);
+  if (!el) return;
+  const stats = getMissedQuestionStats();
+  if (!stats.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text-muted);margin-top:8px">No missed-question data yet (import quiz JSON to capture this).</div>'; return; }
+  const top = stats[0];
+  el.innerHTML = `<div style="font-size:13px;color:var(--text);margin-top:8px">Most missed (${top.pct}% wrong): <em>"${top.q.length > 70 ? top.q.slice(0, 70) + '…' : top.q}"</em></div>`;
+}
+
+function openCertModal() {
+  const certified = getCertifiedList();
+  document.getElementById('detail-modal-title').textContent = '🏆 Certified This Session';
+  const body = document.getElementById('detail-modal-body');
+  if (!certified.length) {
+    body.innerHTML = '<div style="color:var(--text-muted)">No one has hit the certification threshold yet.</div>';
+  } else {
+    body.innerHTML = certified.map(s => `
+      <div class="cert-list-item">
+        <span style="font-size:20px">🏆</span>
+        <div style="flex:1">
+          <div style="font-weight:700">${s.name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${s.dealer}</div>
+        </div>
+        <div style="font-weight:700;color:var(--green)">${s.score}/${deckTotal()}</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('detail-modal-overlay').classList.add('open');
+}
+
+function openFocusModal() {
+  const stats = getMissedQuestionStats();
+  document.getElementById('detail-modal-title').textContent = '📅 Most-Missed Questions';
+  const body = document.getElementById('detail-modal-body');
+  if (!stats.length) {
+    body.innerHTML = '<div style="color:var(--text-muted)">No missed-question data captured yet this session. This populates automatically as quiz results (via the Copy Result Code JSON or auto-submit) come in.</div>';
+  } else {
+    body.innerHTML = stats.slice(0, 15).map(s => `
+      <div class="focus-list-item">
+        <div class="focus-q-text">${s.q}</div>
+        <div class="focus-q-stat">${s.pct}% missed this (${s.count} of ${scores.filter(sc => Array.isArray(sc.missedQuestions)).length})</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('detail-modal-overlay').classList.add('open');
+}
+
+function closeDetailModal() {
+  document.getElementById('detail-modal-overlay').classList.remove('open');
 }
 
 // ── SECURITY SYSTEM ──────────────────────────────────────────
