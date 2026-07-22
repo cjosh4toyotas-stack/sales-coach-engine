@@ -1051,6 +1051,7 @@ function showResults() {
   certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
 
   // Export JSON
+  const missedQuestions = userAnswers.filter(a => !a.correct).map(a => activeQuestions[a.q].q);
   const exportData = {
     name: userData.name,
     dealerCode: userData.dealerCode,
@@ -1067,6 +1068,7 @@ function showResults() {
     certified: pass,
     timeSec: totalTime,
     refreshCount,
+    missedQuestions,
     sessionDate: new Date().toISOString()
   };
   const json = JSON.stringify(exportData);
