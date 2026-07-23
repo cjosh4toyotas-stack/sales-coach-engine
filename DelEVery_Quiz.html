@@ -147,6 +147,15 @@ select.form-input { cursor: pointer; }
 .review-q { font-weight: 500; color: var(--text); margin-bottom: 3px; }
 .review-a { color: var(--text-muted); font-size: 12px; }
 
+.coaching-recap { width: 100%; max-width: 500px; margin-top: 24px; background: linear-gradient(135deg, rgba(235,10,30,0.08), rgba(0,229,160,0.05)); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+.recap-header { display: flex; align-items: center; gap: 8px; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.recap-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; }
+.recap-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.recap-focus-list { margin-top: 10px; }
+.recap-focus-item { background: var(--surface2); border-left: 3px solid var(--red); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-size: 12.5px; }
+.recap-focus-item strong { color: var(--text); }
+.recap-mastery { color: var(--green); font-weight: 600; }
+
 /* ── SECURITY SYSTEM ─────────────────────────────────────── */
 #sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
 #sec-overlay.fade-out{opacity:0;pointer-events:none}
@@ -401,6 +410,8 @@ select.form-input { cursor: pointer; }
     </div>
     <button class="btn-primary" style="margin-top:16px" onclick="retakeQuiz()">RETAKE QUIZ</button>
   </div>
+
+  <div class="coaching-recap" id="coaching-recap"></div>
 
   <div class="question-review" id="question-review"></div>
 </div>
@@ -1026,6 +1037,65 @@ function nextQuestion() {
 }
 
 // ── RESULTS ───────────────────────────────────────────────────
+// ── PERSONALIZED COACHING RECAP ──────────────────────────────
+// Rule-based, not a live AI call (see conversation notes) — built from each
+// question's own explanation text, tailored to what THIS person missed.
+function renderCoachingRecap() {
+  const el = document.getElementById('coaching-recap');
+  if (!el) return;
+
+  const categories = [
+    { key: 'DELIVER IT RIGHT', label: 'Deliver It Right', score: deliverScore, total: 6 },
+    { key: 'CONNECT & RESOURCES', label: 'Connect & Resources', score: connectScore, total: 5 },
+    { key: 'DELIVERY PRACTICE', label: 'Delivery Practice', score: practiceScore, total: 4 },
+    { key: 'REAL-WORLD READINESS', label: 'Real-World Readiness', score: realWorldScore, total: 7 }
+  ];
+
+  const missed = userAnswers.filter(a => !a.correct).map(a => activeQuestions[a.q]);
+
+  if (missed.length === 0) {
+    el.innerHTML = `
+      <div class="recap-header">🎯 Your Coaching Recap</div>
+      <div class="recap-sub">Personalized to your results this attempt</div>
+      <div class="recap-body"><span class="recap-mastery">Perfect score across every category.</span> Nothing to flag here — this is exactly the level of readiness a guest deserves at delivery. Keep this as your benchmark for future sessions.</div>
+    `;
+    return;
+  }
+
+  // Weakest category by percentage (ties broken by whichever has more misses)
+  const withPct = categories.map(c => ({ ...c, pct: c.total ? c.score / c.total : 1, missedHere: missed.filter(m => m.cat === c.key) }));
+  withPct.sort((a, b) => a.pct - b.pct || b.missedHere.length - a.missedHere.length);
+  const weakest = withPct[0];
+
+  let focusQuestions = weakest.missedHere.slice(0, 2);
+  if (focusQuestions.length < 2) {
+    // Fill remaining slots from other missed questions if the weakest category didn't have enough on its own
+    const rest = missed.filter(m => !focusQuestions.includes(m));
+    focusQuestions = focusQuestions.concat(rest.slice(0, 2 - focusQuestions.length));
+  }
+
+  const openingByStrength = weakest.pct <= 0.5
+    ? `Your biggest opportunity this attempt was <strong>${weakest.label}</strong> (${weakest.score}/${weakest.total}). That's worth a closer look before your next session.`
+    : `Solid overall performance — your one area to sharpen is <strong>${weakest.label}</strong> (${weakest.score}/${weakest.total}).`;
+
+  const focusHtml = focusQuestions.map(q => `
+    <div class="recap-focus-item"><strong>${q.q}</strong><br>${q.exp}</div>
+  `).join('');
+
+  const otherMissedCount = missed.length - focusQuestions.length;
+  const tailNote = otherMissedCount > 0
+    ? `<div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Plus ${otherMissedCount} more question${otherMissedCount > 1 ? 's' : ''} to review below in the full Question Review.</div>`
+    : '';
+
+  el.innerHTML = `
+    <div class="recap-header">🎯 Your Coaching Recap</div>
+    <div class="recap-sub">Personalized to your results this attempt</div>
+    <div class="recap-body">${openingByStrength}</div>
+    <div class="recap-focus-list">${focusHtml}</div>
+    ${tailNote}
+  `;
+}
+
 function showResults() {
   clearActiveSession();
   showScreen('screen-results');
@@ -1045,9 +1115,11 @@ function showResults() {
   document.getElementById('res-realworld').textContent = realWorldScore + ' / 7';
   document.getElementById('res-time').textContent = Math.floor(totalTime / 60) + 'm ' + (totalTime % 60) + 's';
 
+  renderCoachingRecap();
+
   const certEl = document.getElementById('res-cert');
   document.getElementById('res-cert-icon').textContent = pass ? '🏆' : '📚';
-  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — Del-EV-ery Delivery Module' : 'Score 12+ to Certify';
+  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — Del-EV-ery Delivery Module' : 'Score 18+ to Certify';
   certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
 
   // Export JSON
