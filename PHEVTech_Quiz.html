@@ -696,7 +696,7 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'PHEV FUNDAMENTALS',
     q: 'What are the three major differentiators that set PHEV technology apart, according to Toyota\'s own discussion guide?',
-    opts: ['Higher top speed, lower price, and longer warranty than a comparable HEV', 'Flexible operation (standard Hybrid or all-electric), larger battery capacity than a regular HEV, and charging convenience', 'Larger cargo space, quieter cabin, and better resale value than a BEV', 'Faster 0-60 time, lower insurance cost, and simpler maintenance than a gas vehicle'],
+    opts: ['A higher top speed, a lower base price, and a longer bumper-to-bumper warranty than a comparable HEV', 'Flexible operation (Hybrid or all-electric driving), a larger battery than a regular HEV, and charging convenience', 'Larger cargo space, a quieter cabin at idle, and stronger resale value than a comparable BEV', 'A faster 0-60 time, lower insurance premiums, and simpler routine maintenance than a gas-only vehicle'],
     ans: 1,
     exp: 'The three sample differentiators are flexible operation (Hybrid or all-electric driving), a larger battery capacity than a regular HEV for gas-free short trips, and charging convenience even without a home 240V setup.'
   },
@@ -717,14 +717,14 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'PHEV FUNDAMENTALS',
     q: 'How should a Sales Consultant frame the PHEV as a "no compromise" option for an eco-conscious customer who still takes long road trips?',
-    opts: ['Recommend they treat the PHEV strictly as a second car and use a gas vehicle for any trip over 50 miles', 'Highlight that the gas engine acts as a seamless backup for long trips, while daily errands and commutes can often be handled in all-electric mode', 'Suggest they avoid road trips altogether to maximize the environmental benefit of the vehicle', 'Explain that road trips require pre-scheduling a public fast-charging stop every 40 miles'],
+    opts: ['Recommend they treat the PHEV strictly as a second car reserved only for errands, using a separate gas vehicle for any trip over fifty miles', 'Highlight that the gas engine acts as a seamless backup for long trips, while daily errands and commutes can often be handled in all-electric mode', 'Suggest avoiding road trips altogether so the vehicle\'s environmental benefit isn\'t offset by highway gasoline consumption over time', 'Explain that longer trips require pre-scheduling a public fast-charging stop roughly every forty miles along the route'],
     ans: 1,
     exp: 'The gas engine is the seamless backup that removes range anxiety on long trips, while the battery handles gas-free daily driving — genuinely the best of both worlds, not a compromise.'
   },
   {
     cat: 'PHEV FUNDAMENTALS',
     q: 'A customer thinks a PHEV and an HEV are basically the same thing. What\'s the key distinction to clarify?',
-    opts: ['There is no meaningful difference — the terms are used interchangeably across the industry', 'A PHEV has a larger-capacity battery and can be plugged in for meaningful all-electric range; an HEV cannot be plugged in at all', 'An HEV can be plugged in for charging, while a PHEV cannot be charged from an outlet', 'A PHEV is exclusively electric with no gasoline engine, while an HEV always requires gasoline'],
+    opts: ['There is no meaningful difference between the two — the terms are commonly used interchangeably throughout the industry', 'A PHEV has a larger-capacity battery and can be plugged in for meaningful all-electric range; an HEV cannot be plugged in at all', 'An HEV can actually be plugged in for charging, while a PHEV surprisingly cannot be charged from any home outlet', 'A PHEV is exclusively electric with no gasoline engine at all, while an HEV always requires gasoline to operate'],
     ans: 1,
     exp: 'The defining difference is plug-in capability paired with a larger battery: a PHEV can be charged from an outlet for meaningful all-electric range, while an HEV\'s smaller battery is only ever charged by the engine and regenerative braking.'
   },
@@ -739,35 +739,35 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'CUSTOMER SCENARIOS',
     q: 'A customer says: "Not much. I just know you plug them in somehow and they use less gas." Based on this response, what\'s the appropriate depth of explanation?',
-    opts: ['Jump straight into Toyota Hybrid System (THS) efficiency details and regenerative braking specifics', 'Keep it simple: two power sources (electric and gas), the vehicle drives electric first, and there\'s no risk of being stranded if the battery runs out', 'Assume they already understand the basics and move directly into financing options', 'Recommend they research PHEVs further on their own before continuing the conversation'],
+    opts: ['Jump straight into detailed Toyota Hybrid System (THS) efficiency specifics and regenerative braking mechanics', 'Keep it simple — two power sources (electric and gas), the vehicle drives electric first, never stranded if depleted', 'Assume they already understand the basics from what they\'ve said, and move directly into financing and pricing options', 'Recommend they go home and research PHEVs further on their own before continuing further into the conversation'],
     ans: 1,
     exp: 'This response signals low knowledge — the right move is a simple explanation of the two power sources and reassurance that a depleted battery doesn\'t mean being stranded, not a deep technical dive they\'re not ready for.'
   },
   {
     cat: 'CUSTOMER SCENARIOS',
     q: 'A customer says: "I know they can run on electricity for a bit and then switch to gas like HEVs." What\'s missing from their understanding that\'s worth clarifying?',
-    opts: ['Nothing — this customer already fully understands PHEV technology and needs no further explanation', 'Clarify the estimated electric range for their specific daily errands or commute, and explain the automatic transition to Hybrid mode', 'Correct them — PHEVs do not switch to gas at all under any circumstance', 'Explain that unlike an HEV, a PHEV cannot be driven once the battery is depleted'],
+    opts: ['Nothing further is needed — this customer already fully understands PHEV technology and needs no more explanation', 'Clarify their estimated electric range for daily errands or commute, and explain the automatic Hybrid mode transition', 'Correct them firmly — PHEVs are designed to never switch to gas at all under any circumstance whatsoever', 'Explain that, unlike an HEV, a PHEV actually cannot be driven at all once its battery becomes fully depleted'],
     ans: 1,
     exp: 'This is medium knowledge — they understand the basic concept but haven\'t connected it to their own life yet. Clarifying their likely electric-only range for daily use, plus how the Hybrid mode transition works, moves them forward without over-explaining what they already know.'
   },
   {
     cat: 'CUSTOMER SCENARIOS',
     q: 'A customer says: "From what I understand, they have a higher capacity battery than an HEV, so they can drive electric for a while before the engine kicks in." What\'s the appropriate next talking point?',
-    opts: ['Go back to basic terminology, since this response suggests real confusion about how PHEVs work', 'Build on their existing knowledge — mention typical EV-only daily driving potential, THS efficiency once the battery is depleted, and regenerative braking', 'Redirect the conversation entirely to pricing and available incentives', 'Suggest they don\'t need any further product explanation and move straight to a test drive'],
+    opts: ['Go back over the basic terminology again, since this response actually suggests real confusion about how PHEVs work', 'Build on their existing knowledge — mention EV-only daily driving potential, THS efficiency, and regenerative braking', 'Redirect the conversation entirely away from product details and toward pricing and available purchase incentives', 'Suggest they don\'t need any further product explanation at all, and move straight ahead to a test drive'],
     ans: 1,
     exp: 'This is a high-knowledge response — the customer already has the fundamentals right. The right move is to build on it with more specific detail (EV-only range, THS efficiency, regen braking), not repeat basics or skip product conversation entirely.'
   },
   {
     cat: 'CUSTOMER SCENARIOS',
     q: 'A customer says they like the idea of occasional all-electric driving but "really don\'t want to have to worry about charging." What\'s the best way to frame the PHEV for them?',
-    opts: ['Tell them a PHEV isn\'t a good fit for them and recommend a standard hybrid instead', 'Frame the PHEV as a bridge between HEV and BEV — charging is optional, and hybrid operation is always there as a backup, so nothing is required of them', 'Insist that regular charging is necessary to avoid long-term damage to the vehicle', 'Suggest they will need to significantly change their daily routine to accommodate charging'],
+    opts: ['Tell them a PHEV probably isn\'t the right fit for their needs, and recommend a standard hybrid model instead', 'Frame the PHEV as a bridge between HEV and BEV — charging is optional, hybrid operation is always the reliable backup', 'Insist that regular, consistent charging is necessary in order to avoid long-term damage to the vehicle\'s battery', 'Suggest they will need to meaningfully change their entire daily routine in order to accommodate regular charging'],
     ans: 1,
     exp: 'This customer wants flexibility without obligation — exactly what a PHEV offers. Frame it as a bridge between HEV and BEV: charging is optional upside, hybrid operation is the reliable, no-effort default.'
   },
   {
     cat: 'CUSTOMER SCENARIOS',
     q: 'A customer describes a roughly 20-mile round-trip daily commute with occasional errands. What should you confirm for them?',
-    opts: ['That a PHEV is not well suited to their driving pattern and a gas-only vehicle would serve them better', 'That many drivers can cover a commute like theirs entirely on all-electric range, especially with regular overnight charging', 'That they will need to charge multiple times throughout the day to complete their commute', 'That their specific commute length disqualifies them from any fuel savings whatsoever'],
+    opts: ['That a PHEV is not well suited to their driving pattern and a gas-only vehicle would serve them better', 'That many drivers can cover a commute like theirs entirely on all-electric range, especially with regular overnight charging', 'That they will likely need to stop and charge multiple times throughout the day just to complete their commute', 'That their specific commute length actually disqualifies them entirely from seeing any meaningful fuel savings'],
     ans: 1,
     exp: 'A daily round trip in that range is very achievable entirely in electric mode with routine overnight charging — a concrete, reassuring answer tied directly to their actual driving pattern.'
   },
@@ -775,28 +775,28 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'MYTH BUSTING',
     q: 'A customer says: "If the battery dies, I\'ll be stranded." What\'s the strongest possible response — not just correct, but tied to real customer value?',
-    opts: ['"That\'s not true at all, don\'t worry about it."', '"I hear that a lot, but the great thing about Toyota PHEVs is they fit into the life you already have — if the battery runs low, the vehicle automatically switches to Hybrid mode and keeps running as a gas-efficient hybrid, so you\'re never stranded."', '"You\'re right that this can happen, so we\'d recommend always keeping the vehicle fully charged."', '"That only happens with older PHEV models, not current ones."'],
+    opts: ['"That\'s honestly not true at all — batteries in modern vehicles are extremely reliable these days, so there\'s truly nothing to worry about."', '"I hear that a lot — the great thing is if the battery runs low, the vehicle automatically switches to Hybrid mode and keeps running efficiently, so you\'re never stranded."', '"You\'re right that running low can happen, so what we\'d always recommend is keeping the vehicle plugged in and fully charged as often as possible."', '"That concern really only applied to older PHEV models from years ago — current Toyota PHEVs simply don\'t have that issue anymore at all."'],
     ans: 1,
     exp: 'This is the "best" tier response from Toyota\'s own scoring rubric: it corrects the myth, cites the specific mechanism (automatic switch to Hybrid mode), and ties it back to a real customer benefit — peace of mind, not just a correction.'
   },
   {
     cat: 'MYTH BUSTING',
     q: 'A customer says: "A Level 2 charger has to be installed in my home." What\'s the accurate correction?',
-    opts: ['That\'s correct — a Level 2 charger installation is mandatory before taking delivery of any PHEV', 'Toyota PHEVs can be charged via a common 120V outlet already found in any home; a Level 2, 240V charger is recommended for faster charging, but not required', 'PHEVs can only be charged at public charging stations, never at home', 'A Level 2 charger is required, but Toyota does not offer any resources to help customers with installation'],
+    opts: ['That\'s correct — a Level 2, 240V charger installation is actually mandatory before taking delivery of any new PHEV', 'Toyota PHEVs can charge via a common 120V outlet already found in any home; a 240V Level 2 charger is recommended, but not required', 'PHEVs can only ever be charged at dedicated public charging stations, and never from an outlet at home', 'A Level 2 charger is required for charging, but Toyota unfortunately offers no resources to help with installation'],
     ans: 1,
     exp: 'No installation is required — a standard 120V household outlet works fine. A Level 2, 240V charger is a recommended upgrade for faster charging, and Toyota has resources to help customers who want one, but it\'s optional.'
   },
   {
     cat: 'MYTH BUSTING',
     q: 'A customer says: "The battery will only last 3-5 years before needing a $10,000 replacement." What\'s the accurate fact to correct this?',
-    opts: ['That estimate is roughly accurate, though the exact cost varies by region', 'Toyota\'s high-voltage battery is covered under a warranty significantly longer than even the engine or transmission — 10 years or 150,000 miles', 'Battery replacement is not covered under any Toyota warranty, regardless of mileage', 'The battery typically needs replacement much sooner than 3-5 years, closer to 1-2 years'],
+    opts: ['That estimate is roughly accurate for most vehicles, though the exact replacement cost does vary somewhat by region', 'Toyota\'s high-voltage battery carries a warranty significantly longer than the engine or transmission — 10 years or 150,000 miles', 'Battery replacement is unfortunately not covered under any Toyota warranty at all, regardless of vehicle mileage', 'The battery typically needs replacement much sooner than that estimate suggests, often closer to just 1-2 years'],
     ans: 1,
     exp: 'Toyota is confident in the life of its batteries — the high-voltage battery carries a 10-year/150,000-mile warranty, longer than the coverage on the engine or transmission.'
   },
   {
     cat: 'MYTH BUSTING',
     q: 'A customer says: "You don\'t even need to put gas in a PHEV as long as you keep it charged." What\'s the accurate correction?',
-    opts: ['That\'s correct — a fully charged PHEV never requires gasoline under any circumstance', 'Gasoline must still be in the tank; the system displays warnings if it runs low, and the gas engine periodically runs even in EV-only use to keep components lubricated and prevent stale fuel', 'Gasoline is only needed once a year regardless of how the vehicle is driven', 'The vehicle will refuse to start at all if the gas tank is ever less than half full'],
+    opts: ['That\'s correct — a fully charged PHEV genuinely never requires any gasoline at all, under any circumstance whatsoever, ever', 'Gasoline must still be in the tank — the system warns if it runs low, and the engine periodically runs even in EV-only use to prevent stale fuel', 'Gasoline is realistically only ever needed about once a year at most, regardless of how frequently the vehicle gets driven', 'The vehicle will actually refuse to start entirely and permanently if the gas tank ever drops below half full at any point'],
     ans: 1,
     exp: 'Gasoline must be in the tank for the PHEV to operate. Even a driver who charges daily and drives EV-only will have the gas engine periodically run to keep components lubricated and prevent the fuel from going stale — and the system will prompt for a refill if needed.'
   }
@@ -836,15 +836,53 @@ function shuffleArray(arr) {
   return a;
 }
 
-// Returns a new question object with its answer options shuffled and .ans
-// re-pointed to wherever the correct option landed. Does not mutate the original.
-function shuffleQuestionOptions(q) {
-  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
-  return {
-    ...q,
-    opts: order.map(i => q.opts[i]),
-    ans: order.indexOf(q.ans)
-  };
+// Builds a sequence of target answer-positions (0..numOptions-1) of length n,
+// balanced as evenly as possible across positions, with no two consecutive
+// entries the same — so the correct answer's letter never repeats back-to-back
+// and no single letter dominates the quiz. Prevents "always press C" guessing.
+function buildBalancedPositions(n, numOptions) {
+  const base = [];
+  const perSlot = Math.ceil(n / numOptions);
+  for (let i = 0; i < numOptions; i++) for (let j = 0; j < perSlot; j++) base.push(i);
+  let seq = shuffleArray(base).slice(0, n);
+  for (let i = 1; i < seq.length; i++) {
+    if (seq[i] === seq[i - 1]) {
+      let swapped = false;
+      for (let k = i + 1; k < seq.length; k++) {
+        if (seq[k] !== seq[i - 1] && seq[k] !== seq[i + 1]) {
+          [seq[i], seq[k]] = [seq[k], seq[i]];
+          swapped = true;
+          break;
+        }
+      }
+      if (!swapped) seq[i] = (seq[i - 1] + 1) % numOptions;
+    }
+  }
+  return seq;
+}
+
+// Places the correct answer at targetPos and shuffles the wrong options into
+// the remaining slots. Does not mutate the original question object.
+function placeAnswerAtPosition(q, targetPos) {
+  const wrongIdx = q.opts.map((_, i) => i).filter(i => i !== q.ans);
+  const shuffledWrong = shuffleArray(wrongIdx);
+  const newOpts = new Array(q.opts.length);
+  newOpts[targetPos] = q.opts[q.ans];
+  let wi = 0;
+  for (let slot = 0; slot < newOpts.length; slot++) {
+    if (slot === targetPos) continue;
+    newOpts[slot] = q.opts[shuffledWrong[wi++]];
+  }
+  return { ...q, opts: newOpts, ans: targetPos };
+}
+
+// Shuffles question order, then assigns each question's correct-answer letter
+// according to a balanced, no-consecutive-repeat sequence for this attempt.
+function buildActiveQuestions(sourceQuestions) {
+  const shuffledQ = shuffleArray(sourceQuestions);
+  const numOptions = shuffledQ[0].opts.length;
+  const positions = buildBalancedPositions(shuffledQ.length, numOptions);
+  return shuffledQ.map((q, i) => placeAnswerAtPosition(q, positions[i]));
 }
 
 // ── REGISTRATION ──────────────────────────────────────────────
@@ -871,7 +909,7 @@ function startQuiz() {
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
-  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
+  activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
   saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
@@ -1121,28 +1159,22 @@ function copyExport() {
 }
 
 // ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
-// ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
-// NOT YET CONFIGURED for PHEV Tech — this must NOT point at any other quiz's
-// Form/Sheet, or PHEV Tech results would get mixed into other dashboard data.
-// Once a dedicated PHEV Tech Google Form + Sheet exists, fill in GFORM_ACTION and
-// GFORM_ENTRIES the same way the other quizzes' were set up, and this will start
-// working automatically — no other code changes needed.
-const GFORM_ACTION = '';
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeNAjW-HamQLn_gYD1HyR8XluFRV5sSbQqf7unoPW1ieeuG5Q/formResponse';
 const GFORM_ENTRIES = {
-  name: '',
-  dealerCode: '',
-  dealerName: '',
-  region: '',
-  state: '',
-  score: '',
-  total: '',
-  pct: '',
-  fundamentalsScore: '',
-  scenariosScore: '',
-  mythScore: '',
-  certified: '',
-  timeSec: '',
-  sessionDate: ''
+  name: 'entry.616639767',
+  dealerCode: 'entry.1832908260',
+  dealerName: 'entry.1305425291',
+  region: 'entry.126549149',
+  state: 'entry.261301369',
+  score: 'entry.1250776424',
+  total: 'entry.1617793882',
+  pct: 'entry.1064389910',
+  fundamentalsScore: 'entry.34419494',
+  scenariosScore: 'entry.1316173869',
+  mythScore: 'entry.640463007',
+  certified: 'entry.991184024',
+  timeSec: 'entry.1174981683',
+  sessionDate: 'entry.1895366030'
 };
 
 function submitToGoogleForm(data) {
