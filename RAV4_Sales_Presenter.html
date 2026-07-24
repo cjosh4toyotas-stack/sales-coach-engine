@@ -541,9 +541,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 }
 .splash-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px var(--red-glow); }
 .splash-version { font-size: 11px; color: var(--text-muted); }
-.deck-select-row { display: flex; gap: 24px; margin: 12px 0; }
+.deck-select-row { display: flex; gap: 20px; margin: 12px 0; flex-wrap: wrap; justify-content: center; max-width: 900px; }
 .deck-select-btn {
-  padding: 28px 40px; border-radius: 16px; min-width: 220px;
+  padding: 24px 32px; border-radius: 16px; min-width: 200px;
   background: var(--surface2); border: 1px solid var(--border); color: var(--text);
   font-family: 'Rajdhani', sans-serif; cursor: pointer; transition: all .2s;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -644,6 +644,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <button class="deck-select-btn" onclick="selectDeck('delev')">
       <div class="deck-select-name">Del-EV-ery</div>
       <div class="deck-select-sub">BEV Delivery Training</div>
+    </button>
+    <button class="deck-select-btn" onclick="selectDeck('phevtech')">
+      <div class="deck-select-name">PHEV Tech</div>
+      <div class="deck-select-sub">Meeting in a Box</div>
     </button>
   </div>
   <div class="splash-version">Information current as of March 2026 &nbsp;·&nbsp; Toyota Motor Sales</div>
@@ -2629,6 +2633,442 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     </div><!-- /deck-delev -->
 
+    <div id="deck-phevtech" class="deck">
+
+    <!-- ═══ PHASE 0: PHEV FUNDAMENTALS ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">PHEV<br><span class="red">Fundamentals</span></div>
+          <div class="phase-splash-subtitle">Build a foundational understanding of PHEV technology — how it differs, how simple charging really is, and why it's a "no compromise" solution.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">What Makes It Different</div>
+            <div class="phase-splash-item">Charging Made Simple</div>
+            <div class="phase-splash-item">The No-Compromise Case</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: What Makes a PHEV Different -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">PHEV Fundamentals · The Basics</div>
+      <div class="slide-title fade-in fade-in-1">What Makes a PHEV <span>Different?</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔀</div>
+          <div class="card-label">Differentiator 1</div>
+          <div class="card-title">Flexible Operation</div>
+          <div class="card-body">Capable of standard Hybrid operation or all-electric driving when sufficiently charged — the driver's choice, not a limitation.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">Differentiator 2</div>
+          <div class="card-title">Larger Capacity Than a Regular HEV</div>
+          <div class="card-body">All-electric range for gas-free short trips and daily commutes — an HEV's small battery can't do this.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-label">Differentiator 3</div>
+          <div class="card-title">Charging Convenience</div>
+          <div class="card-body">Still a convenient choice for customers without easy access to a 240V outlet or Level 2 charger at home.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">❓</div>
+          <div class="card-label">Common Question</div>
+          <div class="card-title">PHEV vs. HEV — What's the Real Difference?</div>
+          <div class="card-body">A PHEV has a larger battery and can be plugged in for meaningful electric range. An HEV cannot be plugged in at all.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: Charging Made Simple -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">PHEV Fundamentals · Charging</div>
+      <div class="slide-title fade-in fade-in-1">Charging Made <span>as Simple as a Smartphone</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div>
+          <div class="card-label" style="margin-bottom:12px">The Simple Explanation</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Most owners charge at home overnight — "it's like plugging in your phone"</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Works on a standard 120V outlet or a 240V/Level 2 charger — no electrical upgrade required for the standard outlet</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Charging is optional, not required — the vehicle still runs great as an HEV if it's never plugged in</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:12px">A Good Comparison Point</div>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">On a Level 2 charger, a PHEV charges 10%-80% <strong>quicker</strong> than a BEV, thanks to its smaller battery capacity</div></div>
+            <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Public Level 2 charging is always an option too — never required, always available</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: The No-Compromise Case -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">PHEV Fundamentals · The Value Case</div>
+      <div class="slide-title fade-in fade-in-1">The <span>"No Compromise"</span> Solution</div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">The Customer's Worry</div>
+          <div class="obj-question">"I want to be eco-conscious, but I also take long road trips. Won't I have to choose one or the other?"</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Your Answer</div>
+          <div class="obj-answer">No compromise needed. The gas engine is a seamless backup for long road trips — never stranded, never limited by range. Meanwhile, daily errands and commutes can often be handled entirely on all-electric power. Quiet, responsive electric driving during the week; gas-station convenience for the weekend road trip. Best of both worlds.</div>
+        </div>
+      </div>
+      <div class="big-stats fade-in fade-in-3" style="margin-top:16px">
+        <div class="big-stat">
+          <div class="big-stat-value">Optional</div>
+          <div class="big-stat-label">Charging Is Never Required</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">Faster</div>
+          <div class="big-stat-label">Level 2 Charging vs. a BEV</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">10 yr / 150k mi</div>
+          <div class="big-stat-label">HV Battery Warranty</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: CUSTOMER SCENARIOS ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Customer<br><span class="red">Scenarios</span></div>
+          <div class="phase-splash-subtitle">Practice reading a customer's knowledge level, then tailoring your explanation to match — not too basic, not too technical.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Reading Knowledge Level</div>
+            <div class="phase-splash-item">Real Customer Dialogue</div>
+            <div class="phase-splash-item">Tailored Responses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Reading Customer Knowledge Level -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Customer Scenarios · The Skill</div>
+      <div class="slide-title fade-in fade-in-1">Match the Explanation <span>to the Customer</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:16px">The goal isn't to recite everything you know — it's to assess what THIS customer already understands, then meet them there.</div>
+      <table class="data-table">
+        <thead><tr><th>Signal</th><th>What It Means</th><th>Your Move</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Low Knowledge</strong></td><td>"I just know you plug them in somehow and use less gas"</td><td>Keep it simple: two power sources, drives electric first, never stranded</td></tr>
+          <tr><td><strong>Medium Knowledge</strong></td><td>"I know they run on electricity then switch to gas like HEVs"</td><td>Clarify their likely daily electric range, explain automatic Hybrid transition</td></tr>
+          <tr><td><strong>High Knowledge</strong></td><td>"They have a bigger battery than an HEV so they drive electric longer"</td><td>Build on it — EV-only range, THS efficiency, regenerative braking</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Slide 1-2: Practice Scenario - Charging Experience -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Customer Scenarios · Live Practice</div>
+      <div class="slide-title fade-in fade-in-1">Customer Scenario <span>1</span></div>
+      <div class="scenario-card fade-in fade-in-2">
+        <div class="scenario-tag">What the Customer Says</div>
+        <div class="scenario-details">"I've been seeing more PHEVs popping up lately, and I'm trying to decide if that's the direction I should go. Some people say they're the 'best of both worlds,' but I'm still wondering if it would just be a hassle."</div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:16px">
+        <div>
+          <div class="obj-label obj-label-q">Potential Question to Ask</div>
+          <div class="obj-question">"Have you had any experience with charging yet, or would this be your first time exploring that?"</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">If They Say: "No, I'm still figuring out how charging works"</div>
+          <div class="obj-answer">Low knowledge — "Most owners charge at home overnight, like plugging in your phone. A standard outlet or a 240V/Level 2 charger both work — charging unlocks EV driving, but the vehicle still runs great without it."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Practice Scenario - Daily Driving & Motivation -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Customer Scenarios · Live Practice</div>
+      <div class="slide-title fade-in fade-in-1">Customer Scenario <span>2</span></div>
+      <div class="scenario-card fade-in fade-in-2">
+        <div class="scenario-tag">What the Customer Says</div>
+        <div class="scenario-details">"My coworker bought a PHEV about six months ago and hasn't stopped talking about it. Apparently, they've barely been to a gas station since. That got me curious."</div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:16px">
+        <div>
+          <div class="obj-label obj-label-q">Potential Question to Ask</div>
+          <div class="obj-question">"What are you hoping something like this would do differently from your current vehicle?"</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">If They Say: "Honestly, I'm mostly hoping it saves me money on gas"</div>
+          <div class="obj-answer">Low knowledge — Discuss potential fuel savings through all-electric range, explain that charging lets the vehicle use electric range first, and position it as a simple way to cut fuel costs without disrupting their current habits.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: MYTH BUSTING ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Myth<br><span class="red">Busting</span></div>
+          <div class="phase-splash-subtitle">Overcome the common PHEV myths customers bring in from independent research — with confident, evidence-based responses.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Good, Better, Best</div>
+            <div class="phase-splash-item">Common Myths</div>
+            <div class="phase-splash-item">The Accurate Answers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: The Good/Better/Best Framework -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Myth Busting · The Framework</div>
+      <div class="slide-title fade-in fade-in-1">Good, Better, <span>Best</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Not all correct answers are equally effective. Here's the difference, using the "I'll need an electrician" myth as the example:</div>
+      <table class="data-table">
+        <thead><tr><th>Level</th><th>Approach</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Good</strong></td><td>Corrects the myth with a basic fact</td><td>"Actually, you can just plug it into a standard 120V outlet."</td></tr>
+          <tr><td><strong>Better</strong></td><td>Adds a Toyota-specific fact or feature</td><td>"Toyota PHEVs include a dual-voltage charging cable that works with a standard outlet — no upgrades required."</td></tr>
+          <tr><td><strong>Best</strong></td><td>Connects the fact to a value proposition</td><td>"I hear that a lot — but the great thing is it fits the life you already have. Plug into the outlet you already own, and you've basically installed a gas station in your own garage for the night."</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Slide 2-2: Common Myths - Basic Operation & Infrastructure -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Myth Busting · Basic Operation & Infrastructure</div>
+      <div class="slide-title fade-in fade-in-1">Myths About <span>How It Works</span></div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">Myth</div>
+          <div class="obj-question">"If the battery dies, I'll be stranded."</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Reality</div>
+          <div class="obj-answer">If the high-voltage battery goes low in EV mode, the vehicle automatically switches to HEV mode, using the gas engine to keep going as an efficient hybrid — never stranded. (Separately, the 12V battery can be jump-started like any vehicle if it goes flat.)</div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:16px">
+        <div>
+          <div class="obj-label obj-label-q">Myth</div>
+          <div class="obj-question">"A Level 2 charger has to be installed in my home."</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Reality</div>
+          <div class="obj-answer">Toyota PHEVs can be charged via a common 120V outlet already found in any home. An electrician-installed Level 2, 240V charger is recommended for faster charging — but never required.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Common Myths - Ownership, Maintenance & Environmental -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Myth Busting · Ownership & Environment</div>
+      <div class="slide-title fade-in fade-in-1">Myths About <span>Cost & Climate</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-label">Myth</div>
+          <div class="card-title">"The battery needs a $10,000 replacement after 3-5 years"</div>
+          <div class="card-body">Reality: the HV battery carries a 10-year/150,000-mile warranty — longer coverage than even the engine or transmission.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Myth</div>
+          <div class="card-title">"If I don't plug it in every day, I'll ruin the battery"</div>
+          <div class="card-body">Reality: there's no requirement to plug in a PHEV at all. Unplugged, it simply runs as an HEV — no stipulation in the warranty requires charging.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-label">Myth</div>
+          <div class="card-title">"Extreme heat or cold kills the battery"</div>
+          <div class="card-body">Reality: PHEVs manage battery temperature via a dedicated cooling system. Efficiency differences in extreme weather are about the same as an HEV or gas-only vehicle.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Myth</div>
+          <div class="card-title">"I never need to put gas in it if I keep it charged"</div>
+          <div class="card-body">Reality: gasoline must stay in the tank. The engine periodically runs even in EV-only use to keep components lubricated and fuel from going stale — the system will prompt for a refill if needed.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Team competition time. Scan the QR code, take the quiz, and see who knows PHEV Tech best.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">PHEV Product Trivia</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-phevtech" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-phevtech" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-phevtech" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-phevtech">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-phevtech" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-phevtech"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-phevtech">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-phevtech">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-phevtech">
+          <div class="scoreboard" id="scoreboard-list-phevtech">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-phevtech" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-phevtech" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-phevtech" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-phevtech" class="fade-in fade-in-2">
+        <div id="final-scoreboard-phevtech"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">PHEV Tech Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn PHEV Tech module certification.</div>
+          <div id="cert-summary-phevtech"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-phevtech"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Check the <strong style="color:var(--text)">PHEV Tech Dashboard</strong> for detailed scores, regional rankings, and certification progress.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Open PHEVTech_Dashboard.html</div>
+            <div class="phase-splash-item">Import today's quiz results</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-phevtech -->
+
   </div><!-- /main -->
 
   <!-- BOTTOM BAR -->
@@ -2769,6 +3209,33 @@ const slideNotesDelev = [
   'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
 ];
 
+const slideNotesPhevtech = [
+  // Phase 0
+  'Kick off with energy! This module builds on the Meeting-in-a-Box PHEV Tech content — the goal is confident, accurate PHEV conversations, not memorized talking points.',
+  'Walk through the three differentiators slowly — flexible operation, bigger battery than an HEV, charging convenience. These come up constantly in customer conversations.',
+  'The smartphone analogy is the single best tool on this slide — repeat it. Also flag the PHEV-vs-BEV Level 2 charging speed fact; it\'s a great answer for cross-shopping customers.',
+  'This is the emotional close of the phase — "no compromise." Make sure the room can say this back in their own words before moving on.',
+  // Phase 1
+  'Set the context: the skill here isn\'t reciting facts, it\'s reading the customer first. Ask the room to practice identifying knowledge level from real dialogue.',
+  'Use this table as a quick reference — quiz the room by reading just the "Signal" column and having them guess the right move before revealing it.',
+  'This is real dialogue from the Meeting-in-a-Box guide. Have a rep read the customer line out loud, then have another rep respond live before revealing the suggested answer.',
+  'Same format as the previous slide, different scenario. Rotate who\'s answering so more reps get live practice reps in this phase.',
+  // Phase 2
+  'Transition energy matters here — this phase is about confidence under objection, not just facts. Frame it as "let\'s make sure nothing a customer finds online can throw you off."',
+  'Introduce the Good/Better/Best framework before showing any myths — it gives the room a lens to self-evaluate their own answers as you go through each myth.',
+  'These are the highest-frequency myths reps will hear. Make sure everyone can give at least a "Good" tier answer to each without looking at the slide.',
+  'These four are just as common but slightly more nuanced — the battery warranty and "must charge daily" myths especially trip up newer reps.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
+];
+
 // Build slides index
 // ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
 const DEALER_LOOKUP = {
@@ -2868,6 +3335,7 @@ function wireDealerCodeLookup(suffix){
 wireDealerCodeLookup('rav4');
 wireDealerCodeLookup('bz');
 wireDealerCodeLookup('delev');
+wireDealerCodeLookup('phevtech');
 
 let currentDeck = 'rav4';
 let allSlides = [];
@@ -2875,6 +3343,7 @@ let currentSlideIdx = 0;
 const DEFAULT_QUIZ_URL_RAV4 = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
 const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/bZ_Woodland_Quiz.html';
 const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/DelEVery_Quiz.html';
+const DEFAULT_QUIZ_URL_PHEVTECH = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PHEVTech_Quiz.html';
 let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 
@@ -2911,6 +3380,14 @@ const DECK_CONFIG = {
     quizTotal: 22,
     passThreshold: 18,
     certLabel: 'Del-EV-ery Certified'
+  },
+  phevtech: {
+    brand: 'PHEV TECH',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_PHEVTECH,
+    phaseNames: ['PHEV Fundamentals', 'Customer Scenarios', 'Myth Busting', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'PHEV Tech Certified'
   }
 };
 
@@ -2927,6 +3404,7 @@ function selectDeck(deckName) {
   document.getElementById('deck-rav4').classList.toggle('active', deckName === 'rav4');
   document.getElementById('deck-bz').classList.toggle('active', deckName === 'bz');
   document.getElementById('deck-delev').classList.toggle('active', deckName === 'delev');
+  document.getElementById('deck-phevtech').classList.toggle('active', deckName === 'phevtech');
   allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
   currentSlideIdx = 0;
 
@@ -2985,7 +3463,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery' };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech' };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -3016,7 +3494,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev };
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
