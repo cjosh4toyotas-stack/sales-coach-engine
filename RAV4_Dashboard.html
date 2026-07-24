@@ -280,6 +280,7 @@ body { min-height: 100vh; }
       <div class="nav-item" onclick="showView('regional')" id="nav-regional"><span class="icon">🗺️</span> Regional</div>
       <div class="nav-item" onclick="showView('dealers')" id="nav-dealers"><span class="icon">🏢</span> By Dealer</div>
       <div class="nav-item" onclick="showView('individuals')" id="nav-individuals"><span class="icon">👤</span> Individuals</div>
+      <div class="nav-item" onclick="showView('visits')" id="nav-visits"><span class="icon">👁️</span> Page Visits</div>
     </div>
     <div class="filter-group">
       <label class="filter-label">Filter by Region</label>
@@ -397,6 +398,24 @@ body { min-height: 100vh; }
         <table class="data-table">
           <thead><tr><th>#</th><th>Name</th><th>Dealer</th><th>Region</th><th>Score</th><th>Pct</th><th>Time</th><th>Certified</th><th>Session Date</th></tr></thead>
           <tbody id="indiv-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE VISITS VIEW ── -->
+    <div class="view" id="view-visits">
+      <div class="section-head">
+        <div class="section-title">Page <span>Visits</span></div>
+        <div class="section-sub">Anonymous visit log — approximate location only, no personal identity</div>
+      </div>
+      <div class="table-card">
+        <div class="table-card-header">
+          <div class="table-card-title">Recent Visits</div>
+          <input class="table-search" placeholder="Search..." oninput="filterVisits(this.value)">
+        </div>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Page</th><th>City / Region</th><th>Country</th><th>Device</th><th>Browser</th><th>Time</th></tr></thead>
+          <tbody id="visits-body"></tbody>
         </table>
       </div>
     </div>
@@ -858,8 +877,164 @@ async function fetchGoogleFormResults() {
   }
 }
 
+// ── PAGE VISIT ANALYTICS (anonymous — approximate location + device only) ──
+// NOT YET CONFIGURED — set up a dedicated Google Form + Sheet for this (separate
+// from quiz results), then fill in VISIT_GFORM_ACTION, VISIT_GFORM_ENTRIES, and
+// VISIT_GSHEET_CSV_URL below. Until then, this only logs to localStorage on this
+// device and does nothing across devices — completely harmless no-op.
+const VISIT_GFORM_ACTION = '';
+const VISIT_GFORM_ENTRIES = {
+  page: '',
+  city: '',
+  region: '',
+  country: '',
+  device: '',
+  browser: '',
+  referrer: '',
+  timestamp: ''
+};
+const VISIT_GSHEET_CSV_URL = '';
+
+function parseDeviceAndBrowser(ua) {
+  let device = 'Desktop';
+  if (/iPhone/i.test(ua)) device = 'iPhone';
+  else if (/iPad/i.test(ua)) device = 'iPad';
+  else if (/Android/i.test(ua)) device = /Mobile/i.test(ua) ? 'Android Phone' : 'Android Tablet';
+  else if (/Macintosh/i.test(ua)) device = 'Mac';
+  else if (/Windows/i.test(ua)) device = 'Windows PC';
+  else if (/Linux/i.test(ua)) device = 'Linux PC';
+
+  let browser = 'Unknown';
+  if (/Edg\//i.test(ua)) browser = 'Edge';
+  else if (/Chrome\//i.test(ua) && !/Chromium/i.test(ua)) browser = 'Chrome';
+  else if (/Safari\//i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
+  else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+
+  return { device, browser };
+}
+
+async function logPageVisit(pageLabel) {
+  try {
+    const { device, browser } = parseDeviceAndBrowser(navigator.userAgent);
+    let city = '', region = '', country = '';
+    try {
+      const geoRes = await fetch('https://ipapi.co/json/');
+      if (geoRes.ok) {
+        const geo = await geoRes.json();
+        city = geo.city || '';
+        region = geo.region || '';
+        country = geo.country_name || '';
+      }
+    } catch(e) { /* geolocation lookup failed — still log the visit without it */ }
+
+    const visit = {
+      page: pageLabel,
+      city, region, country, device, browser,
+      referrer: document.referrer || 'direct',
+      timestamp: new Date().toISOString()
+    };
+
+    // Always keep a local copy on this device as a fallback
+    try {
+      const existing = JSON.parse(localStorage.getItem('page_visit_log') || '[]');
+      existing.push(visit);
+      localStorage.setItem('page_visit_log', JSON.stringify(existing.slice(-200))); // cap local history
+    } catch(e) {}
+
+    // Silent submit to Google Form, if configured
+    if (VISIT_GFORM_ACTION) {
+      const formData = new FormData();
+      Object.keys(VISIT_GFORM_ENTRIES).forEach(key => {
+        if (VISIT_GFORM_ENTRIES[key]) formData.append(VISIT_GFORM_ENTRIES[key], String(visit[key]));
+      });
+      fetch(VISIT_GFORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
+    }
+  } catch(e) {
+    // Fails silently — visit analytics are best-effort, never block the dashboard itself
+  }
+}
+
+let visitLog = [];
+
+function parseVisitCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else { inQuotes = false; } }
+      else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i+1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = [];
+      } else field += c;
+    }
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+async function fetchVisitLog() {
+  // Always show whatever's been logged locally on this device, even without a Sheet configured
+  try {
+    visitLog = JSON.parse(localStorage.getItem('page_visit_log') || '[]');
+  } catch(e) { visitLog = []; }
+
+  if (VISIT_GSHEET_CSV_URL) {
+    try {
+      const res = await fetch(VISIT_GSHEET_CSV_URL, { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        const rows = parseVisitCSV(text);
+        if (rows.length > 1) {
+          const headers = rows[0].map(h => h.trim());
+          const col = name => headers.indexOf(name);
+          const idx = { page: col('page'), city: col('city'), region: col('region'), country: col('country'), device: col('device'), browser: col('browser'), timestamp: col('timestamp') };
+          const remote = rows.slice(1).filter(r => r.length > 1).map(r => ({
+            page: r[idx.page] || '', city: r[idx.city] || '', region: r[idx.region] || '',
+            country: r[idx.country] || '', device: r[idx.device] || '', browser: r[idx.browser] || '',
+            timestamp: r[idx.timestamp] || ''
+          }));
+          visitLog = remote; // Sheet is the source of truth across all devices once configured
+        }
+      }
+    } catch(e) { /* fall back to local-only log */ }
+  }
+  renderVisits();
+}
+
+function renderVisits(search = '') {
+  const tbody = document.getElementById('visits-body');
+  if (!tbody) return;
+  let d = [...visitLog].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  if (search) {
+    const s = search.toLowerCase();
+    d = d.filter(v => (v.page || '').toLowerCase().includes(s) || (v.city || '').toLowerCase().includes(s) || (v.region || '').toLowerCase().includes(s) || (v.country || '').toLowerCase().includes(s));
+  }
+  tbody.innerHTML = d.map((v, i) => `
+    <tr>
+      <td class="dim">${i + 1}</td>
+      <td>${esc(v.page)}</td>
+      <td>${esc(v.city)}${v.city && v.region ? ', ' : ''}${esc(v.region)}</td>
+      <td>${esc(v.country)}</td>
+      <td>${esc(v.device)}</td>
+      <td>${esc(v.browser)}</td>
+      <td>${v.timestamp ? new Date(v.timestamp).toLocaleString() : '—'}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">No visits logged yet</td></tr>';
+}
+
+function filterVisits(val) { renderVisits(val); }
+
 boot();
 fetchGoogleFormResults();
+logPageVisit('Dashboard');
+fetchVisitLog();
 </script>
 </body>
 </html>
