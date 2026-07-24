@@ -701,7 +701,7 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'PRODUCT',
     q: 'Which 2026 RAV4 grade features RIGID Industries® LED fog lights as standard?',
-    opts: ['Limited', 'XSE', 'GR SPORT', 'Woodland'],
+    opts: ['Limited', 'XLE Premium', 'GR SPORT', 'Woodland'],
     ans: 3,
     exp: 'Woodland comes with RIGID Industries® LED fog lights, higher ground clearance, roof rails, and a tow hitch — built for adventure.'
   },
@@ -736,14 +736,14 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'PRODUCT',
     q: 'What new TAMM feature streams music without requiring a phone in the vehicle?',
-    opts: ['SiriusXM with 360L', 'Voice Assistant', 'Spotify integrated streaming', 'Drive Recorder'],
+    opts: ['SiriusXM with 360L audio', 'Enhanced Voice Assistant', 'Spotify integrated streaming', 'Built-in Drive Recorder'],
     ans: 2,
     exp: 'Spotify integrated streaming is new for TAMM. It works through the vehicle\'s Wi-Fi Connect (5G), so no phone is needed for music.'
   },
   {
     cat: 'PRODUCT',
     q: 'Which safety feature is now STANDARD across ALL 2026 RAV4 grades?',
-    opts: ['Traffic Jam Assist', 'Advanced Park', 'Blind Spot Monitor with RCTA', 'Lane Change Assist'],
+    opts: ['Traffic Jam Assist system', 'Advanced Park assistance', 'Blind Spot Monitor with RCTA', 'Lane Change Assist feature'],
     ans: 2,
     exp: 'Blind Spot Monitor with Rear Cross-Traffic Alert is now standard across ALL RAV4 grades for 2026 — a key value talking point.'
   },
@@ -779,7 +779,7 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'COMPETITIVE',
     q: 'RAV4 won a "Best Resale Award" according to which automotive source?',
-    opts: ['Edmunds', 'J.D. Power', 'kbb.com (Kelley Blue Book)', 'CarGurus'],
+    opts: ['Edmunds.com auto ratings', 'J.D. Power quality study', 'kbb.com (Kelley Blue Book)', 'CarGurus market rankings'],
     ans: 2,
     exp: 'RAV4 is a KBB.com Best Resale Award winner. Toyota\'s history of retaining value over time is a powerful selling point.'
   },
@@ -832,15 +832,53 @@ function shuffleArray(arr) {
   return a;
 }
 
-// Returns a new question object with its answer options shuffled and .ans
-// re-pointed to wherever the correct option landed. Does not mutate the original.
-function shuffleQuestionOptions(q) {
-  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
-  return {
-    ...q,
-    opts: order.map(i => q.opts[i]),
-    ans: order.indexOf(q.ans)
-  };
+// Builds a sequence of target answer-positions (0..numOptions-1) of length n,
+// balanced as evenly as possible across positions, with no two consecutive
+// entries the same — so the correct answer's letter never repeats back-to-back
+// and no single letter dominates the quiz. Prevents "always press C" guessing.
+function buildBalancedPositions(n, numOptions) {
+  const base = [];
+  const perSlot = Math.ceil(n / numOptions);
+  for (let i = 0; i < numOptions; i++) for (let j = 0; j < perSlot; j++) base.push(i);
+  let seq = shuffleArray(base).slice(0, n);
+  for (let i = 1; i < seq.length; i++) {
+    if (seq[i] === seq[i - 1]) {
+      let swapped = false;
+      for (let k = i + 1; k < seq.length; k++) {
+        if (seq[k] !== seq[i - 1] && seq[k] !== seq[i + 1]) {
+          [seq[i], seq[k]] = [seq[k], seq[i]];
+          swapped = true;
+          break;
+        }
+      }
+      if (!swapped) seq[i] = (seq[i - 1] + 1) % numOptions;
+    }
+  }
+  return seq;
+}
+
+// Places the correct answer at targetPos and shuffles the wrong options into
+// the remaining slots. Does not mutate the original question object.
+function placeAnswerAtPosition(q, targetPos) {
+  const wrongIdx = q.opts.map((_, i) => i).filter(i => i !== q.ans);
+  const shuffledWrong = shuffleArray(wrongIdx);
+  const newOpts = new Array(q.opts.length);
+  newOpts[targetPos] = q.opts[q.ans];
+  let wi = 0;
+  for (let slot = 0; slot < newOpts.length; slot++) {
+    if (slot === targetPos) continue;
+    newOpts[slot] = q.opts[shuffledWrong[wi++]];
+  }
+  return { ...q, opts: newOpts, ans: targetPos };
+}
+
+// Shuffles question order, then assigns each question's correct-answer letter
+// according to a balanced, no-consecutive-repeat sequence for this attempt.
+function buildActiveQuestions(sourceQuestions) {
+  const shuffledQ = shuffleArray(sourceQuestions);
+  const numOptions = shuffledQ[0].opts.length;
+  const positions = buildBalancedPositions(shuffledQ.length, numOptions);
+  return shuffledQ.map((q, i) => placeAnswerAtPosition(q, positions[i]));
 }
 
 // ── REGISTRATION ──────────────────────────────────────────────
@@ -867,7 +905,7 @@ function startQuiz() {
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
-  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
+  activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
   saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
