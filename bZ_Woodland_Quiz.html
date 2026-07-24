@@ -786,14 +786,14 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'COMPETITIVE',
     q: 'How does the bZ Woodland\'s maximum towing capacity compare to its key competitors?',
-    opts: ['Matches the Honda Prologue\'s 1,500 lbs', 'Falls short of both competitors', 'Exceeds both the Honda Prologue EX AWD (1,500 lbs) and Hyundai IONIQ 5 XRT (2,700 lbs) at 3,500 lbs', 'Only exceeds the IONIQ 5 XRT'],
+    opts: ['Matches the Honda Prologue EX AWD\'s exact towing rating of 1,500 lbs, no more', 'Falls meaningfully short of both key competitors in this towing comparison entirely', 'Exceeds both the Honda Prologue EX AWD (1,500 lbs) and Hyundai IONIQ 5 XRT (2,700 lbs) at 3,500 lbs', 'Only exceeds the Hyundai IONIQ 5 XRT\'s towing capacity, but not the Prologue\'s rating'],
     ans: 2,
     exp: 'At 3,500 lbs, the bZ Woodland out-tows both the Honda Prologue EX AWD (1,500 lbs) and the Hyundai IONIQ 5 XRT (2,700 lbs) by a wide margin — a strong differentiator for adventure-minded customers.'
   },
   {
     cat: 'COMPETITIVE',
     q: 'What horsepower advantage does the bZ Woodland have over the Honda Prologue EX AWD?',
-    opts: ['bZ Woodland: 375 hp vs. Prologue EX AWD: 300 hp — a 75 hp advantage', 'They are equal at 300 hp', 'The Prologue EX AWD has more horsepower', 'bZ Woodland: 260 hp vs. Prologue EX AWD: 300 hp'],
+    opts: ['bZ Woodland: 375 hp vs. Prologue EX AWD: 300 hp — a 75 hp advantage', 'They are actually equal in horsepower, both rated at 300 hp combined', 'The Honda Prologue EX AWD actually has more horsepower than the bZ Woodland', 'bZ Woodland is rated at 260 hp vs. the Prologue EX AWD\'s 300 hp combined rating'],
     ans: 0,
     exp: 'The bZ Woodland\'s 375 hp beats the Honda Prologue EX AWD\'s 300 hp by 75 hp, while also offering more standard capability (AWD, X-MODE, higher towing).'
   }
@@ -832,15 +832,53 @@ function shuffleArray(arr) {
   return a;
 }
 
-// Returns a new question object with its answer options shuffled and .ans
-// re-pointed to wherever the correct option landed. Does not mutate the original.
-function shuffleQuestionOptions(q) {
-  const order = shuffleArray(q.opts.map((_, i) => i)); // shuffled list of original option indices
-  return {
-    ...q,
-    opts: order.map(i => q.opts[i]),
-    ans: order.indexOf(q.ans)
-  };
+// Builds a sequence of target answer-positions (0..numOptions-1) of length n,
+// balanced as evenly as possible across positions, with no two consecutive
+// entries the same — so the correct answer's letter never repeats back-to-back
+// and no single letter dominates the quiz. Prevents "always press C" guessing.
+function buildBalancedPositions(n, numOptions) {
+  const base = [];
+  const perSlot = Math.ceil(n / numOptions);
+  for (let i = 0; i < numOptions; i++) for (let j = 0; j < perSlot; j++) base.push(i);
+  let seq = shuffleArray(base).slice(0, n);
+  for (let i = 1; i < seq.length; i++) {
+    if (seq[i] === seq[i - 1]) {
+      let swapped = false;
+      for (let k = i + 1; k < seq.length; k++) {
+        if (seq[k] !== seq[i - 1] && seq[k] !== seq[i + 1]) {
+          [seq[i], seq[k]] = [seq[k], seq[i]];
+          swapped = true;
+          break;
+        }
+      }
+      if (!swapped) seq[i] = (seq[i - 1] + 1) % numOptions;
+    }
+  }
+  return seq;
+}
+
+// Places the correct answer at targetPos and shuffles the wrong options into
+// the remaining slots. Does not mutate the original question object.
+function placeAnswerAtPosition(q, targetPos) {
+  const wrongIdx = q.opts.map((_, i) => i).filter(i => i !== q.ans);
+  const shuffledWrong = shuffleArray(wrongIdx);
+  const newOpts = new Array(q.opts.length);
+  newOpts[targetPos] = q.opts[q.ans];
+  let wi = 0;
+  for (let slot = 0; slot < newOpts.length; slot++) {
+    if (slot === targetPos) continue;
+    newOpts[slot] = q.opts[shuffledWrong[wi++]];
+  }
+  return { ...q, opts: newOpts, ans: targetPos };
+}
+
+// Shuffles question order, then assigns each question's correct-answer letter
+// according to a balanced, no-consecutive-repeat sequence for this attempt.
+function buildActiveQuestions(sourceQuestions) {
+  const shuffledQ = shuffleArray(sourceQuestions);
+  const numOptions = shuffledQ[0].opts.length;
+  const positions = buildBalancedPositions(shuffledQ.length, numOptions);
+  return shuffledQ.map((q, i) => placeAnswerAtPosition(q, positions[i]));
 }
 
 // ── REGISTRATION ──────────────────────────────────────────────
@@ -867,7 +905,7 @@ function startQuiz() {
   userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
-  activeQuestions = shuffleArray(questions).map(shuffleQuestionOptions); // fresh random order + shuffled options for this attempt
+  activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
   saveActiveSession();
   showScreen('screen-quiz');
   loadQuestion();
@@ -1111,25 +1149,21 @@ function copyExport() {
 }
 
 // ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
-// NOT YET CONFIGURED for bZ Woodland — this must NOT point at the RAV4 Form/Sheet,
-// or bZ Woodland results would get mixed into the RAV4 dashboard data.
-// Once a dedicated bZ Woodland Google Form + Sheet exists, fill in GFORM_ACTION and
-// GFORM_ENTRIES the same way the RAV4 quiz's were set up, and this will start working
-// automatically — no other code changes needed.
-const GFORM_ACTION = '';
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSf0N55yjkgVXOp-zOByeasfgN-p00ZVL92DVXaKXPVzZCaZAw/formResponse';
 const GFORM_ENTRIES = {
-  name: '',
-  dealerName: '',
-  region: '',
-  state: '',
-  score: '',
-  total: '',
-  pct: '',
-  productScore: '',
-  competitiveScore: '',
-  certified: '',
-  timeSec: '',
-  sessionDate: ''
+  name: 'entry.226705701',
+  dealerCode: 'entry.140740996',
+  dealerName: 'entry.737623148',
+  region: 'entry.1254352112',
+  state: 'entry.1893870900',
+  score: 'entry.477066371',
+  total: 'entry.529035372',
+  pct: 'entry.1162817023',
+  productScore: 'entry.415363252',
+  competitiveScore: 'entry.429868747',
+  certified: 'entry.186789123',
+  timeSec: 'entry.1509348433',
+  sessionDate: 'entry.6804817'
 };
 
 function submitToGoogleForm(data) {
