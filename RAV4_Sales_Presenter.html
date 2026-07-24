@@ -554,6 +554,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 }
 .deck-select-name { font-size: 26px; font-weight: 700; }
 .deck-select-sub { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+.splash-section-label {
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted);
+  margin-top: 28px; margin-bottom: 4px; text-align: center; width: 100%;
+}
+.admin-deck { border-color: rgba(0,150,255,0.35); }
+.admin-deck:hover { border-color: #0096ff; box-shadow: 0 0 40px rgba(0,150,255,0.25); }
 
 /* ── PHASE TITLE SLIDE ────────────────────────────────── */
 .phase-splash {
@@ -632,6 +638,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
   <div class="splash-red-line"></div>
   <div class="splash-title" style="font-size:32px">Sales Coach Engine</div>
   <div class="splash-sub">Select a presentation to begin</div>
+  <div class="splash-section-label">Sales Training</div>
   <div class="deck-select-row">
     <button class="deck-select-btn" onclick="selectDeck('rav4')">
       <div class="deck-select-name">RAV4</div>
@@ -648,6 +655,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     <button class="deck-select-btn" onclick="selectDeck('phevtech')">
       <div class="deck-select-name">PHEV Tech</div>
       <div class="deck-select-sub">Meeting in a Box</div>
+    </button>
+  </div>
+  <div class="splash-section-label">Administrative</div>
+  <div class="deck-select-row">
+    <button class="deck-select-btn admin-deck" onclick="selectDeck('allocsys')">
+      <div class="deck-select-name">Allocation System</div>
+      <div class="deck-select-sub">Dealer Allocation Training</div>
     </button>
   </div>
   <div class="splash-version">Information current as of March 2026 &nbsp;·&nbsp; Toyota Motor Sales</div>
@@ -3069,6 +3083,422 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     </div><!-- /deck-phevtech -->
 
+    <div id="deck-allocsys" class="deck">
+
+    <!-- ═══ PHASE 0: ALLOCATION FUNDAMENTALS ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Allocation<br><span class="red">Fundamentals</span></div>
+          <div class="phase-splash-subtitle">Understand the three methods Toyota uses to allocate vehicles to dealers, and the core terms behind every allocation calculation.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">The Three Methods</div>
+            <div class="phase-splash-item">Core Terms</div>
+            <div class="phase-splash-item">Pipeline & Adjustments</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: The Three Allocation Methods -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Allocation Fundamentals · The Three Methods</div>
+      <div class="slide-title fade-in fade-in-1">How Vehicles Get <span>Allocated</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">⚖️</div>
+          <div class="card-label">Method 1 — Most Vehicles</div>
+          <div class="card-title">Balanced Days Supply</div>
+          <div class="card-body">Used to allocate a majority of vehicles. Each series is allocated individually based on balancing each dealer's days supply to the region's days supply.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <div class="card-label">Method 2 — Specialty Product</div>
+          <div class="card-title">Niche Methodology</div>
+          <div class="card-body">Used to allocate niche product. Each series is allocated individually based on a multiple-part earnings process.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="card-label">Method 3 — Launch Periods</div>
+          <div class="card-title">Weighted Sales Base</div>
+          <div class="card-body">Used primarily during launch or introductory periods, when a dealer sales base isn't yet established. Each series is allocated based on each dealer's percent of the region's sales.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">➕</div>
+          <div class="card-label">Discretionary</div>
+          <div class="card-title">Additional Units</div>
+          <div class="card-body">Regional management may offer additional units based on business judgment — for example, to support market representation actions or special promotions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: Core Terms Part 1 -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Allocation Fundamentals · Key Terms</div>
+      <div class="slide-title fade-in fade-in-1">The Vocabulary <span>You Need</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Days in Allocation</strong> — the number of days of sales used in the allocation calculation</div></div>
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Travel Rate</strong> — average sales per day: retail sales during the allocation period, divided by days in that period</div></div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Total Stock / Total Pipeline</strong> — a dealer's current inventory, plus vehicles already allocated but not yet delivered</div></div>
+          <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>Days Supply</strong> — the number of days it would take to sell the total pipeline at the current travel rate</div></div>
+        </div>
+      </div>
+      <div class="obj-card fade-in fade-in-3" style="margin-top:20px">
+        <div>
+          <div class="obj-label obj-label-q">Quick Gut-Check</div>
+          <div class="obj-question">A dealer sold 45 units in a 30-day allocation window. What's their Travel Rate?</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Answer</div>
+          <div class="obj-answer">45 ÷ 30 = <strong>1.5 units per day</strong>. That figure then gets compared against the dealer's total pipeline to determine Days Supply.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: Pipeline Adjustments -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Allocation Fundamentals · Pipeline Adjustments</div>
+      <div class="slide-title fade-in fade-in-1">When the Pipeline <span>Gets Adjusted</span></div>
+      <div class="fade-in fade-in-2">
+        <div class="scenario-card">
+          <div class="scenario-tag">Definition</div>
+          <div class="scenario-title">Pipeline Adjustments</div>
+          <div class="scenario-details">Vehicles subtracted from a dealer's pipeline for specific reasons — for example, net reassigned turndown protection, or pipeline protection of convertibles. These adjustments happen before days supply and allocation earnings are calculated.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">📋</div>
+          <div class="card-label" style="color:var(--green)">Current Region Update</div>
+          <div class="card-title">Allocation 08-1 · Effective July 31, 2026</div>
+          <div class="card-body">Kansas City Region has raised the Minimum Flow quantity to <strong>3</strong> for both <strong>Camry HV</strong> and <strong>RAV4 HV</strong> — both remain on the Balanced Days Supply methodology.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📍</div>
+          <div class="card-label">Where This Lives</div>
+          <div class="card-title">Series Weights Table</div>
+          <div class="card-body">This is a real, current change from your region's own allocation parameters — we'll cover exactly what "Minimum Flow" means and why this matters in the next phase.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: MINIMUM FLOW & MODEL ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Minimum Flow<br><span class="red">& Model</span></div>
+          <div class="phase-splash-subtitle">Two protective mechanisms that guarantee dealers a baseline pipeline — and the key difference between them.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Minimum Flow</div>
+            <div class="phase-splash-item">Minimum Model</div>
+            <div class="phase-splash-item">Real Region Example</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Minimum Flow -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Minimum Flow & Model · Minimum Flow</div>
+      <div class="slide-title fade-in fade-in-1">Minimum <span>Flow</span></div>
+      <div class="obj-card fade-in fade-in-2">
+        <div>
+          <div class="obj-label obj-label-q">What It Guarantees</div>
+          <div class="obj-question">Used for selected series only. Insures that every dealer has a minimum number of that series in their total pipeline — assigned before any other allocation calculations run.</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Worked Example</div>
+          <div class="obj-answer">Camry Minimum Flow Qty: <strong>3</strong><br>Qty of Camry in Dealer's Pipeline: <strong>2</strong><br>This dealer earns <strong>1 Camry</strong> from minimum flow, prior to any allocation calculations.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Minimum Model -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Minimum Flow & Model · Minimum Model</div>
+      <div class="slide-title fade-in fade-in-1">Minimum <span>Model</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Used for selected models of selected series only. Unlike Minimum Flow, dealers must first <strong>earn</strong> the series before Minimum Model applies.</div>
+      <div class="obj-card">
+        <div>
+          <div class="obj-label obj-label-q">Scenario A</div>
+          <div class="obj-question">Minimum Models: 2532, 2544 &nbsp;·&nbsp; Quantity: 3<br>Dealer's Camry Earning: 3 &nbsp;·&nbsp; Qty of 2532/2544 already in pipeline: 1</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Result</div>
+          <div class="obj-answer">The system will attempt to ensure that <strong>2 of the 3</strong> earned Camrys are a 2532 and/or 2544.</div>
+        </div>
+      </div>
+      <div class="obj-card" style="margin-top:16px">
+        <div>
+          <div class="obj-label obj-label-q">Scenario B</div>
+          <div class="obj-question">Same Minimum Models &amp; Quantity &nbsp;·&nbsp; Dealer's Camry Earning: <strong>1</strong> &nbsp;·&nbsp; Qty already in pipeline: 1</div>
+        </div>
+        <div>
+          <div class="obj-label obj-label-a">Result</div>
+          <div class="obj-answer">Minimum Model earnings never exceed the quantity earned at the series level. The system will attempt to ensure the <strong>one</strong> earned Camry is a 2532 or 2544.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Real Region Example -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Minimum Flow & Model · Applied to Your Region</div>
+      <div class="slide-title fade-in fade-in-1">This Isn't Theoretical — <span>It's Happening Now</span></div>
+      <div class="fade-in fade-in-2">
+        <table class="data-table">
+          <thead><tr><th>Series</th><th>Methodology</th><th>Wheelbase</th><th>Min Flow (New)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Camry HV</strong></td><td>Balanced Day Supply</td><td>90</td><td><span class="win-badge">3</span></td></tr>
+            <tr><td><strong>RAV4 HV</strong></td><td>Balanced Day Supply</td><td>90</td><td><span class="win-badge">3</span></td></tr>
+            <tr class="dim"><td>4Runner Gas</td><td>Balanced Day Supply</td><td>90</td><td>1</td></tr>
+            <tr class="dim"><td>Corolla Gas</td><td>Balanced Day Supply</td><td>90</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip" style="margin-top:16px">Effective with Allocation 08-1 (locking July 31, 2026), every Kansas City Region dealer's Camry HV and RAV4 HV pipeline gets brought up to at least 3 units apiece — before the rest of the Balanced Days Supply math even runs.</div>
+    </div>
+
+    <!-- ═══ PHASE 2: WEIGHTED SALES BASE ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Weighted<br><span class="red">Sales Base</span></div>
+          <div class="phase-splash-subtitle">Walk through the actual calculation, the full allocation flow, and how fractional units carry forward across cycles.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">The Formula</div>
+            <div class="phase-splash-item">The Full Flow</div>
+            <div class="phase-splash-item">Fractional Carry Forward</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: The Weighted Sales Base Formula -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Weighted Sales Base · The Calculation</div>
+      <div class="slide-title fade-in fade-in-1">Three Steps to <span>Dealer Earnings</span></div>
+      <div class="fade-in fade-in-2">
+        <table class="data-table">
+          <thead><tr><th>Step</th><th>What Happens</th><th>Worked Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1</strong></td><td>Determine the dealer's sales share of region sales, for each sales group</td><td>Group 1: 1,350 ÷ 30,000 = 4.50%<br>Group 2: 31 ÷ 900 = 3.44%</td></tr>
+            <tr><td><strong>2</strong></td><td>Multiply each group's sales share by that group's weight, then add the results</td><td>(4.50% × 60%) + (3.44% × 40%)<br>= 2.70% + 1.38% = <strong>4.08%</strong></td></tr>
+            <tr><td><strong>3</strong></td><td>Multiply the total weighted sales percent by the volume to allocate</td><td>4.08% × 50 units = <strong>2 vehicles earned</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: The Full Allocation Flow -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Weighted Sales Base · The Full Flow</div>
+      <div class="slide-title fade-in fade-in-1">Every Step, <span>In Order</span></div>
+      <div class="feature-list fade-in fade-in-2">
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>1. Minimum Flow</strong> — brings dealers below the minimum up to the required pipeline level</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>2. Series Quantity</strong> — calculates each dealer's series earnings using the Weighted Sales Base formula</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>3. Minimum Model</strong> — insures dealers who earn the series have the minimum quantity of specified models</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>4. Series Preference Fill</strong> — dealers who earn a vehicle get a specified number assigned; preferences are considered</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>5. Model Quantity</strong> — remaining model earnings are calculated, avoiding duplicate models where possible</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>6. Vehicle Assignment</strong> — available vehicles are matched to model earnings and preferences</div></div>
+        <div class="feature-item"><div class="feature-dot"></div><div class="feature-text"><strong>7. Dealer Allocation</strong> — the final result</div></div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Fractional Unit Carry Forward -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Weighted Sales Base · Fractional Unit Carry Forward</div>
+      <div class="slide-title fade-in fade-in-1">When Earnings <span>Aren't Whole Numbers</span></div>
+      <div class="fade-in fade-in-2" style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Fractional units earned in one allocation carry forward and accumulate until a whole vehicle is earned. In Niche Methodology, only <strong>Part III</strong> (sales-percent-of-region allocation) uses this feature — Parts I and II are unaffected.</div>
+      <table class="data-table">
+        <thead><tr><th>Dealer</th><th>Alloc 1</th><th>Alloc 2</th><th>Alloc 3</th><th>Alloc 4</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Dealer A</strong> (earns 0.33/cycle)</td><td>0.33</td><td>0.66</td><td>0.99 → earns 1</td><td>0.33</td></tr>
+          <tr><td><strong>Dealer B</strong> (earns 1.25/cycle)</td><td>1.25 → earns 1, carries 0.25</td><td>carry 0.50</td><td>carry 0.75</td><td>carry 1.00 → earns 2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Test your understanding of the allocation system. Scan the QR code to begin.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">Allocation System Knowledge</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-allocsys" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-allocsys" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-allocsys" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-allocsys">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-allocsys" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealer code, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-allocsys"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-allocsys">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-allocsys">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-allocsys">
+          <div class="scoreboard" id="scoreboard-list-allocsys">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-allocsys" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-allocsys" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-allocsys" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-allocsys" class="fade-in fade-in-2">
+        <div id="final-scoreboard-allocsys"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">Allocation System Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn Allocation System module certification.</div>
+          <div id="cert-summary-allocsys"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-allocsys"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Check the <strong style="color:var(--text)">Allocation System Dashboard</strong> for detailed scores, regional rankings, and certification progress.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Open AllocationSystem_Dashboard.html</div>
+            <div class="phase-splash-item">Import today's quiz results</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-allocsys -->
+
   </div><!-- /main -->
 
   <!-- BOTTOM BAR -->
@@ -3236,6 +3666,33 @@ const slideNotesPhevtech = [
   'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
 ];
 
+const slideNotesAllocsys = [
+  // Phase 0
+  'This module is for Dealer Principals, GMs, and Sales Managers — the tone here should be more consultative than the customer-facing decks. The goal is genuine fluency with how allocation actually works.',
+  'Spend real time on Weighted Sales Base — it\'s the one most people misunderstand, since it only shows up during launch periods and isn\'t something GMs see day-to-day.',
+  'Use the Travel Rate gut-check as a live exercise — have the room calculate it out loud before you reveal the answer.',
+  'This is the bridge slide — end on the real Kansas City Region update. It makes everything that follows feel immediately relevant instead of theoretical.',
+  // Phase 1
+  'This is the heart of the module. Make sure the room can articulate the Minimum Flow example back in their own words before moving on.',
+  'The key distinction here — Minimum Flow applies before earning, Minimum Model applies after — trips people up constantly. Slow down on this slide.',
+  'Walk through both scenarios slowly. Scenario B (earning only 1 vehicle) is the one that most often gets misunderstood — emphasize that Minimum Model can never exceed what was earned at the series level.',
+  'This is your own region\'s real, current allocation table. Let that land — this isn\'t hypothetical, it\'s already in effect as of Allocation 08-1.',
+  // Phase 2
+  'This phase is calculation-heavy — go slower here than anywhere else in the deck. Consider working the example on a whiteboard alongside the slide.',
+  'Walk through all three steps in order, and don\'t skip showing the math — dealers and GMs trust this content more when they see exactly where the numbers come from.',
+  'This flow chart is worth having the room copy down or photograph — it\'s the single most useful reference artifact in this entire module.',
+  'The Dealer A / Dealer B table is the payoff slide — it shows WHY fractional carry forward exists: so small, consistent earners aren\'t penalized for not hitting a whole number every cycle.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 2 minutes for everyone to complete the quiz on their phones.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
+];
+
 // Build slides index
 // ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
 const DEALER_LOOKUP = {
@@ -3336,6 +3793,7 @@ wireDealerCodeLookup('rav4');
 wireDealerCodeLookup('bz');
 wireDealerCodeLookup('delev');
 wireDealerCodeLookup('phevtech');
+wireDealerCodeLookup('allocsys');
 
 let currentDeck = 'rav4';
 let allSlides = [];
@@ -3344,6 +3802,7 @@ const DEFAULT_QUIZ_URL_RAV4 = 'https://cjosh4toyotas-stack.github.io/sales-coach
 const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/bZ_Woodland_Quiz.html';
 const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/DelEVery_Quiz.html';
 const DEFAULT_QUIZ_URL_PHEVTECH = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PHEVTech_Quiz.html';
+const DEFAULT_QUIZ_URL_ALLOCSYS = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/AllocationSystem_Quiz.html';
 let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 
@@ -3388,6 +3847,14 @@ const DECK_CONFIG = {
     quizTotal: 15,
     passThreshold: 12,
     certLabel: 'PHEV Tech Certified'
+  },
+  allocsys: {
+    brand: 'ALLOCATION SYSTEM',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_ALLOCSYS,
+    phaseNames: ['Allocation Fundamentals', 'Minimum Flow & Model', 'Weighted Sales Base', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'Allocation System Certified'
   }
 };
 
@@ -3405,6 +3872,7 @@ function selectDeck(deckName) {
   document.getElementById('deck-bz').classList.toggle('active', deckName === 'bz');
   document.getElementById('deck-delev').classList.toggle('active', deckName === 'delev');
   document.getElementById('deck-phevtech').classList.toggle('active', deckName === 'phevtech');
+  document.getElementById('deck-allocsys').classList.toggle('active', deckName === 'allocsys');
   allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
   currentSlideIdx = 0;
 
@@ -3465,7 +3933,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech' };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System' };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -3496,7 +3964,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech };
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
