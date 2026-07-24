@@ -305,7 +305,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="quiz-brand">TOYOTA · ALLOCATION SYSTEM</div>
     <div class="quiz-title">Knowledge<br><span class="red">Battle</span></div>
-    <div class="quiz-sub">15 questions · 20 seconds each · Fastest wins</div>
+    <div class="quiz-sub">15 questions · 45 seconds each · Fastest wins</div>
   </div>
 
   <div class="form-card">
@@ -819,7 +819,7 @@ let flowModelScore = 0;
 let weightedBaseScore = 0;
 let answered = false;
 let qtInterval = null;
-let qtSeconds = 20;
+let qtSeconds = 45;
 let startTime = null;
 let userAnswers = [];
 let userData = {};
@@ -948,7 +948,7 @@ function loadQuestion() {
 
 function startQuestionTimer() {
   clearInterval(qtInterval);
-  qtSeconds = 20;
+  qtSeconds = 45;
   updateQTimer();
   qtInterval = setInterval(() => {
     qtSeconds--;
