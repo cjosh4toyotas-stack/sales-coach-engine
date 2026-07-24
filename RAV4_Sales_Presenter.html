@@ -3435,7 +3435,9 @@ function selectDeck(deckName) {
 }
 
 function updateUI() {
+  if (!allSlides.length) return; // no deck loaded yet — nothing to render
   const slide = allSlides[currentSlideIdx];
+  if (!slide) return; // out-of-range index — fail silently instead of crashing
   const phaseIdx = parseInt(slide.dataset.phase);
   const slideInPhase = parseInt(slide.dataset.slide);
   currentPhaseIdx = phaseIdx;
@@ -3503,6 +3505,7 @@ function updateUI() {
 }
 
 function goToSlide(idx) {
+  if (!allSlides.length) return; // no deck loaded yet — ignore navigation attempts
   currentSlideIdx = Math.max(0, Math.min(idx, allSlides.length - 1));
   updateUI();
 }
