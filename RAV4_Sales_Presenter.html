@@ -3934,12 +3934,63 @@ function toggleFullscreen() {
   else document.exitFullscreen();
 }
 
+// ── PAGE VISIT ANALYTICS (anonymous — approximate location + device only) ──
+// Shares the same Google Form as the Dashboard's visit log, once configured.
+// See RAV4_Dashboard.html for the matching VISIT_GFORM_ACTION setup — fill in
+// the same values here so both pages feed one shared log.
+const VISIT_GFORM_ACTION = '';
+const VISIT_GFORM_ENTRIES = {
+  page: '', city: '', region: '', country: '', device: '', browser: '', referrer: '', timestamp: ''
+};
+
+function parseDeviceAndBrowser(ua) {
+  let device = 'Desktop';
+  if (/iPhone/i.test(ua)) device = 'iPhone';
+  else if (/iPad/i.test(ua)) device = 'iPad';
+  else if (/Android/i.test(ua)) device = /Mobile/i.test(ua) ? 'Android Phone' : 'Android Tablet';
+  else if (/Macintosh/i.test(ua)) device = 'Mac';
+  else if (/Windows/i.test(ua)) device = 'Windows PC';
+  else if (/Linux/i.test(ua)) device = 'Linux PC';
+  let browser = 'Unknown';
+  if (/Edg\//i.test(ua)) browser = 'Edge';
+  else if (/Chrome\//i.test(ua) && !/Chromium/i.test(ua)) browser = 'Chrome';
+  else if (/Safari\//i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
+  else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+  return { device, browser };
+}
+
+async function logPageVisit(pageLabel) {
+  try {
+    const { device, browser } = parseDeviceAndBrowser(navigator.userAgent);
+    let city = '', region = '', country = '';
+    try {
+      const geoRes = await fetch('https://ipapi.co/json/');
+      if (geoRes.ok) {
+        const geo = await geoRes.json();
+        city = geo.city || ''; region = geo.region || ''; country = geo.country_name || '';
+      }
+    } catch(e) {}
+    const visit = { page: pageLabel, city, region, country, device, browser, referrer: document.referrer || 'direct', timestamp: new Date().toISOString() };
+    try {
+      const existing = JSON.parse(localStorage.getItem('page_visit_log') || '[]');
+      existing.push(visit);
+      localStorage.setItem('page_visit_log', JSON.stringify(existing.slice(-200)));
+    } catch(e) {}
+    if (VISIT_GFORM_ACTION) {
+      const formData = new FormData();
+      Object.keys(VISIT_GFORM_ENTRIES).forEach(key => { if (VISIT_GFORM_ENTRIES[key]) formData.append(VISIT_GFORM_ENTRIES[key], String(visit[key])); });
+      fetch(VISIT_GFORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
+    }
+  } catch(e) {}
+}
+
 // ── BOOT ──────────────────────────────────────────────────────
 secInit();
 generateQR(quizUrl);
 document.getElementById('session-label-display').textContent = sessionLabel.includes('●') ? sessionLabel : '● ' + sessionLabel;
 updateUI();
 updateTimerDisplay();
+logPageVisit('Presenter');
 </script>
 </body>
 </html>
