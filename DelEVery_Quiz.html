@@ -64,7 +64,6 @@ select.form-input { cursor: pointer; }
 }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover, .autocomplete-item.active { background: var(--red-dim); }
-.autocomplete-item .spin-preview { font-size: 11px; color: var(--text-muted); font-family: monospace; }
 .tms-toggle-field {
   background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 14px; margin-bottom: 20px;
@@ -349,7 +348,8 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="form-field">
       <label class="form-label">SPIN Number</label>
-      <input class="form-input" id="f-spin" type="text" placeholder="Auto-fills for known staff — otherwise enter manually" inputmode="numeric">
+      <input class="form-input" id="f-spin" type="password" placeholder="Auto-fills for known staff — otherwise enter manually" inputmode="numeric" autocomplete="off">
+      <div style="font-size:10px;color:var(--text-muted);margin-top:5px">Hidden for privacy — shown only to you on your results screen</div>
     </div>
     <div class="form-field">
       <label class="form-label">Dealership Name</label>
@@ -430,6 +430,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="result-breakdown">
       <div class="rb-item"><span class="rb-label">Name</span><span class="rb-val" id="res-name">-</span></div>
+      <div class="rb-item"><span class="rb-label">SPIN</span><span class="rb-val" id="res-spin">-</span></div>
       <div class="rb-item"><span class="rb-label">Dealership</span><span class="rb-val" id="res-dealer">-</span></div>
       <div class="rb-item"><span class="rb-label">Region</span><span class="rb-val" id="res-region">-</span></div>
       <div class="rb-item"><span class="rb-label">Deliver It Right</span><span class="rb-val" id="res-deliver">-</span></div>
@@ -499,7 +500,6 @@ function wireNameAutocomplete() {
     list.innerHTML = matches.map((p, i) => `
       <div class="autocomplete-item" data-idx="${i}">
         <span>${p.first} ${p.last}</span>
-        <span class="spin-preview">${p.spin}</span>
       </div>
     `).join('');
     list.classList.add('open');
@@ -1271,6 +1271,7 @@ function showResults() {
   document.getElementById('res-outof').textContent = 'out of ' + activeQuestions.length;
   document.getElementById('res-pct').textContent = pct + '%';
   document.getElementById('res-name').textContent = userData.name;
+  document.getElementById('res-spin').textContent = userData.spin || 'Not provided';
   document.getElementById('res-dealer').textContent = userData.dealer;
   document.getElementById('res-region').textContent = userData.region + (userData.state ? ' · ' + userData.state : '');
   document.getElementById('res-deliver').textContent = deliverScore + ' / 6';
