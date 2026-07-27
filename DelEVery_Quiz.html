@@ -50,6 +50,28 @@ html, body { background: var(--black); color: var(--text); font-family: 'Inter',
 }
 .form-input:focus { border-color: var(--red); }
 select.form-input { cursor: pointer; }
+.autocomplete-wrap { position: relative; }
+.autocomplete-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  margin-top: 4px; max-height: 200px; overflow-y: auto; display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.autocomplete-list.open { display: block; }
+.autocomplete-item {
+  padding: 11px 14px; font-size: 14px; cursor: pointer; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover, .autocomplete-item.active { background: var(--red-dim); }
+.autocomplete-item .spin-preview { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+.tms-toggle-field {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; margin-bottom: 20px;
+}
+.checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; }
+.checkbox-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--red); cursor: pointer; flex-shrink: 0; }
+#dealer-fields-group.tms-hidden { display: none; }
 .locked-field { background: rgba(255,255,255,0.03); color: rgba(240,240,244,0.55); cursor: not-allowed; }
 .locked-field:focus { border-color: var(--border); }
 
@@ -309,13 +331,25 @@ select.form-input { cursor: pointer; }
   </div>
 
   <div class="form-card">
+    <div class="form-field tms-toggle-field">
+      <label class="checkbox-label">
+        <input type="checkbox" id="f-tms-bypass" onchange="toggleTmsBypass()">
+        <span>I'm a TMS employee (not a dealership rep)</span>
+      </label>
+    </div>
+    <div class="form-field autocomplete-wrap">
+      <label class="form-label">Your Name</label>
+      <input class="form-input" id="f-name" type="text" placeholder="Start typing your name…" autocomplete="off">
+      <div class="autocomplete-list" id="name-suggestions"></div>
+    </div>
+    <div id="dealer-fields-group">
     <div class="form-field">
       <label class="form-label">Dealer Code</label>
       <input class="form-input" id="f-dealer-code" type="text" placeholder="e.g. 14055" maxlength="5" autocomplete="off" inputmode="numeric">
     </div>
     <div class="form-field">
-      <label class="form-label">Your Name</label>
-      <input class="form-input" id="f-name" type="text" placeholder="First Last" autocomplete="name">
+      <label class="form-label">SPIN Number</label>
+      <input class="form-input" id="f-spin" type="text" placeholder="Auto-fills for known staff — otherwise enter manually" inputmode="numeric">
     </div>
     <div class="form-field">
       <label class="form-label">Dealership Name</label>
@@ -343,6 +377,7 @@ select.form-input { cursor: pointer; }
       <label class="form-label">State</label>
       <input class="form-input locked-field" id="f-state" type="text" placeholder="Auto-filled from Dealer Code" readonly>
     </div>
+    </div><!-- /dealer-fields-group -->
     <button class="btn-primary" onclick="startQuiz()">START QUIZ →</button>
     <div style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
       Information current as of March 2026 · Toyota Motor Sales
@@ -417,6 +452,84 @@ select.form-input { cursor: pointer; }
 </div>
 
 <script>
+// ── SALES ROSTER (name autocomplete + SPIN autofill) ──────────
+// Excludes Benjamin Schmidt per request.
+const SALES_ROSTER = [
+  { first: 'Ethan', last: 'Aronson', spin: '104100609627' },
+  { first: 'Braden', last: 'Burr', spin: '104100614756' },
+  { first: 'Kaden', last: 'Darby', spin: '104100453484' },
+  { first: 'Curtis', last: 'Dillon', spin: '104100409414' },
+  { first: 'Nicole', last: 'Elledge', spin: '104100645966' },
+  { first: 'Noah', last: 'Fried', spin: '104100662904' },
+  { first: 'Mario', last: 'Garcia', spin: '104100543199' },
+  { first: 'Tyler', last: 'Hemphill', spin: '104100372330' },
+  { first: 'Josh', last: 'Hicks', spin: '104083046615' },
+  { first: 'Michael', last: 'Huber', spin: '104838435634' },
+  { first: 'Damon', last: 'Koppes', spin: '104100368298' },
+  { first: 'Derrius', last: 'Loveless', spin: '104883321945' },
+  { first: 'Jack', last: 'Osland', spin: '104100494886' },
+  { first: 'Hunter', last: 'Robertson', spin: '104100665140' },
+  { first: 'Hunter', last: 'Schmitt', spin: '104100228566' },
+  { first: 'Shawn', last: 'Still', spin: '104100368462' },
+  { first: 'Theron', last: 'Stuelke', spin: '104100543377' },
+  { first: 'Kyle', last: 'Triplett', spin: '104100409731' },
+  { first: 'Joseph', last: 'Vogt', spin: '104100579616' },
+  { first: 'Michael', last: 'Wells', spin: '104100643902' },
+  { first: 'Aaron', last: 'Woodward', spin: '104100543113' }
+];
+
+function toggleTmsBypass() {
+  const isTms = document.getElementById('f-tms-bypass').checked;
+  document.getElementById('dealer-fields-group').classList.toggle('tms-hidden', isTms);
+}
+
+function wireNameAutocomplete() {
+  const input = document.getElementById('f-name');
+  const spinInput = document.getElementById('f-spin');
+  const list = document.getElementById('name-suggestions');
+  if (!input || !list) return;
+
+  function closeList() { list.classList.remove('open'); list.innerHTML = ''; }
+
+  function renderMatches(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) { closeList(); return; }
+    const matches = SALES_ROSTER.filter(p => (p.first + ' ' + p.last).toLowerCase().includes(q)).slice(0, 6);
+    if (!matches.length) { closeList(); return; }
+    list.innerHTML = matches.map((p, i) => `
+      <div class="autocomplete-item" data-idx="${i}">
+        <span>${p.first} ${p.last}</span>
+        <span class="spin-preview">${p.spin}</span>
+      </div>
+    `).join('');
+    list.classList.add('open');
+    Array.from(list.children).forEach((el, i) => {
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        selectMatch(matches[i]);
+      });
+    });
+  }
+
+  function selectMatch(person) {
+    input.value = person.first + ' ' + person.last;
+    spinInput.value = person.spin;
+    closeList();
+  }
+
+  function tryExactMatch() {
+    const q = input.value.trim().toLowerCase();
+    const exact = SALES_ROSTER.find(p => (p.first + ' ' + p.last).toLowerCase() === q);
+    if (exact) { spinInput.value = exact.spin; }
+    else { spinInput.value = ''; }
+  }
+
+  input.addEventListener('input', () => { renderMatches(input.value); }); // doesn't clear SPIN — respects manual entry for anyone not in the loaded roster
+  input.addEventListener('focus', () => { if (input.value) renderMatches(input.value); });
+  input.addEventListener('blur', () => { setTimeout(() => { closeList(); tryExactMatch(); }, 120); });
+}
+document.addEventListener('DOMContentLoaded', wireNameAutocomplete);
+
 // ── SECURITY SYSTEM ──────────────────────────────────────────
 const _SEC_KEY='delev_sec_v1';
 const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
@@ -952,14 +1065,27 @@ function clearActiveSession(){
 
 function startQuiz() {
   const name = document.getElementById('f-name').value.trim();
-  const dealerCode = document.getElementById('f-dealer-code').value.trim();
-  const dealer = document.getElementById('f-dealer').value.trim();
-  const region = document.getElementById('f-region').value;
-  const state = document.getElementById('f-state').value.trim().toUpperCase();
+  const isTms = document.getElementById('f-tms-bypass').checked;
+  let spin, dealerCode, dealer, region, state;
+  if (isTms) {
+    spin = document.getElementById('f-spin').value.trim();
+    dealerCode = 'TMS';
+    dealer = 'Toyota Motor Sales';
+    region = 'TMS / Corporate';
+    state = '';
+  } else {
+    spin = document.getElementById('f-spin').value.trim();
+    dealerCode = document.getElementById('f-dealer-code').value.trim();
+    dealer = document.getElementById('f-dealer').value.trim();
+    region = document.getElementById('f-region').value;
+    state = document.getElementById('f-state').value.trim().toUpperCase();
+  }
   if (!name) { alert('Please enter your name.'); return; }
-  if (!dealerCode) { alert('Please enter your dealer code.'); return; }
-  if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
-  userData = { name, dealerCode, dealer, region, state, startTime: Date.now() };
+  if (!isTms) {
+    if (!dealerCode) { alert('Please enter your dealer code.'); return; }
+    if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
+  }
+  userData = { name, spin, dealerCode, dealer, region, state, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
   activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
@@ -1164,6 +1290,7 @@ function showResults() {
   const missedQuestions = userAnswers.filter(a => !a.correct).map(a => activeQuestions[a.q].q);
   const exportData = {
     name: userData.name,
+    spin: userData.spin,
     dealerCode: userData.dealerCode,
     dealerName: userData.dealer,
     region: userData.region,
