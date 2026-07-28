@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>RAV4 2026 · Knowledge Battle</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -178,6 +178,82 @@ select.form-input { cursor: pointer; }
 .recap-mastery { color: var(--green); font-weight: 600; }
 
 /* ── SECURITY SYSTEM ─────────────────────────────────────── */
+/* ── PRE-QUIZ WARNING SCREEN ─────────────────────────────── */
+#anon-warning-overlay {
+  position: fixed; inset: 0; z-index: 9000; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; overflow: hidden; padding: 24px;
+}
+#matrix-rain-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0.55; }
+.anon-scanlines {
+  position: absolute; inset: -50% 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(235,10,30,0.05) 0px, transparent 1px, transparent 3px);
+  animation: anonScanMove 9s linear infinite;
+}
+@keyframes anonScanMove { 0% { transform: translateY(0); } 100% { transform: translateY(100px); } }
+.anon-content {
+  max-width: 620px; text-align: center; position: relative; z-index: 1;
+  background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
+  animation: anonContentShake 0.22s infinite;
+}
+@keyframes anonContentShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1px, 1px); }
+  20% { transform: translate(1px, -1px); }
+  30% { transform: translate(-1px, -1px); }
+  40% { transform: translate(1px, 1px); }
+  50% { transform: translate(-2px, 0); }
+  60% { transform: translate(2px, 0); }
+  70% { transform: translate(0, -2px); }
+  80% { transform: translate(0, 2px); }
+  90% { transform: translate(-1px, 1px); }
+}
+.anon-glitch-title {
+  font-size: 44px; font-weight: 700; color: #fff; letter-spacing: 6px;
+  position: relative; margin-bottom: 10px; display: inline-block;
+  animation: anonTitleShake 0.15s infinite;
+}
+@keyframes anonTitleShake {
+  0%, 100% { transform: translate(0, 0) skewX(0deg); }
+  20% { transform: translate(-2px, 1px) skewX(1deg); }
+  40% { transform: translate(2px, -1px) skewX(-1deg); }
+  60% { transform: translate(-1px, -2px) skewX(0.5deg); }
+  80% { transform: translate(1px, 2px) skewX(-0.5deg); }
+}
+.anon-glitch-title::before, .anon-glitch-title::after {
+  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; color: #fff;
+}
+.anon-glitch-title::before { text-shadow: -3px 0 #EB0A1E; clip-path: inset(0 0 100% 0); animation: anonGlitch1 1.4s infinite linear; }
+.anon-glitch-title::after { text-shadow: 3px 0 #00e5a0; clip-path: inset(0 0 100% 0); animation: anonGlitch2 1.1s infinite linear; }
+@keyframes anonGlitch1 {
+  0%,60%,100% { clip-path: inset(0 0 100% 0); transform: translate(0,0); }
+  61% { clip-path: inset(15% 0 65% 0); transform: translate(-4px,0); }
+  64% { clip-path: inset(55% 0 15% 0); transform: translate(4px,0); }
+  67% { clip-path: inset(5% 0 80% 0); transform: translate(-3px,0); }
+  70% { clip-path: inset(35% 0 40% 0); transform: translate(3px,0); }
+  73% { clip-path: inset(0 0 100% 0); }
+}
+@keyframes anonGlitch2 {
+  0%,55%,100% { clip-path: inset(0 0 100% 0); transform: translate(0,0); }
+  56% { clip-path: inset(65% 0 5% 0); transform: translate(4px,0); }
+  59% { clip-path: inset(25% 0 55% 0); transform: translate(-4px,0); }
+  62% { clip-path: inset(78% 0 8% 0); transform: translate(3px,0); }
+  65% { clip-path: inset(10% 0 70% 0); transform: translate(-3px,0); }
+  68% { clip-path: inset(0 0 100% 0); }
+}
+.anon-topic-line { font-size: 11px; color: var(--red); letter-spacing: 3px; margin-bottom: 26px; opacity: .9; text-transform: uppercase; }
+.anon-body { font-size: 14.5px; color: #d4d4d8; line-height: 1.85; text-align: left; white-space: pre-wrap; min-height: 240px; }
+.anon-cursor { display: inline-block; color: var(--red); animation: anonBlink 0.8s step-end infinite; font-size: 14.5px; }
+@keyframes anonBlink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+.anon-proceed-btn {
+  margin-top: 26px; padding: 13px 34px; background: transparent; border: 1px solid var(--red); color: var(--red);
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px; letter-spacing: 2.5px; cursor: pointer;
+  transition: all .2s; opacity: 0;
+}
+.anon-proceed-btn.shown { animation: anonFadeIn .6s ease forwards; }
+.anon-proceed-btn:hover { background: var(--red); color: #fff; box-shadow: 0 0 24px rgba(235,10,30,0.5); }
+@keyframes anonFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
 #sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
 #sec-overlay.fade-out{opacity:0;pointer-events:none}
 #pin-entry{display:flex;flex-direction:column;align-items:center}
@@ -297,6 +373,18 @@ select.form-input { cursor: pointer; }
     <div class="sec-hint-txt">Authorized Personnel Only · Toyota Motor Sales</div>
   </div>
 </div>
+
+<div id="anon-warning-overlay">
+  <canvas id="matrix-rain-canvas"></canvas>
+  <div class="anon-scanlines"></div>
+  <div class="anon-content">
+    <div class="anon-glitch-title" data-text="ATTENTION">ATTENTION</div>
+    <div class="anon-topic-line">// SUBJECT: RAV4 PRODUCT KNOWLEDGE</div>
+    <div class="anon-body" id="anon-typed-text"></div><span class="anon-cursor" id="anon-cursor">█</span>
+    <div><button class="anon-proceed-btn" id="anon-proceed-btn" onclick="dismissAnonWarning()">PROCEED WHEN READY →</button></div>
+  </div>
+</div>
+
 <div id="admin-fab" onclick="openAdminPanel()" title="Master Admin">⚙</div>
 <div id="admin-modal">
   <div class="admin-panel">
@@ -476,6 +564,12 @@ const SALES_ROSTER = [
   { first: 'Michael', last: 'Wells', spin: '104100643902' },
   { first: 'Aaron', last: 'Woodward', spin: '104100543113' }
 ];
+
+function maskSpin(spin) {
+  if (!spin) return 'Not provided';
+  if (spin.length <= 4) return spin;
+  return 'X'.repeat(spin.length - 4) + spin.slice(-4);
+}
 
 function toggleTmsBypass() {
   const isTms = document.getElementById('f-tms-bypass').checked;
@@ -702,6 +796,97 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='Escape')secClear();
 });
 secInit();
+
+// ── PRE-QUIZ WARNING SCREEN ──────────────────────────────────
+const ANON_WARNING_TEXT = `You are about to enter a timed knowledge assessment.
+
+This is not a formality.
+
+What follows will test the fabric of your understanding — not for the sake of a score, but because somewhere, soon, a real guest will be standing in front of you, asking a real question, expecting a real answer.
+
+There is no pause button in that moment. There is only what you know.
+
+15 questions. 20 seconds each. One outcome that matters more than any of them: the guest walks away better off for having met you.`;
+
+function typeAnonWarning() {
+  const el = document.getElementById('anon-typed-text');
+  const cursor = document.getElementById('anon-cursor');
+  const btn = document.getElementById('anon-proceed-btn');
+  let i = 0;
+  function step() {
+    if (i <= ANON_WARNING_TEXT.length) {
+      el.textContent = ANON_WARNING_TEXT.slice(0, i);
+      i++;
+      setTimeout(step, 14 + Math.random() * 18);
+    } else {
+      cursor.style.display = 'none';
+      btn.classList.add('shown');
+    }
+  }
+  step();
+}
+
+let matrixRainTimer = null;
+function startMatrixRain() {
+  const canvas = document.getElementById('matrix-rain-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const glyphs = 'アイウエオカキクケコサシスセソ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const fontSize = 16;
+  let columns = Math.floor(canvas.width / fontSize);
+  let drops = new Array(columns).fill(1);
+
+  function draw() {
+    if (columns !== Math.floor(canvas.width / fontSize)) {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = new Array(columns).fill(1);
+    }
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; // low alpha creates the classic fading-trail look
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#00e5a0';
+    ctx.font = fontSize + 'px monospace';
+    for (let i = 0; i < drops.length; i++) {
+      const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+      ctx.fillText(glyph, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  matrixRainTimer = setInterval(draw, 45);
+}
+
+function stopMatrixRain() {
+  if (matrixRainTimer) { clearInterval(matrixRainTimer); matrixRainTimer = null; }
+}
+
+function dismissAnonWarning() {
+  const overlay = document.getElementById('anon-warning-overlay');
+  overlay.style.transition = 'opacity .4s';
+  overlay.style.opacity = '0';
+  stopMatrixRain();
+  setTimeout(() => { overlay.style.display = 'none'; }, 400);
+}
+
+// Don't start the dramatic reveal until any PIN gate has actually been cleared.
+function maybeStartAnonWarning() {
+  const secOverlay = document.getElementById('sec-overlay');
+  if (secOverlay.style.display === 'none') {
+    typeAnonWarning();
+    startMatrixRain();
+  } else {
+    setTimeout(maybeStartAnonWarning, 200);
+  }
+}
+maybeStartAnonWarning();
+
 
 // ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
 const DEALER_LOOKUP = {
@@ -1208,7 +1393,7 @@ function showResults() {
   document.getElementById('res-outof').textContent = 'out of ' + activeQuestions.length;
   document.getElementById('res-pct').textContent = pct + '%';
   document.getElementById('res-name').textContent = userData.name;
-  document.getElementById('res-spin').textContent = userData.spin || 'Not provided';
+  document.getElementById('res-spin').textContent = maskSpin(userData.spin);
   document.getElementById('res-dealer').textContent = userData.dealer;
   document.getElementById('res-region').textContent = userData.region + (userData.state ? ' · ' + userData.state : '');
   document.getElementById('res-prod').textContent = prodScore + ' / 10';
