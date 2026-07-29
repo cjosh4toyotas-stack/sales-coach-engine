@@ -656,6 +656,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="deck-select-name">PHEV Tech</div>
       <div class="deck-select-sub">Meeting in a Box</div>
     </button>
+    <button class="deck-select-btn" onclick="selectDeck('ptmastery')">
+      <div class="deck-select-name">Powertrain Mastery</div>
+      <div class="deck-select-sub">Next-Level Component & Tundra Application</div>
+    </button>
+    <button class="deck-select-btn" onclick="selectDeck('chrmastery')">
+      <div class="deck-select-name">C-HR Mastery</div>
+      <div class="deck-select-sub">2026 BEV — Range, Charging & Equipment</div>
+    </button>
   </div>
   <div class="splash-section-label">Administrative</div>
   <div class="deck-select-row">
@@ -3499,6 +3507,946 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     </div><!-- /deck-allocsys -->
 
+    <div id="deck-ptmastery" class="deck">
+
+    <!-- ═══ PHASE 0: POWERTRAIN COMPONENT MASTERY ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Powertrain<br><span class="red">Component Mastery</span></div>
+          <div class="phase-splash-subtitle">Go past "which powertrains exist" into the component-level details that separate a confident answer from a guess — especially the one misconception that trips up even experienced reps.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">The HV Battery Trap</div>
+            <div class="phase-splash-item">Component Comparison</div>
+            <div class="phase-splash-item">AWD vs 4WD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: The HV Battery Trap -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Powertrain Component Mastery · The Core Misconception</div>
+      <div class="slide-title fade-in fade-in-1">HV Battery Doesn't Mean <span>Plug Required</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">The Trap</div>
+          <div class="card-title">"It has a battery, so it must plug in"</div>
+          <div class="card-body">This is the single most common mistake reps make when explaining powertrains to customers — and it's wrong more often than it's right.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-label" style="color:var(--green)">The Reality</div>
+          <div class="card-title">Three powertrains have an HV battery with zero plug</div>
+          <div class="card-body">Hybrid, Hybrid MAX, and i-FORCE MAX all include an HV battery — none of them ever require plugging in.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-label">Fuel & Plug Reference</div>
+          <div class="card-body">Hybrid: gas only, no plug &nbsp;·&nbsp; Plug-in Hybrid: gas, plug optional &nbsp;·&nbsp; Battery EV: plug required &nbsp;·&nbsp; Hybrid MAX: gas only, no plug &nbsp;·&nbsp; i-FORCE MAX: gas only, no plug &nbsp;·&nbsp; Fuel Cell: hydrogen only</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: Component Comparison Table -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Powertrain Component Mastery · Side by Side</div>
+      <div class="slide-title fade-in fade-in-1">What's Actually <span>Under the Hood</span></div>
+      <div class="fade-in fade-in-2" style="overflow-x:auto;margin-top:12px">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Powertrain</th>
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Components</th>
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Drivetrain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:600">Hybrid</td><td style="padding:10px 12px">Efficient gas engine, e-CVT, HV battery, motor generators</td><td style="padding:10px 12px">AWD available</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:600">Plug-in Hybrid</td><td style="padding:10px 12px">Same as Hybrid + on-board charger</td><td style="padding:10px 12px">AWD available</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:600">Battery EV</td><td style="padding:10px 12px">HV battery, e-axle(s), on-board charger</td><td style="padding:10px 12px">AWD available</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;font-weight:600">Hybrid MAX</td><td style="padding:10px 12px">Turbo gas engine + motor generator, conventional transmission, HV battery</td><td style="padding:10px 12px">AWD available</td></tr>
+            <tr><td style="padding:10px 12px;font-weight:600">i-FORCE MAX</td><td style="padding:10px 12px">Turbo gas engine + motor generator, conventional transmission, HV battery</td><td style="padding:10px 12px">4WD available</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:14px;font-size:12px;color:var(--text-muted)">Fuel Cell (hydrogen only) is excluded here — it doesn't share this component family with the other five.</div>
+    </div>
+
+    <!-- Slide 0-3: AWD vs 4WD -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Powertrain Component Mastery · Terminology That Matters</div>
+      <div class="slide-title fade-in fade-in-1">AWD and 4WD Are <span>Not Interchangeable</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🚙</div>
+          <div class="card-label">Car-Based Powertrains</div>
+          <div class="card-title">AWD</div>
+          <div class="card-body">Hybrid, Plug-in Hybrid, Battery EV, and Hybrid MAX all pair with AWD — Hybrid MAX specifically uses a rear e-axle motor generator to deliver it.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛻</div>
+          <div class="card-label">Truck-Based Powertrain</div>
+          <div class="card-title">4WD</div>
+          <div class="card-body">i-FORCE MAX is the outlier — built for truck use, it pairs with a conventional 4WD system instead, if equipped.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">💡</div>
+          <div class="card-label" style="color:var(--green)">Why This Matters</div>
+          <div class="card-body">Getting this right with a customer signals real product fluency — mixing up AWD and 4WD in front of a truck buyer is an easy way to lose credibility fast.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: TUNDRA POWERTRAIN APPLICATION ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Tundra<br><span class="red">Powertrain Application</span></div>
+          <div class="phase-splash-subtitle">Tundra isn't separate from the powertrain framework — i-FORCE and i-FORCE MAX are two of the six powertrains, applied to one specific truck. See the real connection.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Torque Specs</div>
+            <div class="phase-splash-item">Towing Technology</div>
+            <div class="phase-splash-item">TNGA-F Platform</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: i-FORCE vs i-FORCE MAX -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Tundra Powertrain Application · Torque Specs</div>
+      <div class="slide-title fade-in fade-in-1">i-FORCE vs <span>i-FORCE MAX</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-label">Standard Powertrain</div>
+          <div class="card-title">i-FORCE</div>
+          <div class="card-body">406 lb-ft of torque standard, up to 479 lb-ft on select grades. Gas only — no plug, ever.</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-icon">🔥</div>
+          <div class="card-label" style="color:var(--red)">MAX Powertrain</div>
+          <div class="card-title">i-FORCE MAX</div>
+          <div class="card-body">583 lb-ft of low-end torque. Still gas only, still zero plug — the HV battery works entirely through the gas engine and regenerative braking.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <div class="card-label">Sales Application</div>
+          <div class="card-body">"Serious torque, no plugging in" is a direct answer for towing-focused customers — i-FORCE MAX delivers both without contradiction.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Towing Technology -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Tundra Powertrain Application · Confidence for Towers</div>
+      <div class="slide-title fade-in fade-in-1">Towing Tech, <span>Matched to the Need</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">↩️</div>
+          <div class="card-label">First-Time Towers</div>
+          <div class="card-title">Trailer Backup Guide + Straight Path Assist</div>
+          <div class="card-body">On-screen guidance and small steering corrections make reversing into tight spots far less intimidating.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👁️</div>
+          <div class="card-label">Daily Haulers</div>
+          <div class="card-title">Power-Extend Mirrors + Blind Spot Monitor</div>
+          <div class="card-body">Mirrors extend for visibility around wide trailers; BSM adjusts its detection zone for trailer width and traffic.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🛞</div>
+          <div class="card-label">Off-Road / Job Sites</div>
+          <div class="card-title">Electronically Controlled Locking Rear Differential</div>
+          <div class="card-body">Improves traction on loose ground — job sites, gravel, or off-road terrain.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎚️</div>
+          <div class="card-label">Stability</div>
+          <div class="card-title">Trailer-Sway Control + Integrated Trailer Brake Controller</div>
+          <div class="card-body">Keeps the trailer tracking straight and braking predictably, independent of driver skill level.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: TNGA-F Platform -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Tundra Powertrain Application · The Foundation</div>
+      <div class="slide-title fade-in fade-in-1">Why the <span>Frame</span> Matters</div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🏗️</div>
+          <div class="card-label">TNGA-F Platform</div>
+          <div class="card-title">High-Strength Boxed Frame</div>
+          <div class="card-body">Built with laser blank welding — reducing weight while reinforcing exactly the areas that matter most for towing and hauling confidence.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <div class="card-label">Real-World Recognition</div>
+          <div class="card-title">IIHS Top Safety Pick · KBB Best Resale Value</div>
+          <div class="card-body">Independent recognition backs up the engineering story with numbers customers can verify themselves.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Common Misstatement to Avoid</div>
+          <div class="card-body">Laser blank welding isn't about faster production or a lower price — it's specifically about weight reduction and targeted reinforcement. Frame it around durability, not cost.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: CUSTOMER SCENARIO MASTERY ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Customer<br><span class="red">Scenario Mastery</span></div>
+          <div class="phase-splash-subtitle">Real understanding shows up in application, not recall. Practice matching what a customer actually says to the right powertrain — without relying on memorized scripts.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Listen for Signals</div>
+            <div class="phase-splash-item">Avoid Common Traps</div>
+            <div class="phase-splash-item">Practice Scenario</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Listening Framework -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Customer Scenario Mastery · The Framework</div>
+      <div class="slide-title fade-in fade-in-1">What to <span>Listen For</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <div class="card-label">Charging Access</div>
+          <div class="card-title">"I don't have anywhere to plug in"</div>
+          <div class="card-body">Points toward Hybrid or Hybrid MAX — never Battery EV, and Plug-in Hybrid only if they'd genuinely use the optional charging.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏋️</div>
+          <div class="card-label">Towing Needs</div>
+          <div class="card-title">"I need serious pulling power"</div>
+          <div class="card-body">Points toward i-FORCE MAX on Tundra — high torque, no plug required, built specifically for hauling.</div>
+        </div>
+      </div>
+      <div class="cards-grid cards-2 fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🌿</div>
+          <div class="card-label">Efficiency Priority</div>
+          <div class="card-title">"I want better mileage, nothing complicated"</div>
+          <div class="card-body">Points toward standard Hybrid — efficiency-focused, balanced performance, zero charging dependency.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛣️</div>
+          <div class="card-label">Comfort Priority</div>
+          <div class="card-title">"Smooth, quiet, no towing needs"</div>
+          <div class="card-body">Points away from performance-focused powertrains entirely — efficiency and balance matter more here than torque figures.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: Common Traps -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Customer Scenario Mastery · Where Reps Slip Up</div>
+      <div class="slide-title fade-in fade-in-1">Traps to <span>Avoid</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Trap</div>
+          <div class="card-title">Assuming HV battery = plug-in</div>
+          <div class="card-body">Costs credibility instantly with a customer who's already done some research online.</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Trap</div>
+          <div class="card-title">Mixing up AWD and 4WD terminology</div>
+          <div class="card-body">Especially risky with truck buyers who already know the difference from experience.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-label" style="color:var(--green)">The Fix</div>
+          <div class="card-body">Match the recommendation to what the customer actually said — not to the powertrain you personally find most impressive to talk about.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Practice Scenario -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Customer Scenario Mastery · Try It Live</div>
+      <div class="slide-title fade-in fade-in-1">Group <span>Practice</span></div>
+      <div class="fade-in fade-in-2" style="margin-top:12px">
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <div class="card-label">Facilitator Prompt</div>
+          <div class="card-title">"A contractor needs daily hauling power but says plugging in overnight isn't realistic at most job sites."</div>
+          <div class="card-body">Call on the group: which powertrain, which Tundra trim consideration, and why — in under 30 seconds, no notes.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">✅</div>
+          <div class="card-label" style="color:var(--green)">Listen For</div>
+          <div class="card-body">i-FORCE MAX — 583 lb-ft of torque, gas-only, zero plug dependency. Directly answers both stated priorities at once.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Test genuine understanding of powertrain components and Tundra application. Scan the QR code to begin.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">Powertrain & Tundra Knowledge</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-ptmastery" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-ptmastery" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-ptmastery" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-ptmastery">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-ptmastery" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealer code, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-ptmastery"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-ptmastery">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-ptmastery">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-ptmastery">
+          <div class="scoreboard" id="scoreboard-list-ptmastery">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-ptmastery" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-ptmastery" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-ptmastery" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-ptmastery" class="fade-in fade-in-2">
+        <div id="final-scoreboard-ptmastery"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">Powertrain Mastery Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn Powertrain Mastery module certification.</div>
+          <div id="cert-summary-ptmastery"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-ptmastery"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. The HV battery trap and the AWD/4WD distinction are the two things worth reinforcing most before your next customer conversation.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Review missed questions</div>
+            <div class="phase-splash-item">Practice the scenario framework</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-ptmastery -->
+
+    <div id="deck-chrmastery" class="deck">
+
+    <!-- ═══ PHASE 0: RANGE, BATTERY & CHARGING MASTERY ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Range, Battery &<br><span class="red">Charging Mastery</span></div>
+          <div class="phase-splash-subtitle">The 2026 C-HR is Toyota's third BEV in the US lineup. Get past the headline numbers into the details that hold up under a well-researched customer's questions.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">SE vs XSE Range</div>
+            <div class="phase-splash-item">DC Fast Charging</div>
+            <div class="phase-splash-item">Battery Health</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: SE vs XSE Range -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Range, Battery & Charging Mastery · The Counterintuitive Detail</div>
+      <div class="slide-title fade-in fade-in-1">Same Battery, <span>Different Range</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">SE Grade</div>
+          <div class="card-title">287 miles EPA-estimated</div>
+          <div class="card-body">18-inch wheels. Same 74.7-kWh battery as XSE — the range difference isn't about battery size.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">XSE Grade</div>
+          <div class="card-title">273 miles EPA-estimated</div>
+          <div class="card-body">20-inch wheels. The larger wheels add rotational mass and rolling resistance — that's the real reason for the gap.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Common Assumption to Avoid</div>
+          <div class="card-body">Don't let a customer (or yourself) assume "higher trim = better range." Here, the more feature-rich XSE actually has the lower EPA range number.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: DC Fast Charging + Preconditioning -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Range, Battery & Charging Mastery · Speed & Preparation</div>
+      <div class="slide-title fade-in fade-in-1">30 Minutes, <span>With a Catch</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-label">DC Fast Charging</div>
+          <div class="card-title">10% → 80% in ~30 min</div>
+          <div class="card-body">Under ideal conditions — this is a 10-80% window, not a 0-100% figure. Charging naturally slows above 80% to protect the battery.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌡️</div>
+          <div class="card-label">Battery Preconditioning</div>
+          <div class="card-title">Manual or Automatic</div>
+          <div class="card-body">Manual works anytime through settings. Automatic requires the nav destination set to a fast charger — and an active Drive Connect trial or subscription.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-label">Also Standard</div>
+          <div class="card-body">11-kW onboard AC charger, standard dual-voltage charging cable (Level 1 and 2), and Plug & Charge capability (requires an active Remote Connect trial or subscription).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-3: SOC vs Battery Health + Stanford Study -->
+    <div class="slide" data-phase="0" data-slide="3">
+      <div class="slide-eyebrow">Range, Battery & Charging Mastery · What Actually Extends Battery Life</div>
+      <div class="slide-title fade-in fade-in-1">Two Different <span>Measurements</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="card-label">State of Charge</div>
+          <div class="card-title">Visible in the MID</div>
+          <div class="card-body">Current energy level — checked constantly, so it's front and center during daily driving.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-label">Battery Health</div>
+          <div class="card-title">In the Vehicle menu</div>
+          <div class="card-body">Long-term capacity information — checked rarely, so it's tucked deeper in the multimedia system. Same as a smartphone.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">🎓</div>
+          <div class="card-label" style="color:var(--green)">The Stanford Finding</div>
+          <div class="card-body">Varied driving conditions — stop-and-go traffic, regenerative braking — led to batteries lasting up to 40% longer than constant, steady-speed driving. The counterintuitive part: steady highway cruising is the harder condition on the battery, not city traffic.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: CONNECTOR & CHARGING INFRASTRUCTURE ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Connector &<br><span class="red">Charging Infrastructure</span></div>
+          <div class="phase-splash-subtitle">2026 marks a real transition point for Toyota's charging hardware. Know exactly what changed, what didn't, and why a customer's existing BEV might look different from a brand-new C-HR.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">MY25 → MY26 Transition</div>
+            <div class="phase-splash-item">NACS Explained</div>
+            <div class="phase-splash-item">Public Charging</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: MY25 to MY26 Transition -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Connector & Charging Infrastructure · The Transition Year</div>
+      <div class="slide-title fade-in fade-in-1">2026: The Year the <span>Port Changed</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔙</div>
+          <div class="card-label">MY25 and Earlier</div>
+          <div class="card-title">J1772 + CCS1</div>
+          <div class="card-body">J1772 for Level 1/2 AC charging on BEVs and PHEVs. CCS1 added for DC Fast Charging on BEVs.</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-icon">🆕</div>
+          <div class="card-label" style="color:var(--red)">MY26 and Forward</div>
+          <div class="card-title">NACS Standard</div>
+          <div class="card-body">One port handles every charging level. First-generation bZ4X customers get a NACS adapter to bridge the gap.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <div class="card-label">Backward Compatibility, Included</div>
+          <div class="card-body">Even though NACS is native, C-HR ships standard with SAE J1772 and CCS adapters — so it can still connect to charging infrastructure that hasn't transitioned yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: NACS Explained -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Connector & Charging Infrastructure · What NACS Actually Unlocks</div>
+      <div class="slide-title fade-in fade-in-1">North American <span>Charging System</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-label">Network Access</div>
+          <div class="card-title">Tesla Supercharger Network</div>
+          <div class="card-body">Expanded access to thousands of DC fast-charging stations nationwide — an addition, not a replacement for AC charging.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔋</div>
+          <div class="card-label">Still Supports</div>
+          <div class="card-title">Level 1 & Level 2 AC Charging</div>
+          <div class="card-body">NACS handles the full range — home charging through public DC fast charging — through one connector.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Not a Toyota-Exclusive Network</div>
+          <div class="card-body">NACS is not proprietary to Toyota, and it doesn't cap charging speed below what J1772-based infrastructure offered — it's a genuine expansion of where a customer can charge.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Dual-Voltage Cable + Public Charging Challenges -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Connector & Charging Infrastructure · Practical Realities</div>
+      <div class="slide-title fade-in fade-in-1">Flexibility, and <span>What to Say When Things Go Wrong</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <div class="card-label">Dual-Voltage Charging Cable</div>
+          <div class="card-title">Standard Equipment</div>
+          <div class="card-body">Interchangeable prongs switch between a 120V and 240V outlet — one cable for home, work, or travel.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚧</div>
+          <div class="card-label">Public Charger Unavailable?</div>
+          <div class="card-title">Two Resources, Not One</div>
+          <div class="card-body">Charging company apps often show wait times. The Toyota app can help find an alternate location — but only with an active Remote Connect trial or subscription.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <div class="card-label">Set the Expectation Early</div>
+          <div class="card-body">Public charging stations can be temporarily unavailable for maintenance or customer backups — this is normal, not a defect. Knowing the resources ahead of time keeps a customer calm when it happens.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: CAPABILITY, EQUIPMENT & COMPETITIVE POSITIONING ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 10 Minutes</div>
+          <div class="phase-splash-title">Capability, Equipment &<br><span class="red">Competitive Positioning</span></div>
+          <div class="phase-splash-subtitle">Power figures, real dimensions, and the precise line between what's standard on every C-HR versus what's genuinely XSE-exclusive.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Power & Size</div>
+            <div class="phase-splash-item">SE vs XSE, Precisely</div>
+            <div class="phase-splash-item">Colors & Positioning</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Power Split & Dimensions -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Capability, Equipment & Competitive Positioning · Numbers That Hold Up</div>
+      <div class="slide-title fade-in fade-in-1">Precise Power, <span>Precise Size</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-label">Dual Motor Output</div>
+          <div class="card-title">167 kW front / 87 kW rear</div>
+          <div class="card-body">An uneven split — the front motor contributes meaningfully more — combining for 338 hp total and standard AWD. 0-60 in 4.9 seconds.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📏</div>
+          <div class="card-label">Exterior Dimensions</div>
+          <div class="card-title">177.9" L · 73.6" W · 108.3" WB</div>
+          <div class="card-body">Genuinely useful when a customer wants a direct size comparison to a vehicle they already know.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-label">Cargo</div>
+          <div class="card-body">25.3 cubic feet behind the rear seats — practical utility packed into the coupe-like profile, built on the e-TNGA platform.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: SE Standard vs XSE Exclusive -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Capability, Equipment & Competitive Positioning · Draw the Line Precisely</div>
+      <div class="slide-title fade-in fade-in-1">Standard on Every Grade, <span>vs. XSE-Only</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-label" style="color:var(--green)">Standard on SE (Every Grade)</div>
+          <div class="card-title">TSS 3.0 · BSM w/ RCTA · Downhill Assist</div>
+          <div class="card-body">Along with Front/Rear Parking Assist w/ Auto Braking, Safe Exit Alert, and the Star Safety System — the full safety foundation, not an XSE upsell.</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-icon">⭐</div>
+          <div class="card-label" style="color:var(--red)">XSE-Exclusive Additions</div>
+          <div class="card-title">Lane Change Assist · Traffic Jam Assist</div>
+          <div class="card-body">Plus Driver Memory Seat, Panoramic View Monitor, and 20" wheels. These genuinely require moving up a grade.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">Subscription Trap</div>
+          <div class="card-body">Traffic Jam Assist requires an active Drive Connect subscription. Digital Key requires Remote Connect instead. Two different services — don't tell a customer one covers both.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Colors & Competitive Positioning -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Capability, Equipment & Competitive Positioning · Rounding It Out</div>
+      <div class="slide-title fade-in fade-in-1">Colors, and the <span>Honest Comparison</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🎨</div>
+          <div class="card-label">Color Nuance</div>
+          <div class="card-title">Wind Chill Pearl = Premium Option</div>
+          <div class="card-body">Unlike Overcast, Tandoori, Cement, and Midnight Black Metallic. Two-tone roof combos exist only with Tandoori, Cement, or Wind Chill Pearl — not Overcast.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚙</div>
+          <div class="card-label">Cross-Shop Against RAV4 Hybrid</div>
+          <div class="card-title">AWD Standard on Both</div>
+          <div class="card-body">The accurate answer is simple and doesn't need embellishing — no customer is sacrificing AWD by choosing the smaller C-HR.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">💡</div>
+          <div class="card-label" style="color:var(--green)">The Bigger Lesson</div>
+          <div class="card-body">An accurate, appropriately modest answer builds more trust than an oversold one. Resist the urge to claim C-HR's AWD is "better" than RAV4 Hybrid's — the honest answer is that both offer it standard.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Test genuine understanding of range, charging, connector infrastructure, and equipment precision. Scan the QR code to begin.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">2026 C-HR BEV Knowledge</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-chrmastery" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-chrmastery" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-chrmastery" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-chrmastery">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-chrmastery" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealer code, then race through 15 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-chrmastery"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-chrmastery">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-chrmastery">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-chrmastery">
+          <div class="scoreboard" id="scoreboard-list-chrmastery">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-chrmastery" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-chrmastery" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-chrmastery" class="modal-input" style="width:80px" type="number" min="0" max="15" placeholder="Score /15">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-chrmastery" class="fade-in fade-in-2">
+        <div id="final-scoreboard-chrmastery"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">C-HR Mastery Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn C-HR Mastery module certification.</div>
+          <div id="cert-summary-chrmastery"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-chrmastery"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. The SE/XSE range distinction and the Drive Connect vs. Remote Connect subscription split are the two things worth reinforcing most before your next customer conversation.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Review missed questions</div>
+            <div class="phase-splash-item">Practice precise SE/XSE distinctions</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-chrmastery -->
+
+
+
   </div><!-- /main -->
 
   <!-- BOTTOM BAR -->
@@ -3693,6 +4641,60 @@ const slideNotesAllocsys = [
   'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
 ];
 
+const slideNotesPtmastery = [
+  // Phase 0
+  'This module goes deeper than the standard Powertrain Pursuit and Spotlight activities — the goal is genuine component-level fluency, not just being able to name the six powertrains.',
+  'This is the single most important slide in the whole deck. Slow down here — the HV battery misconception is the one mistake that undermines credibility with an already-researched customer fastest.',
+  'Let the room read the table for a moment before you talk through it. This is a good moment to ask "which of these surprises you?" rather than just presenting it.',
+  'The AWD vs 4WD distinction is subtle but real — don\'t rush past it. This is exactly the kind of detail that separates a confident rep from one who\'s guessing.',
+  // Phase 1
+  'This bridges the powertrain framework to something tangible — Tundra. Make the connection explicit: these aren\'t new concepts, just the same six powertrains applied to a truck.',
+  'The torque numbers matter, but the real point is the second sentence on i-FORCE MAX — no plug, ever, regardless of torque output. Reinforce that connection back to Phase 0.',
+  'Go through each card as a distinct customer type — first-time tower, daily hauler, off-road user, safety-focused buyer. Ask the room which one they encounter most often.',
+  'The common-misstatement card at the bottom is worth emphasizing out loud — reps sometimes improvise an explanation for "laser blank welding" that isn\'t accurate. Give them the real answer here.',
+  // Phase 2
+  'This phase is where recall becomes application — the goal is for reps to practice matching, not just memorize facts in isolation.',
+  'Read each customer quote out loud in character if you\'re comfortable — it makes the listening exercise feel more real than just reading bullet points.',
+  'These are the two traps most likely to show up in the Knowledge Battle questions coming up next — call that out directly to build anticipation.',
+  'Run this as a genuine live exercise — call on someone cold, give them 30 seconds, and only reveal the "listen for" answer after they\'ve tried.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 3 minutes for everyone to complete the quiz on their phones — these questions run a bit longer than the standard product quizzes.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. The HV battery trap and the AWD/4WD distinction are worth a quick refresher before anyone\'s next customer conversation.'
+];
+
+const slideNotesChrmastery = [
+  // Phase 0
+  'C-HR is Toyota\'s third BEV in the US lineup and a genuinely new nameplate reintroduction — set that context before diving into specifics.',
+  'This is a great "did you know" moment — pause and ask the room to guess why XSE has lower range than SE before revealing the wheel/rolling-resistance answer.',
+  'Emphasize the 10-80% framing specifically — this is the detail most likely to get oversimplified into "30 minutes to charge" without the caveat.',
+  'The Stanford finding surprises people — steady highway driving being harder on the battery than stop-and-go traffic runs against most people\'s intuition. Let that land.',
+  // Phase 1
+  'Frame this as a genuine transition year — MY26 is when NACS became standard, which is directly relevant to any customer trading in an older Toyota BEV.',
+  'The Tesla Supercharger Network access is the headline, but the "not proprietary, not a speed cap" framing matters just as much for setting accurate expectations.',
+  'The included J1772/CCS adapters are an easy thing to forget to mention — reinforce that C-HR isn\'t narrowing charging options, it\'s expanding them while staying backward compatible.',
+  'Public charging availability issues are normal, not a product flaw — help the room internalize that framing so they can reassure a customer calmly in the moment.',
+  // Phase 2
+  'This phase covers power, size, and the precise standard-vs-exclusive equipment line — the section reps most often get vague on, so hold the room\'s attention here.',
+  'The 167kW/87kW split and the exact dimensions are the kind of precise numbers that build real credibility with a detail-oriented customer — encourage the room to actually memorize these, not just recognize them.',
+  'This slide is the crux of the whole module — the SE-standard vs. XSE-exclusive line, plus the Drive Connect vs. Remote Connect subscription distinction. Slow down here.',
+  'Close on the RAV4 Hybrid comparison — the point isn\'t that C-HR is better, it\'s giving an honest, confidence-building answer without overselling.',
+  // Phase 3
+  'It\'s time to compete! Make it fun — announce the winner gets recognition on the scoreboard.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code. Give 3 minutes for everyone to complete the quiz on their phones — these are deliberately harder questions than the standard product quizzes.',
+  'As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Phase 4
+  'Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.',
+  'Recognize the winner, announce certification thresholds, and preview the next session topic.',
+  'Session complete. The SE/XSE range distinction and the subscription-service split are worth a quick refresher before anyone\'s next customer conversation.'
+];
+
 // Build slides index
 // ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
 const DEALER_LOOKUP = {
@@ -3803,6 +4805,8 @@ const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-e
 const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/DelEVery_Quiz.html';
 const DEFAULT_QUIZ_URL_PHEVTECH = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PHEVTech_Quiz.html';
 const DEFAULT_QUIZ_URL_ALLOCSYS = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/AllocationSystem_Quiz.html';
+const DEFAULT_QUIZ_URL_PTMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PowertrainMastery_Quiz.html';
+const DEFAULT_QUIZ_URL_CHRMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/CHR_Quiz.html';
 let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 
@@ -3855,6 +4859,22 @@ const DECK_CONFIG = {
     quizTotal: 15,
     passThreshold: 12,
     certLabel: 'Allocation System Certified'
+  },
+  ptmastery: {
+    brand: 'POWERTRAIN MASTERY',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_PTMASTERY,
+    phaseNames: ['Component Mastery', 'Tundra Application', 'Scenario Mastery', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'Powertrain Mastery Certified'
+  },
+  chrmastery: {
+    brand: 'C-HR MASTERY',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_CHRMASTERY,
+    phaseNames: ['Range & Charging', 'Connector Infrastructure', 'Capability & Positioning', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 15,
+    passThreshold: 12,
+    certLabel: 'C-HR Mastery Certified'
   }
 };
 
@@ -3873,6 +4893,8 @@ function selectDeck(deckName) {
   document.getElementById('deck-delev').classList.toggle('active', deckName === 'delev');
   document.getElementById('deck-phevtech').classList.toggle('active', deckName === 'phevtech');
   document.getElementById('deck-allocsys').classList.toggle('active', deckName === 'allocsys');
+  document.getElementById('deck-ptmastery').classList.toggle('active', deckName === 'ptmastery');
+  document.getElementById('deck-chrmastery').classList.toggle('active', deckName === 'chrmastery');
   allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
   currentSlideIdx = 0;
 
@@ -3933,7 +4955,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System' };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR Mastery' };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -3964,7 +4986,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys };
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, chrmastery: slideNotesChrmastery };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
