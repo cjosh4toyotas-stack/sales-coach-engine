@@ -661,7 +661,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="deck-select-sub">Next-Level Component & Tundra Application</div>
     </button>
     <button class="deck-select-btn" onclick="selectDeck('chrmastery')">
-      <div class="deck-select-name">C-HR Mastery</div>
+      <div class="deck-select-name">C-HR</div>
       <div class="deck-select-sub">2026 BEV — Range, Charging & Equipment</div>
     </button>
   </div>
@@ -4410,8 +4410,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
         <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
           <div class="card-icon">🎯</div>
           <div class="card-label" style="color:var(--green)">Certification Progress</div>
-          <div class="card-title">C-HR Mastery Certified</div>
-          <div class="card-body">Score 12/15 or higher to earn C-HR Mastery module certification.</div>
+          <div class="card-title">C-HR Certified</div>
+          <div class="card-body">Score 12/15 or higher to earn C-HR module certification.</div>
           <div id="cert-summary-chrmastery"></div>
           <div class="card-click-hint">Click to see the full certified list →</div>
         </div>
@@ -4869,12 +4869,12 @@ const DECK_CONFIG = {
     certLabel: 'Powertrain Mastery Certified'
   },
   chrmastery: {
-    brand: 'C-HR MASTERY',
+    brand: 'C-HR',
     defaultQuizUrl: DEFAULT_QUIZ_URL_CHRMASTERY,
     phaseNames: ['Range & Charging', 'Connector Infrastructure', 'Capability & Positioning', 'Knowledge Battle', 'Scoreboard'],
     quizTotal: 15,
     passThreshold: 12,
-    certLabel: 'C-HR Mastery Certified'
+    certLabel: 'C-HR Certified'
   }
 };
 
@@ -4955,7 +4955,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR Mastery' };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR' };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
