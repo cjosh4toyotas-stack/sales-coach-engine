@@ -403,7 +403,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="quiz-brand">TOYOTA · WHAT'S NEW 2027</div>
     <div class="quiz-title">Knowledge<br><span class="red">Battle</span></div>
-    <div class="quiz-sub">25 questions · 45 seconds each · Fastest wins</div>
+    <div class="quiz-sub">30 questions · 45 seconds each · Fastest wins</div>
   </div>
 
   <div class="form-card">
@@ -493,7 +493,7 @@ select.form-input { cursor: pointer; }
 
   <div class="result-card">
     <div class="result-score-big" id="res-score">0</div>
-    <div class="result-out-of" id="res-outof">out of 25</div>
+    <div class="result-out-of" id="res-outof">out of 30</div>
     <div class="result-pct" id="res-pct">0%</div>
     <div class="cert-badge" id="res-cert">
       <span id="res-cert-icon">●</span>
@@ -787,7 +787,7 @@ What follows will test the fabric of your understanding — not for the sake of 
 
 There is no pause button in that moment. There is only what you know.
 
-25 questions. 45 seconds each. One outcome that matters more than any of them: the guest walks away better off for having met you.`;
+30 questions. 45 seconds each. One outcome that matters more than any of them: the guest walks away better off for having met you.`;
 
 function typeAnonWarning() {
   const el = document.getElementById('anon-typed-text');
@@ -1173,10 +1173,10 @@ const DEFAULT_QUESTIONS = [
   },
   {
     cat: 'PRODUCT',
-    q: 'For 2027, which shock does the TRD Pro grade receive on Tundra and Sequoia?',
-    opts: ['FOX enhanced Q3S (Sequoia: QS3)', 'Old Man Emu Nitrocharger', 'FOX 3.0 external reservoir', 'Bilstein 6112/5160'],
-    ans: 0,
-    exp: 'TRD Pro gets newly designed, vehicle-tuned FOX enhanced Q3S shocks (labeled QS3 in the Sequoia release). Old Man Emu belongs to Trailhunter — the two packages use different suspensions, which is a common mix-up.'
+    q: 'For 2027, Tundra and Sequoia come standard with which safety system?',
+    opts: ['Toyota Safety Sense 2.5', 'Toyota Safety Sense 2.5+', 'Toyota Safety Sense 3.0', 'Toyota Safety Sense 4.0'],
+    ans: 3,
+    exp: 'Both the 2027 Tundra and Sequoia come standard with Toyota Safety Sense 4.0 (TSS 4.0), the newest generation. 2.5, 2.5+, and 3.0 are all real earlier TSS versions — the correct answer is specifically 4.0 for MY27.'
   },
   {
     cat: 'PRODUCT',
@@ -1254,6 +1254,41 @@ const DEFAULT_QUESTIONS = [
     opts: ['A plug-in hybrid that must be charged', 'A conventional hybrid — no plugging in required', 'A full battery-electric drivetrain', 'A mild-hybrid 48V system'],
     ans: 1,
     exp: 'The standard 2027 Prius is a conventional hybrid that electrifies the drive without needing to plug in. The separate Prius Prime is the plug-in; don\'t confuse the two.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'A guest wants a 2027 Highlander BEV that seats seven. Between the XLE and the Limited, which accurately reflects the seating configurations?',
+    opts: ['The Limited seats seven with a standard second-row bench; the XLE uses captain\'s chairs', 'The XLE offers second-row bench seating for up to seven; the Limited comes standard with second-row captain\'s chairs', 'Both grades seat seven standard; only the third row differs', 'Only the Limited can seat seven, via an available bench-seat option'],
+    ans: 1,
+    exp: 'The XLE is the grade that offers the second-row bench for up to seven; the pricier Limited comes standard with second-row captain\'s chairs. Stepping up to Limited actually removes a seat — the opposite of what most reps assume, which is exactly the trap.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'Which advanced driver-assist features are exclusive to the 2027 Highlander BEV Limited and not offered on the XLE?',
+    opts: ['Head-Up Display, Traffic Jam Assist, and Panoramic View Monitor', 'Blind Spot Monitor, Front Cross-Traffic Alert, and Lane Change Assist', 'Toyota Safety Sense 4.0, Advanced Park, and Lane Change Assist', 'Dual Qi wireless charging, Head-Up Display, and Traffic Jam Assist'],
+    ans: 0,
+    exp: 'Head-Up Display, Traffic Jam Assist, and Panoramic View Monitor are all Limited-only. The traps are precise: Blind Spot Monitor, TSS 4.0, and Dual Qi wireless charging are each standard on BOTH grades — so any option including them can\'t be Limited-exclusive.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'How do the standard wheels differ between the two 2027 Highlander BEV grades?',
+    opts: ['The XLE comes standard on 19-inch wheels; 22-inch wheels are available on the Limited', 'The XLE is standard on 18-inch; the Limited on 20-inch', 'Both grades share standard 20-inch wheels; only the finish differs', 'The Limited is standard on 22-inch; the XLE on 21-inch'],
+    ans: 0,
+    exp: 'The XLE is standard on 19-inch wheels, and 22-inch wheels are the Limited\'s available upgrade. The distractors use adjacent, plausible sizes (18/20/21) common on other Toyotas but incorrect for the Highlander BEV.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'The 2027 Highlander BEV\'s advanced power-export capability includes which two functions?',
+    opts: ['Vehicle-to-Load (V2L) and Vehicle-to-Home (V2H)', 'Vehicle-to-Load (V2L) and Vehicle-to-Grid (V2G)', 'Vehicle-to-Home (V2H) and Vehicle-to-Vehicle (V2V)', 'A standard 2.4kW household inverter only'],
+    ans: 0,
+    exp: 'The Highlander BEV introduces advanced Vehicle-to-Load (V2L) and Vehicle-to-Home (V2H) capability. V2G and V2V are real industry terms the Highlander doesn\'t claim, and the 2.4kW inverter belongs to the Tundra/Sequoia — a cross-lineup trap.'
+  },
+  {
+    cat: 'PRODUCT',
+    q: 'The 2027 Highlander BEV produces 323 lb-ft of torque from its standard dual-motor AWD system. How is that torque split between the front and rear motors?',
+    opts: ['198 lb-ft front / 125 lb-ft rear', '125 lb-ft front / 198 lb-ft rear', '161.5 lb-ft front / 161.5 lb-ft rear (evenly split)', '125 lb-ft front / 125 lb-ft rear, with the balance from regen'],
+    ans: 0,
+    exp: 'The front motor delivers 198 lb-ft and the rear 125 lb-ft, summing to the 323 lb-ft combined figure. Option B reverses them, C assumes an even split, and D invents a regen contribution — all plausible-sounding but wrong.'
   },
 
   // ── CONNECTED SERVICES ── (2027 changes only)
@@ -1613,7 +1648,7 @@ function showResults() {
   showScreen('screen-results');
   const totalTime = Math.round((Date.now() - startTime) / 1000);
   const pct = Math.round(score / activeQuestions.length * 100);
-  const pass = score >= 20;
+  const pass = score >= 24;
 
   document.getElementById('res-score').textContent = score;
   document.getElementById('res-outof').textContent = 'out of ' + activeQuestions.length;
@@ -1644,7 +1679,7 @@ function showResults() {
 
   const certEl = document.getElementById('res-cert');
   document.getElementById('res-cert-icon').textContent = pass ? '🏆' : '📚';
-  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — 2027 What\'s New Module' : 'Score 20+ to Certify';
+  document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — 2027 What\'s New Module' : 'Score 24+ to Certify';
   certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
 
   // Export JSON
