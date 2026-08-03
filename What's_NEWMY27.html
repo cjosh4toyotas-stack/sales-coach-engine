@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's New for 2027 — Sales Coach Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  @media print {
+    body { background: white !important; }
+    .no-print { display: none !important; }
+    .page { box-shadow: none !important; margin: 0 auto 0 !important; border-radius: 0 !important; max-width: 100% !important; page-break-after: always; }
+    @page { margin: 0.45in; size: letter; }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f0f0f2;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+    padding: 40px 16px 80px;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .toolbar { position: fixed; top: 16px; right: 16px; z-index: 100; display: flex; gap: 8px; }
+  .tb-btn {
+    padding: 10px 18px; background: #EB0A1E; color: white;
+    border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(235,10,30,0.3); transition: opacity .2s;
+  }
+  .tb-btn.ghost { background: #18181e; }
+  .tb-btn:hover { opacity: .85; }
+
+  .page {
+    background: white;
+    max-width: 860px;
+    margin: 0 auto 28px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+
+  /* ── HEADER ── */
+  .header { background: #060608; padding: 30px 40px 26px; position: relative; overflow: hidden; }
+  .header::after {
+    content: ''; position: absolute; right: -40px; top: -40px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(235,10,30,0.16) 0%, transparent 70%);
+  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; gap: 16px; }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-brand svg { width: 44px; height: 30px; flex-shrink: 0; }
+  .brand-name { font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 4px; color: white; }
+  .brand-sub { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.35); text-transform: uppercase; margin-top: 2px; }
+  .header-badge { padding: 5px 14px; border-radius: 20px; background: rgba(235,10,30,0.15); border: 1px solid rgba(235,10,30,0.4); font-size: 10px; letter-spacing: 2px; color: #EB0A1E; font-weight: 600; text-transform: uppercase; white-space: nowrap; }
+  .header-title { font-family: 'Rajdhani', sans-serif; font-size: 44px; font-weight: 700; color: white; line-height: 1.04; margin-bottom: 8px; position: relative; z-index: 1; }
+  .header-title span { color: #EB0A1E; }
+  .header-sub { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: .5px; position: relative; z-index: 1; line-height: 1.5; }
+  .red-line { width: 48px; height: 3px; background: #EB0A1E; border-radius: 2px; margin: 15px 0; box-shadow: 0 0 12px rgba(235,10,30,0.5); }
+
+  /* ── BODY ── */
+  .body { padding: 32px 40px 40px; }
+
+  .section { margin-bottom: 30px; }
+  .section:last-child { margin-bottom: 0; }
+  .section-label {
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: #EB0A1E; font-weight: 700; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #ececef; }
+  .section-title { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: #111; line-height: 1.15; margin-bottom: 6px; }
+  .section-intro { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 16px; }
+
+  /* change cards */
+  .change {
+    border: 1px solid #ececef; border-left: 3px solid #EB0A1E;
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: #fafafb;
+  }
+  .change-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .change-title { font-weight: 600; font-size: 15px; color: #111; }
+  .change-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; color: #EB0A1E; white-space: nowrap; }
+  .change-body { font-size: 13px; color: #555; line-height: 1.6; margin-top: 5px; }
+  .change-body strong { color: #111; font-weight: 600; }
+
+  /* before/after inline pill */
+  .ba { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; margin-top: 7px; flex-wrap: wrap; }
+  .ba .from { color: #999; text-decoration: line-through; }
+  .ba .arrow { color: #EB0A1E; font-weight: 700; }
+  .ba .to { color: #111; font-weight: 600; }
+
+  /* two-col grade grid */
+  .grade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grade-card { border: 1px solid #ececef; border-radius: 10px; padding: 13px 15px; background: #fff; }
+  .grade-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 16px; color: #111; margin-bottom: 4px; }
+  .grade-name .pkg { color: #EB0A1E; }
+  .grade-list { font-size: 12px; color: #555; line-height: 1.65; }
+
+  /* callout */
+  .callout { background: #060608; border-radius: 12px; padding: 18px 20px; margin-top: 4px; }
+  .callout-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #EB0A1E; font-weight: 700; margin-bottom: 8px; }
+  .callout-text { font-size: 13.5px; color: rgba(255,255,255,0.82); line-height: 1.65; }
+  .callout-text strong { color: #fff; }
+
+  /* trap table */
+  .trap { border: 1px solid #ececef; border-radius: 10px; overflow: hidden; margin-top: 6px; }
+  .trap-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #ececef; }
+  .trap-row:last-child { border-bottom: none; }
+  .trap-row.head { background: #f6f6f8; font-weight: 700; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #888; }
+  .trap-cell { padding: 11px 14px; font-size: 13px; color: #444; line-height: 1.5; border-right: 1px solid #ececef; }
+  .trap-cell:last-child { border-right: none; }
+  .trap-cell .correct { color: #0a8f5f; font-weight: 600; }
+  .trap-cell .wrong { color: #c0392b; }
+
+  ul.tight { list-style: none; }
+  ul.tight li { font-size: 13.5px; color: #444; line-height: 1.7; padding-left: 18px; position: relative; }
+  ul.tight li::before { content: '▸'; position: absolute; left: 0; color: #EB0A1E; font-size: 11px; top: 2px; }
+
+  .footer-note { text-align: center; font-size: 11px; color: #aaa; margin-top: 24px; letter-spacing: .5px; }
+
+  @media (max-width: 640px) {
+    .header-title { font-size: 34px; }
+    .header { padding: 24px 22px 22px; }
+    .body { padding: 26px 22px 32px; }
+    .grade-grid, .trap-row { grid-template-columns: 1fr; }
+    .trap-cell { border-right: none; border-bottom: 1px solid #ececef; }
+    .trap-row .trap-cell:last-child { border-bottom: none; }
+    .header-badge { font-size: 9px; padding: 4px 10px; }
+    .toolbar { position: static; justify-content: center; margin-bottom: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <button class="tb-btn" onclick="window.print()">⤓ Print / PDF</button>
+</div>
+
+<!-- ══════════ PAGE 1 — WHAT'S NEW OVERVIEW ══════════ -->
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 80 54" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="27" rx="38" ry="24" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="20" rx="14" ry="9" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="33" rx="24" ry="14" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">KC Region · Sales Coach</div>
+        </div>
+      </div>
+      <div class="header-badge">Model Year 2027</div>
+    </div>
+    <div class="header-title">What's <span>New</span> for 2027</div>
+    <div class="red-line"></div>
+    <div class="header-sub">Tundra · Sequoia · Prius · Connected Services — the changes that matter on the floor. This brief covers only what's <em>different</em> from 2026.</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <div class="section-label">How to use this brief</div>
+      <div class="section-intro">Every item here is a <strong>2027 change</strong>. Nothing on these pages is carryover. The most common misses aren't obscure facts — they're the ones where two things sound almost identical: a trial that grew versus one that shrank, a color that lives on one model but not another, a suspension that belongs to one package and not the other. Read the "Easy to Miss" callouts twice. Then take the Knowledge Battle.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">The four fronts</div>
+      <div class="grade-grid">
+        <div class="grade-card">
+          <div class="grade-name">🛻 Tundra</div>
+          <div class="grade-list">New Trailhunter package, refreshed front-end, TRD Pro Honeycomb + FOX Q3S shocks, latest 24MM multimedia, TSS 4.0.</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-name">🏔 Sequoia</div>
+          <div class="grade-list">Sharper exterior, new Trailhunter package, TRD Pro QS3 shocks + Honeycomb, standard 14" screen, TSS 4.0.</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-name">⚡ Prius</div>
+          <div class="grade-list">New "Inked" color, standard dual-zone climate, and two Connected Services trial changes moving in opposite directions.</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-name">📡 Connected Services</div>
+          <div class="grade-list">Latest 24MM on AT&T 5G, standard Drive Recorder Dash Cam, Enhanced Digital Key in the native wallet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="callout">
+        <div class="callout-label">⚠ The #1 trap this cycle</div>
+        <div class="callout-text"><strong>Trailhunter and TRD Pro are not the same truck.</strong> Trailhunter = SR5-based overlanding, <strong>Old Man Emu</strong> suspension, <strong>bronze</strong> wheels, Michelin LTX Trail tires. TRD Pro = the hardcore off-roader, <strong>FOX Q3S</strong> shocks, <strong>Honeycomb</strong> paint, <strong>red</strong> tow hooks. Swap those details and the customer notices.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 2 — CONNECTED SERVICES ══════════ -->
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 80 54" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="27" rx="38" ry="24" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="20" rx="14" ry="9" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="33" rx="24" ry="14" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">KC Region · Sales Coach</div>
+        </div>
+      </div>
+      <div class="header-badge">01 · Connected</div>
+    </div>
+    <div class="header-title">Connected <span>Services</span></div>
+    <div class="red-line"></div>
+    <div class="header-sub">What changed in trials, multimedia, and Digital Key for 2027.</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <div class="section-label">Prius trial changes — opposite directions</div>
+      <div class="section-intro">These two move in <strong>different directions</strong>. That's the whole trap. Get the service and the direction right.</div>
+
+      <div class="change">
+        <div class="change-head"><span class="change-title">Remote Connect trial</span><span class="change-tag">Longer</span></div>
+        <div class="ba"><span class="from">1 year</span><span class="arrow">→</span><span class="to">5 years</span></div>
+        <div class="change-body">Remote Connect (remote start, lock/unlock, and the service that powers <strong>Digital Key</strong>) now carries a much longer trial on the 2027 Prius.</div>
+      </div>
+
+      <div class="change">
+        <div class="change-head"><span class="change-title">Drive Connect trial (applicable)</span><span class="change-tag">Shorter</span></div>
+        <div class="ba"><span class="from">1 year</span><span class="arrow">→</span><span class="to">3 months</span></div>
+        <div class="change-body">Drive Connect (cloud navigation, Intelligent Assistant, Destination Assist) shrinks the other way. If a rep remembers "the trial changed" but not which way, this is where they miss.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Latest Toyota Audio Multimedia (24MM)</div>
+      <div class="section-intro">The newest 24MM system arrives on the 2027 Tundra and Sequoia.</div>
+      <ul class="tight">
+        <li>Runs on <strong>AT&T 5G</strong> connectivity (5G, not LTE).</li>
+        <li>Standardizes a <strong>14-inch screen</strong> on both trucks.</li>
+        <li>Smartphone-like home screen with customizable widgets.</li>
+        <li>Faster "<strong>Hey Toyota</strong>" embedded Voice Assistant responses.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">New: standard Drive Recorder Dash Cam</div>
+      <div class="change">
+        <div class="change-head"><span class="change-title">Built-in Drive Recorder</span><span class="change-tag">New · Standard</span></div>
+        <div class="change-body">Launches with the latest 24MM. Uses the exterior cameras (front/rear, or Panoramic View Monitor if equipped) to capture <strong>20-second clips</strong> of both manual and triggered events.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Enhanced Digital Key</div>
+      <ul class="tight">
+        <li>Now managed in the device's <strong>native digital wallet</strong> — Apple, Google, or Samsung — not just the Toyota app.</li>
+        <li>Share and manage access with up to <strong>five additional drivers</strong> from the wallet.</li>
+        <li>Uses <strong>NFC</strong> to keep working for a period of time <strong>even if the phone battery is dead</strong>.</li>
+        <li>Requires an active <strong>Remote Connect</strong> trial/subscription (5G dependent) — not Drive Connect.</li>
+      </ul>
+      <div class="callout" style="margin-top:14px;">
+        <div class="callout-label">⚠ Easy to miss</div>
+        <div class="callout-text">Digital Key rides on <strong>Remote Connect</strong>. Drive Connect is navigation and assist. When a customer asks "what subscription keeps my phone-as-key working," the answer is Remote Connect — which is exactly why its trial grew to five years on Prius.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 3 — TUNDRA ══════════ -->
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 80 54" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="27" rx="38" ry="24" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="20" rx="14" ry="9" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="33" rx="24" ry="14" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">KC Region · Sales Coach</div>
+        </div>
+      </div>
+      <div class="header-badge">02 · Tundra</div>
+    </div>
+    <div class="header-title">2027 <span>Tundra</span></div>
+    <div class="red-line"></div>
+    <div class="header-sub">Rugged updated styling, advanced tech, and the all-new Trailhunter package.</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <div class="section-label">New Trailhunter package</div>
+      <div class="section-intro">Factory-built overlanding, based on the <strong>SR5</strong> grade and positioned at a more accessible price point.</div>
+      <ul class="tight">
+        <li><strong>Michelin LTX Trail 265/70R18</strong> tires</li>
+        <li><strong>Old Man Emu</strong> upgraded suspension</li>
+        <li>Front recovery hooks + additional underbody protection</li>
+        <li>Multi-Terrain Select, Crawl Control, locking rear differential</li>
+        <li>Unique <strong>bronze-colored wheels</strong> and exclusive badges</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Purpose-built TRD Pro upgrades</div>
+      <ul class="tight">
+        <li>Newly designed, Tundra-tuned <strong>FOX enhanced Q3S</strong> shocks (adjustable)</li>
+        <li>New <strong>Honeycomb</strong> exterior color</li>
+        <li>Standard <strong>red tow hooks</strong></li>
+        <li>Available <strong>ISO-dynamic seats</strong> for off-road comfort</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Also new for 2027</div>
+      <ul class="tight">
+        <li>Sharper, more purposeful front-end (CALTY design, hexagonal grille theme)</li>
+        <li>Latest 24MM multimedia — standard 14" screen, AT&T 5G, Drive Recorder</li>
+        <li>Standard <strong>Toyota Safety Sense 4.0</strong></li>
+        <li>Upgraded grille-mounted LED light bar; available RIGID fog lights</li>
+        <li><strong>2.4kW inverter</strong> on i-FORCE MAX grades</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Grade lineup</div>
+      <div class="grade-card">
+        <div class="grade-list">SR · SR5 · Limited · Platinum · 1794 Edition · TRD Pro · Capstone — plus the available <span style="color:#EB0A1E;font-weight:600;">Trailhunter</span> package. Gas twin-turbo V6 or available hybrid i-FORCE MAX. <em>Full specs and pricing announced fall 2026.</em></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="callout">
+        <div class="callout-label">⚠ Easy to miss — Trailhunter vs TRD Pro</div>
+        <div class="trap" style="margin-top:12px;">
+          <div class="trap-row head"><div class="trap-cell">Trailhunter</div><div class="trap-cell">TRD Pro</div></div>
+          <div class="trap-row"><div class="trap-cell"><span class="correct">Old Man Emu</span> suspension</div><div class="trap-cell"><span class="correct">FOX Q3S</span> shocks</div></div>
+          <div class="trap-row"><div class="trap-cell"><span class="correct">Bronze</span> wheels</div><div class="trap-cell"><span class="correct">Red</span> tow hooks + Honeycomb</div></div>
+          <div class="trap-row"><div class="trap-cell">Based on <span class="correct">SR5</span></div><div class="trap-cell">Off-road flagship</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 4 — SEQUOIA ══════════ -->
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 80 54" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="27" rx="38" ry="24" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="20" rx="14" ry="9" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="33" rx="24" ry="14" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">KC Region · Sales Coach</div>
+        </div>
+      </div>
+      <div class="header-badge">03 · Sequoia</div>
+    </div>
+    <div class="header-title">2027 <span>Sequoia</span></div>
+    <div class="red-line"></div>
+    <div class="header-sub">Elevated style, advanced technology, and the newly available Trailhunter package.</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <div class="section-label">New Trailhunter package</div>
+      <div class="section-intro">Same overlanding recipe as Tundra — <strong>SR5</strong>-based, factory-built trail capability.</div>
+      <ul class="tight">
+        <li><strong>Michelin LTX Trail 265/70R18</strong> tires</li>
+        <li><strong>Old Man Emu</strong> upgraded suspension</li>
+        <li>Front recovery hooks + additional underbody protection</li>
+        <li>Multi-Terrain Select, Crawl Control, locking rear differential</li>
+        <li>Unique <strong>bronze-colored wheels</strong> and exclusive badges</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Purpose-built TRD Pro upgrades</div>
+      <ul class="tight">
+        <li>Sequoia-tuned <strong>FOX enhanced QS3</strong> shocks (adjustable)</li>
+        <li>New <strong>Honeycomb</strong> exterior color</li>
+        <li>Standard <strong>red tow hooks</strong></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Also new for 2027</div>
+      <ul class="tight">
+        <li>Sharper, more assertive exterior; reimagined chrome on select grades</li>
+        <li>Latest 24MM multimedia — <strong>standard 14" screen</strong>, AT&T 5G, Drive Recorder</li>
+        <li>Standard <strong>Toyota Safety Sense 4.0</strong></li>
+        <li>Brighter grille-mounted LED light bar; available RIGID fog lights</li>
+        <li><strong>2.4kW inverter</strong> for camping, tailgating, and travel</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Grade lineup</div>
+      <div class="grade-card">
+        <div class="grade-list">SR5 · Limited · Platinum · 1794 Edition · TRD Pro · Capstone. <em>Full details, specs, and pricing announced fall 2026.</em></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="callout">
+        <div class="callout-label">⚠ Easy to miss — the shock label</div>
+        <div class="callout-text">Sequoia's TRD Pro shocks are labeled <strong>QS3</strong>; Tundra's are labeled <strong>Q3S</strong>. Same FOX family, vehicle-specific tuning — the letters just flip. Both are correct for their truck, so match the label to the model.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 5 — PRIUS + TRD PRO COLORS ══════════ -->
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-brand">
+        <svg viewBox="0 0 80 54" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="27" rx="38" ry="24" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="20" rx="14" ry="9" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+          <ellipse cx="40" cy="33" rx="24" ry="14" fill="none" stroke="#EB0A1E" stroke-width="3"/>
+        </svg>
+        <div>
+          <div class="brand-name">TOYOTA</div>
+          <div class="brand-sub">KC Region · Sales Coach</div>
+        </div>
+      </div>
+      <div class="header-badge">04 · Prius + Colors</div>
+    </div>
+    <div class="header-title">2027 <span>Prius</span></div>
+    <div class="red-line"></div>
+    <div class="header-sub">The quintessential hybrid — efficiency, tech, and futuristic design that electrifies without plugging in.</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <div class="section-label">What's new on Prius</div>
+      <div class="change">
+        <div class="change-head"><span class="change-title">New "Inked" exterior color</span><span class="change-tag">Replaces</span></div>
+        <div class="ba"><span class="from">Midnight Black Metallic</span><span class="arrow">→</span><span class="to">Inked</span></div>
+        <div class="change-body">"Inked" is the new color and it <strong>replaces</strong> Midnight Black Metallic — it doesn't sit alongside it.</div>
+      </div>
+      <div class="change">
+        <div class="change-head"><span class="change-title">Dual-zone automatic climate control</span><span class="change-tag">Now standard</span></div>
+        <div class="change-body">Becomes <strong>standard</strong> for 2027.</div>
+      </div>
+      <div class="change">
+        <div class="change-head"><span class="change-title">Connected Services trials</span><span class="change-tag">Changed</span></div>
+        <div class="change-body">Remote Connect <strong>1 yr → 5 yrs</strong>; applicable Drive Connect <strong>1 yr → 3 months</strong>. (See page 01.)</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Positioning reminders</div>
+      <ul class="tight">
+        <li>Offered in <strong>four grades</strong>, including the striking <strong>Nightshade Edition</strong>.</li>
+        <li>It's a <strong>conventional hybrid</strong> — no plugging in. (The <em>Prius Prime</em> is the separate plug-in.)</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-label">2027 TRD Pro colors — Honeycomb vs Hot Honey</div>
+      <div class="section-intro">Two similar shades, split across the lineup. This is a classic mix-up.</div>
+      <div class="trap">
+        <div class="trap-row head"><div class="trap-cell">Color</div><div class="trap-cell">Models</div></div>
+        <div class="trap-row"><div class="trap-cell"><span class="correct">Honeycomb</span></div><div class="trap-cell">Tundra · Sequoia · Tacoma</div></div>
+        <div class="trap-row"><div class="trap-cell"><span class="correct">Hot Honey</span> <span style="color:#999;font-size:11px;">(different shade)</span></div><div class="trap-cell">4Runner</div></div>
+      </div>
+      <div class="callout" style="margin-top:14px;">
+        <div class="callout-label">⚠ Easy to miss</div>
+        <div class="callout-text"><strong>4Runner gets Hot Honey</strong> — a slightly different shade from the Honeycomb on Tundra, Sequoia, and Tacoma. If the customer's looking at a 4Runner, don't call it Honeycomb.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Ready?</div>
+      <div class="callout">
+        <div class="callout-label">🎯 Take the Knowledge Battle</div>
+        <div class="callout-text">25 questions · 45 seconds each. Every question is a 2027 change — and the wrong answers were built to look right. Score <strong>20+</strong> to certify the module. Scan the quiz QR to begin.</div>
+      </div>
+    </div>
+
+    <div class="footer-note">Toyota KC Region · Sales Coach Engine · What's New for 2027 · Sources: Toyota USA Newsroom (Tundra 7/21/26, Sequoia 7/23/26, TRD Pro Colors 7/28/26) &amp; Toyota Training Pulse Vol. 5</div>
+  </div>
+</div>
+
+</body>
+</html>
