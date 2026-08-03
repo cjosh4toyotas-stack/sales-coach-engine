@@ -495,6 +495,7 @@ select.form-input { cursor: pointer; }
     <div class="result-score-big" id="res-score">0</div>
     <div class="result-out-of" id="res-outof">out of 30</div>
     <div class="result-pct" id="res-pct">0%</div>
+    <div class="result-out-of" id="res-attempt" style="margin-top:2px"></div>
     <div class="cert-badge" id="res-cert">
       <span id="res-cert-icon">●</span>
       <span id="res-cert-text">Loading...</span>
@@ -1457,6 +1458,21 @@ function clearActiveSession(){
   try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
 }
 
+// ── ATTEMPT TRACKING (per consultant, per device) ─────────────
+const ATTEMPTS_KEY = 'whatsnew2027_attempts';
+function attemptKey(name){ return name.trim().toLowerCase(); }
+function getAttempts(name){
+  try { return (JSON.parse(localStorage.getItem(ATTEMPTS_KEY) || '{}')[attemptKey(name)]) || 0; } catch(e){ return 0; }
+}
+function bumpAttempt(name){
+  try {
+    const m = JSON.parse(localStorage.getItem(ATTEMPTS_KEY) || '{}');
+    m[attemptKey(name)] = (m[attemptKey(name)] || 0) + 1;
+    localStorage.setItem(ATTEMPTS_KEY, JSON.stringify(m));
+    return m[attemptKey(name)];
+  } catch(e){ return 1; }
+}
+
 function startQuiz() {
   const name = document.getElementById('f-name').value.trim();
   const spin = document.getElementById('f-spin').value.trim();
@@ -1467,7 +1483,8 @@ function startQuiz() {
   if (!name) { alert('Please enter your name.'); return; }
   if (!dealerCode) { alert('Please enter your dealer code.'); return; }
   if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
-  userData = { name, spin, dealerCode, dealer, region, state, startTime: Date.now() };
+  const attemptNum = bumpAttempt(name);
+  userData = { name, spin, dealerCode, dealer, region, state, attemptNum, startTime: Date.now() };
   startTime = Date.now();
   refreshCount = 0;
   activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
@@ -1653,6 +1670,7 @@ function showResults() {
   document.getElementById('res-score').textContent = score;
   document.getElementById('res-outof').textContent = 'out of ' + activeQuestions.length;
   document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-attempt').textContent = 'Attempt #' + (userData.attemptNum || getAttempts(userData.name) || 1);
   document.getElementById('res-name').textContent = userData.name;
   document.getElementById('res-spin').textContent = maskSpin(userData.spin);
   document.getElementById('res-dealer').textContent = userData.dealer;
@@ -1696,6 +1714,7 @@ function showResults() {
     pct,
     categoryScores: catScores,
     certified: pass,
+    attempt: userData.attemptNum || getAttempts(userData.name) || 1,
     timeSec: totalTime,
     refreshCount,
     missedQuestions,
@@ -1711,10 +1730,8 @@ function showResults() {
     localStorage.setItem('whatsnew2027_quiz_results', JSON.stringify(existing));
   } catch(e) {}
 
-  // Auto-submit disabled for this deck: GFORM_ACTION below still points at the RAV4
-  // dealership's Google Form/spreadsheet. Point GFORM_ACTION + GFORM_ENTRIES at a
-  // dedicated 2027 What's New form (or reuse this one with new entry IDs) to re-enable.
-  // submitToGoogleForm(exportData);
+  // Auto-submit to the dedicated 2027 What's New Google Form (config in GFORM_ACTION / GFORM_ENTRIES below).
+  submitToGoogleForm(exportData);
 
   // Question review
   const reviewEl = document.getElementById('question-review');
@@ -1738,8 +1755,8 @@ function copyExport() {
 }
 
 // ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
-// NOTE: submission is DISABLED above (call is commented out). Before enabling,
-// create a dedicated 2027 What's New Google Form and replace GFORM_ACTION plus
+// Submission call is LIVE. It self-disables until the placeholders below are
+// replaced. Create the dedicated 2027 What's New Google Form and replace GFORM_ACTION plus
 // every entry.XXXXXXX ID below. The category fields must match the two categories
 // this quiz actually uses (PRODUCT, CONNECTED SERVICES) — the flat product/
 // competitive fields from the RAV4 form do NOT map to categoryScores.
@@ -1755,11 +1772,13 @@ const GFORM_ENTRIES = {
   productScore: 'entry.REPLACE_PRODUCT',        // <- from data.categoryScores['PRODUCT']
   connectedScore: 'entry.REPLACE_CONNECTED',    // <- from data.categoryScores['CONNECTED SERVICES']
   certified: 'entry.REPLACE_CERTIFIED',
+  attempt: 'entry.REPLACE_ATTEMPT',
   timeSec: 'entry.REPLACE_TIME',
   sessionDate: 'entry.REPLACE_DATE'
 };
 
 function submitToGoogleForm(data) {
+  if (GFORM_ACTION.indexOf('REPLACE') !== -1) return; // not wired yet — localStorage + JSON import still work
   try {
     const cs = data.categoryScores || {};
     const flat = {
