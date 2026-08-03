@@ -668,6 +668,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="deck-select-name">Land Cruiser</div>
       <div class="deck-select-sub">2027 i-FORCE MAX — Powertrain & Connected Services</div>
     </button>
+    <button class="deck-select-btn" onclick="selectDeck('whatsnew')">
+      <div class="deck-select-name">What's New MY27</div>
+      <div class="deck-select-sub">Tundra · Sequoia · Prius · Connected Services</div>
+    </button>
   </div>
   <div class="splash-section-label">Administrative</div>
   <div class="deck-select-row">
@@ -4902,7 +4906,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="qr-center">
         <div class="qr-instructions fade-in fade-in-1">
           <div class="qr-title">Scan & <span>Compete</span></div>
-          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 25 questions on the i-FORCE MAX drivetrain and MY27 Connected Services. The clock is running!</div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 30 questions on the i-FORCE MAX drivetrain and MY27 Connected Services. The clock is running!</div>
         </div>
         <div class="qr-wrapper fade-in fade-in-2">
           <div id="qr-code-landcruiser"></div>
@@ -4997,6 +5001,515 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     </div>
 
     </div><!-- /deck-landcruiser -->
+
+    <div id="deck-whatsnew" class="deck">
+
+    <!-- ═══ PHASE 0: WHAT'S NEW OVERVIEW ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">What's<br><span class="red">New for 2027</span></div>
+          <div class="phase-splash-subtitle">Everything here is a 2027 change — nothing carryover. The common misses are the details that sound almost identical: a trial that grew vs. one that shrank, a color on one model but not another.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">The Four Fronts</div>
+            <div class="phase-splash-item">What Changed vs. 2026</div>
+            <div class="phase-splash-item">The Traps to Avoid</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: The Four Fronts -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">What's New · Overview</div>
+      <div class="slide-title fade-in fade-in-1">Four <span>Fronts</span> for 2027</div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-label">Truck</div>
+          <div class="card-title">🛻 Tundra</div>
+          <div class="card-body">New Trailhunter package, refreshed front-end, TRD Pro Honeycomb + FOX Q3S shocks, latest 24MM multimedia, TSS 4.0.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">SUV</div>
+          <div class="card-title">🏔 Sequoia</div>
+          <div class="card-body">Sharper exterior, new Trailhunter package, TRD Pro QS3 shocks + Honeycomb, standard 14&quot; screen, TSS 4.0.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Hybrid</div>
+          <div class="card-title">⚡ Prius</div>
+          <div class="card-body">New &quot;Inked&quot; color, standard dual-zone climate, and two Connected Services trial changes moving in opposite directions.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Digital</div>
+          <div class="card-title">📡 Connected Services</div>
+          <div class="card-body">Latest 24MM on AT&amp;T 5G, standard Drive Recorder Dash Cam, Enhanced Digital Key in the native wallet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-2: The #1 Trap -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">What's New · Memorize This</div>
+      <div class="slide-title fade-in fade-in-1">Trailhunter <span>≠ TRD Pro</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-label" style="color:var(--red)">Trailhunter</div>
+          <div class="card-title">SR5-Based Overlanding</div>
+          <div class="card-body">
+            <strong>Old Man Emu</strong> suspension · <strong>Bronze</strong> wheels · Michelin LTX Trail tires · front recovery hooks + underbody protection.
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-label" style="color:var(--red)">TRD Pro</div>
+          <div class="card-title">The Off-Road Flagship</div>
+          <div class="card-body">
+            <strong>FOX Q3S</strong> shocks · <strong>Honeycomb</strong> paint · <strong>Red</strong> tow hooks · available ISO-dynamic seats.
+          </div>
+        </div>
+      </div>
+      <div class="card mt-24 fade-in fade-in-3" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+        <div class="card-body" style="color:var(--text)">Swap those details and the customer notices. <strong>Bronze</strong> wheels are Trailhunter; <strong>red tow hooks + Honeycomb</strong> are TRD Pro.</div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: CONNECTED SERVICES ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">Connected<br><span class="red">Services</span></div>
+          <div class="phase-splash-subtitle">What changed in trials, multimedia, and Digital Key for 2027 — the details a sharp customer will ask about first.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Prius Trial Changes</div>
+            <div class="phase-splash-item">Latest 24MM System</div>
+            <div class="phase-splash-item">Enhanced Digital Key</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Prius Trial Changes -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Connected Services · Prius Trials</div>
+      <div class="slide-title fade-in fade-in-1">Opposite <span>Directions</span></div>
+      <div class="big-stats fade-in fade-in-2">
+        <div class="big-stat">
+          <div class="big-stat-value" style="color:var(--green)">1 yr → 5 yrs</div>
+          <div class="big-stat-label">Remote Connect Trial (Longer)</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value" style="color:var(--red)">1 yr → 3 mo</div>
+          <div class="big-stat-label">Drive Connect Trial (Shorter)</div>
+        </div>
+      </div>
+      <div class="two-col fade-in fade-in-3">
+        <div class="card">
+          <div class="card-title">Remote Connect</div>
+          <div class="card-body">Remote start, lock/unlock, and the service that powers <strong>Digital Key</strong> — now a much longer trial.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Drive Connect</div>
+          <div class="card-body">Cloud navigation, Intelligent Assistant, Destination Assist — shrinks the other way. If a rep recalls &quot;the trial changed&quot; but not which way, this is where they miss.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: 24MM System -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Connected Services · 24MM</div>
+      <div class="slide-title fade-in fade-in-1">Latest <span>Toyota Audio Multimedia</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>AT&amp;T 5G</strong> connectivity — 5G, not LTE.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Standard 14-inch screen</strong> on both Tundra and Sequoia.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Customizable widgets</strong> on a smartphone-like home screen.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Faster &quot;<strong>Hey Toyota</strong>&quot; embedded Voice Assistant.</div>
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-label" style="color:var(--green)">New · Standard</div>
+          <div class="card-title">Built-In Drive Recorder Dash Cam</div>
+          <div class="card-body">Launches with the latest 24MM. Uses the exterior cameras (front/rear, or Panoramic View Monitor if equipped) to capture <strong>20-second clips</strong> of manual and triggered events.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: Enhanced Digital Key -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Connected Services · Digital Key</div>
+      <div class="slide-title fade-in fade-in-1">Enhanced <span>Digital Key</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Now managed in the device's <strong>native digital wallet</strong> — Apple, Google, or Samsung — not just the Toyota app.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Share and manage access with up to <strong>five additional drivers</strong> from the wallet.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Uses <strong>NFC</strong> to keep working for a period of time <strong>even if the phone battery is dead</strong>.</div>
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-label" style="color:var(--red)">Easy to Miss</div>
+          <div class="card-title">Requires Remote Connect</div>
+          <div class="card-body">Digital Key rides on <strong>Remote Connect</strong> (5G dependent) — not Drive Connect. When a customer asks what keeps phone-as-key working, the answer is Remote Connect, which is exactly why its trial grew to five years on Prius.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: TUNDRA · SEQUOIA · PRIUS ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 4 Minutes</div>
+          <div class="phase-splash-title">The 2027<br><span class="red">Vehicles</span></div>
+          <div class="phase-splash-subtitle">The vehicle-by-vehicle changes — Tundra, Sequoia, Prius, and the all-new Highlander BEV — that keep you accurate on the floor.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Trailhunter &amp; TRD Pro</div>
+            <div class="phase-splash-item">Prius &amp; Highlander BEV</div>
+            <div class="phase-splash-item">The Grade Traps</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: Trailhunter Package -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Tundra &amp; Sequoia · Trailhunter</div>
+      <div class="slide-title fade-in fade-in-1">New <span>Trailhunter</span> Package</div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Based on the <strong>SR5</strong> grade, at a more accessible price point.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Michelin LTX Trail 265/70R18</strong> tires.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Old Man Emu</strong> upgraded suspension.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Front recovery hooks + additional underbody protection.</div>
+          </div>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Multi-Terrain Select</strong>, Crawl Control, locking rear differential.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Unique <strong>bronze-colored wheels</strong> + exclusive badges.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>2.4kW inverter</strong> on Tundra i-FORCE MAX grades (and Sequoia).</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Standard <strong>TSS 4.0</strong> and brighter LED lighting across the lineup.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: TRD Pro Upgrades -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Tundra &amp; Sequoia · TRD Pro</div>
+      <div class="slide-title fade-in fade-in-1">Purpose-Built <span>TRD Pro</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-label">Shocks</div>
+          <div class="card-title">FOX Enhanced Q3S / QS3</div>
+          <div class="card-body">Newly designed, vehicle-tuned and adjustable. Labeled <strong>Q3S</strong> on Tundra, <strong>QS3</strong> on Sequoia — same FOX family, letters just flip.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Color</div>
+          <div class="card-title">New Honeycomb Paint</div>
+          <div class="card-body">Bold, high-impact color for Tundra and Sequoia TRD Pro.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Accent</div>
+          <div class="card-title">Standard Red Tow Hooks</div>
+          <div class="card-body">A functional off-road accent — standard on TRD Pro.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Comfort</div>
+          <div class="card-title">ISO-Dynamic Seats</div>
+          <div class="card-body">Available on Tundra (and Tacoma) to support comfort and stability off-road.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-3: Prius -->
+    <div class="slide" data-phase="2" data-slide="3">
+      <div class="slide-eyebrow">Prius · What's New</div>
+      <div class="slide-title fade-in fade-in-1">2027 <span>Prius</span></div>
+      <div class="two-col fade-in fade-in-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">New <strong>&quot;Inked&quot;</strong> exterior color <strong>replaces</strong> Midnight Black Metallic — it doesn't sit alongside it.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>Dual-zone automatic climate control</strong> now standard.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Offered in <strong>four grades</strong>, including the striking <strong>Nightshade Edition</strong>.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">A <strong>conventional hybrid</strong> — no plugging in. (The <em>Prius Prime</em> is the separate plug-in.)</div>
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-label" style="color:var(--red)">Easy to Miss · TRD Pro Colors</div>
+          <div class="card-title">Honeycomb vs. Hot Honey</div>
+          <div class="card-body">
+            <strong>Honeycomb</strong> → Tundra, Sequoia, Tacoma.<br>
+            <strong>Hot Honey</strong> (a slightly different shade) → 4Runner.<br>
+            If the customer's looking at a 4Runner, don't call it Honeycomb.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-4: Highlander BEV -->
+    <div class="slide" data-phase="2" data-slide="4">
+      <div class="slide-eyebrow">2027 Highlander BEV · All-New</div>
+      <div class="slide-title fade-in fade-in-1">All-New <span>Highlander BEV</span></div>
+      <div class="big-stats fade-in fade-in-2">
+        <div class="big-stat">
+          <div class="big-stat-value">338 hp</div>
+          <div class="big-stat-label">Combined, Standard AWD</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">320 mi</div>
+          <div class="big-stat-label">Mfr-Est Range (95.8-kWh)</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">323 lb-ft</div>
+          <div class="big-stat-label">198 Front / 125 Rear</div>
+        </div>
+        <div class="big-stat">
+          <div class="big-stat-value">Made in USA</div>
+          <div class="big-stat-label">Battery Packs &amp; Vehicle</div>
+        </div>
+      </div>
+      <div class="two-col fade-in fade-in-3">
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text">Toyota's <strong>first mid-size 3-row crossover BEV SUV</strong> — 320-mi range applies to both XLE and Limited (95.8-kWh AWD).</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <div class="feature-text"><strong>NACS</strong> DC fast charging, 11-kW onboard AC charger, plus advanced <strong>V2L &amp; V2H</strong> power export.</div>
+          </div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-label" style="color:var(--red)">Easy to Miss · XLE vs. Limited</div>
+          <div class="card-title">Stepping Up Removes a Seat</div>
+          <div class="card-body">The <strong>XLE</strong> offers the second-row bench for up to <strong>seven</strong>; the pricier <strong>Limited</strong> comes standard with <strong>captain's chairs</strong> (seats six). XLE is 19&quot; wheels standard; 22&quot; is a Limited option.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">Team competition time. Scan the QR code, take the quiz, and see who knows the 2027 changes best. Every wrong answer was built to look right. Fastest correct answer wins.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Team Competition</div>
+            <div class="phase-splash-item">30 Questions</div>
+            <div class="phase-splash-item">Fastest Correct Answer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-whatsnew" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-whatsnew" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-whatsnew" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-whatsnew">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-whatsnew" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan &amp; <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 30 questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-whatsnew"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-whatsnew">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-whatsnew">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-whatsnew">
+          <div class="scoreboard" id="scoreboard-list-whatsnew">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-whatsnew" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-whatsnew" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-whatsnew" class="modal-input" style="width:80px" type="number" min="0" max="30" placeholder="Score /30">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 2 Minutes</div>
+          <div class="phase-splash-title">Accountability &amp;<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and set the focus for the next session.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Next Session Focus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-whatsnew" class="fade-in fade-in-2">
+        <div id="final-scoreboard-whatsnew"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">2027 What's New Certified</div>
+          <div class="card-body">Score 24/30 or higher to earn 2027 What's New module certification.</div>
+          <div id="cert-summary-whatsnew"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-whatsnew"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Knowledge → Practice<br><span class="red">Competition → Action</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Great session. Keep the 2027 changes sharp — the guest won't ask about last year, they'll ask about this one.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Tundra · Sequoia · Prius</div>
+            <div class="phase-splash-item">Connected Services</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-whatsnew -->
+
 
 
 
@@ -5276,6 +5789,33 @@ const slideNotesLandcruiser = [
   'Session complete. Remind the team to check the dashboard for regional ranking and certification status.'
 ];
 
+const slideNotesWhatsnew = [
+  // Phase 0
+  "Kick off with energy. Everything today is a 2027 change \u2014 nothing carryover. 25 questions at the end, and the wrong answers were built to look right.",
+  "FOUR FRONTS: Give the room the 30-second map \u2014 Tundra, Sequoia, Prius, and Connected Services. Everything else builds on these four.",
+  "THE #1 TRAP: Drill Trailhunter vs. TRD Pro. Old Man Emu + bronze = Trailhunter; FOX Q3S + Honeycomb + red tow hooks = TRD Pro. Swap them and the customer notices.",
+  // Phase 1
+  "Set the stage: trials, the 24MM system, and Digital Key. All three are fair game on the quiz.",
+  "TRIALS: The whole trap is direction. Remote Connect grew 1\u21925 yrs; Drive Connect shrank 1 yr\u21923 mo. Poll the room on which went which way.",
+  "24MM: Hammer the specifics \u2014 AT&T 5G (not LTE), standard 14-inch screen, and the new standard Drive Recorder capturing 20-second clips.",
+  "DIGITAL KEY: The exception to memorize \u2014 it rides on Remote Connect, not Drive Connect. That's exactly why Remote Connect's trial grew to five years.",
+  // Phase 2
+  "Vehicle-by-vehicle. Read the Trailhunter list as a team \u2014 SR5-based, Michelin LTX Trail, Old Man Emu, bronze wheels, rear locker.",
+  "TRD PRO: Note the shock label flips \u2014 Q3S on Tundra, QS3 on Sequoia. Same FOX family. Red tow hooks and Honeycomb are standard TRD Pro cues.",
+  "PRIUS: 'Inked' replaces Midnight Black Metallic. Dual-zone climate now standard. Four grades incl. Nightshade. It's a hybrid \u2014 no plugging in.",
+  "HONEYCOMB vs. HOT HONEY: 4Runner gets Hot Honey; Tundra/Sequoia/Tacoma get Honeycomb. Don't call a 4Runner's color Honeycomb.",
+  "HIGHLANDER BEV: Toyota's first mid-size 3-row crossover BEV. Drill the XLE/Limited trap \u2014 the XLE seats seven (bench), the pricier Limited seats six (captain's chairs). 320-mi range on both grades; battery + vehicle built in the USA.",
+  // Phase 3
+  "It's time to compete! 45 seconds per question. Announce that the winner gets recognition on the scoreboard.",
+  "Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.",
+  "Display this QR code. Give reps 15-20 minutes to complete the 25-question quiz on their phones.",
+  "As scores come in, add them manually or import the JSON. Real-time leaderboard pressure adds energy!",
+  // Phase 4
+  "Final phase! Call out the top 3 by name. Acknowledge effort and improvement, not just top scores.",
+  "Recognize the winner and announce the 20/25 certification threshold.",
+  "Session complete. Remind the team that the guest won't ask about last year \u2014 they'll ask about this one."
+];
+
 // Build slides index
 // ── DEALER CODE LOOKUP (Kansas City Region) ──────────────────
 const DEALER_LOOKUP = {
@@ -5389,6 +5929,7 @@ const DEFAULT_QUIZ_URL_ALLOCSYS = 'https://cjosh4toyotas-stack.github.io/sales-c
 const DEFAULT_QUIZ_URL_PTMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PowertrainMastery_Quiz.html';
 const DEFAULT_QUIZ_URL_CHRMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/CHR_Quiz.html';
 const DEFAULT_QUIZ_URL_LANDCRUISER = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/LandCruiser_Quiz.html';
+const DEFAULT_QUIZ_URL_WHATSNEW = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/What_s_NEWMY27_Quiz.html';
 let quizUrl = localStorage.getItem('presenter_quiz_url_rav4') || DEFAULT_QUIZ_URL_RAV4;
 let sessionLabel = localStorage.getItem('presenter_session_label') || 'LIVE SESSION';
 
@@ -5465,6 +6006,14 @@ const DECK_CONFIG = {
     quizTotal: 25,
     passThreshold: 20,
     certLabel: 'Land Cruiser i-FORCE MAX Certified'
+  },
+  whatsnew: {
+    brand: "WHAT'S NEW MY27",
+    defaultQuizUrl: DEFAULT_QUIZ_URL_WHATSNEW,
+    phaseNames: ["What's New", 'Connected Services', 'The 2027 Vehicles', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 30,
+    passThreshold: 24,
+    certLabel: "2027 What's New Certified"
   }
 };
 
@@ -5486,6 +6035,7 @@ function selectDeck(deckName) {
   document.getElementById('deck-ptmastery').classList.toggle('active', deckName === 'ptmastery');
   document.getElementById('deck-chrmastery').classList.toggle('active', deckName === 'chrmastery');
   document.getElementById('deck-landcruiser').classList.toggle('active', deckName === 'landcruiser');
+  document.getElementById('deck-whatsnew').classList.toggle('active', deckName === 'whatsnew');
   allSlides = Array.from(document.querySelectorAll('#deck-' + deckName + ' .slide'));
   currentSlideIdx = 0;
 
@@ -5546,7 +6096,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR', landcruiser: 'Land Cruiser' };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR', landcruiser: 'Land Cruiser', whatsnew: "What's New MY27" };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -5577,7 +6127,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser };
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser, whatsnew: slideNotesWhatsnew };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
