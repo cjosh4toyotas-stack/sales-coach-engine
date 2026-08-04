@@ -6350,7 +6350,9 @@ async function fetchGoogleFormResults() {
     let added = 0;
     rows.slice(1).filter(r => r.length > 1).forEach(r => {
       const sessionDate = r[idx.sessionDate] || '';
-      const name = r[idx.name] || '';
+      const name = (r[idx.name] || '').trim();
+      // Skip blank rows and pipeline test submissions — they stay in the sheet but never hit the leaderboard
+      if (!name || /^test\b/i.test(name)) return;
       const dup = scores.find(s => s.name === name && s._sessionDate === sessionDate);
       if (dup) return;
       const score = Number(r[idx.score]) || 0;
