@@ -6347,32 +6347,40 @@ async function fetchGoogleFormResults() {
     const headers = rows[0].map(h => h.trim());
     const col = name => headers.indexOf(name);
     const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), total: col('total'), certified: col('certified'), attempt: col('attempt'), pct: col('pct'), sessionDate: col('sessionDate') };
-    let added = 0;
+    // MIRROR MODE: the Google Sheet is the source of truth for its own rows.
+    // Every poll rebuilds sheet-derived entries from scratch, so edits and
+    // deletions in the Sheet show up on the leaderboard within 15 seconds.
+    // Manual Add Score and Import Results entries (no _sessionDate) are kept.
+    const SHEET_NAME_FIXES = { 'balbazor': 'Mike Wells' };
+    const fetched = [];
     rows.slice(1).filter(r => r.length > 1).forEach(r => {
       const sessionDate = r[idx.sessionDate] || '';
-      const name = (r[idx.name] || '').trim();
+      let name = (r[idx.name] || '').trim();
       // Skip blank rows and pipeline test submissions — they stay in the sheet but never hit the leaderboard
       if (!name || /^test\b/i.test(name)) return;
-      const dup = scores.find(s => s.name === name && s._sessionDate === sessionDate);
-      if (dup) return;
+      name = SHEET_NAME_FIXES[name.toLowerCase()] || name;
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
-      scores.push({
+      fetched.push({
         name,
         dealer: r[idx.dealerName] || '',
         score,
         total: rowTotal,
         certified: idx.certified > -1 ? r[idx.certified] : undefined,
         attempt: idx.attempt > -1 ? (Number(r[idx.attempt]) || undefined) : undefined,
-        pct: Number(r[idx.pct]) || Math.round(score / (rowTotal || deckTotal()) * 100),
-        ts: Date.now(),
-        _sessionDate: sessionDate,
+        pct: Math.round(score / (rowTotal || deckTotal()) * 100),
+        ts: Date.parse(sessionDate) || 0,
+        _sessionDate: sessionDate || 'sheet',
         missedQuestions: []
       });
-      added++;
     });
-    if (added > 0) {
-      scores.sort((a, b) => b.score - a.score || a.ts - b.ts);
+    const manual = scores.filter(s => s._sessionDate === undefined);
+    const next = manual.concat(fetched);
+    next.sort((a, b) => b.score - a.score || a.ts - b.ts);
+    const sig = a => JSON.stringify(a.map(s => [s.name, s.score, s.total, s.attempt, s.certified, s._sessionDate]));
+    const changed = sig(next) !== sig(scores);
+    scores = next;
+    if (changed) {
       localStorage.setItem(scoresKey(), JSON.stringify(scores));
       renderScoreboard();
       renderFinalScoreboard();
