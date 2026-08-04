@@ -175,7 +175,7 @@ select.form-input { cursor: pointer; }
 #anon-warning-overlay {
   position: fixed; inset: 0; z-index: 9000; background: #000;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; overflow: auto; padding: 24px;
+  font-family: 'JetBrains Mono', monospace; overflow: hidden; padding: 24px;
 }
 #matrix-rain-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0.55; }
 .anon-scanlines {
@@ -185,7 +185,7 @@ select.form-input { cursor: pointer; }
 }
 @keyframes anonScanMove { 0% { transform: translateY(0); } 100% { transform: translateY(100px); } }
 .anon-content {
-  max-width: 620px; text-align: center; position: relative; z-index: 1; margin: auto;
+  max-width: 620px; text-align: center; position: relative; z-index: 1;
   background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
 }
 .anon-glitch-title {
@@ -1473,9 +1473,11 @@ function bumpAttempt(name){
   } catch(e){ return 1; }
 }
 
+const MCGRATH_DEALER_CODE = '14055';
+
 function startQuiz() {
-  const name = document.getElementById('f-name').value.trim();
-  const spin = document.getElementById('f-spin').value.trim();
+  let name = document.getElementById('f-name').value.trim();
+  let spin = document.getElementById('f-spin').value.trim();
   const dealerCode = document.getElementById('f-dealer-code').value.trim();
   const dealer = document.getElementById('f-dealer').value.trim();
   const region = document.getElementById('f-region').value;
@@ -1483,6 +1485,23 @@ function startQuiz() {
   if (!name) { alert('Please enter your name.'); return; }
   if (!dealerCode) { alert('Please enter your dealer code.'); return; }
   if (!dealer || !region) { alert('That dealer code wasn\'t recognized. Please double-check it and try again.'); return; }
+
+  // ── McGrath: SPIN is the identity of record ──
+  if (dealerCode === MCGRATH_DEALER_CODE) {
+    const rosterByName = SALES_ROSTER.find(p => (p.first + ' ' + p.last).toLowerCase() === name.toLowerCase());
+    if (rosterByName) {
+      if (!spin) spin = rosterByName.spin; // autofill safety net
+    } else {
+      // Name was edited / isn't in Staff Master — SPIN required to proceed
+      if (!spin) { alert('That name isn\'t in the McGrath staff list. Enter your SPIN to continue.'); return; }
+      const rosterBySpin = SALES_ROSTER.find(p => p.spin === spin);
+      if (rosterBySpin) {
+        // SPIN wins: record under the official Staff Master name
+        name = rosterBySpin.first + ' ' + rosterBySpin.last;
+        document.getElementById('f-name').value = name;
+      }
+    }
+  }
   const attemptNum = bumpAttempt(name);
   userData = { name, spin, dealerCode, dealer, region, state, attemptNum, startTime: Date.now() };
   startTime = Date.now();
@@ -1760,21 +1779,21 @@ function copyExport() {
 // every entry.XXXXXXX ID below. The category fields must match the two categories
 // this quiz actually uses (PRODUCT, CONNECTED SERVICES) — the flat product/
 // competitive fields from the RAV4 form do NOT map to categoryScores.
-const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSflBoJB1IKn4OovrZfTzZrID07puysDxLYdJV5-HZA64FucSQ/formResponse';
+const GFORM_ACTION = 'REPLACE_WITH_2027_FORM_ACTION_URL';
 const GFORM_ENTRIES = {
-  name: 'entry.927622674',
-  dealerName: 'entry.577093262',
-  region: 'entry.251094242',
-  state: 'entry.1556367455',
-  score: 'entry.1582091829',
-  total: 'entry.108011691',
-  pct: 'entry.1906974093',
-  productScore: 'entry.1927101984',        // <- from data.categoryScores['PRODUCT']
-  connectedScore: 'entry.1572305826',    // <- from data.categoryScores['CONNECTED SERVICES']
-  certified: 'entry.1987647027',
-  attempt: 'entry.1371135140',
-  timeSec: 'entry.1754842867',
-  sessionDate: 'entry.46726006'
+  name: 'entry.REPLACE_NAME',
+  dealerName: 'entry.REPLACE_DEALER',
+  region: 'entry.REPLACE_REGION',
+  state: 'entry.REPLACE_STATE',
+  score: 'entry.REPLACE_SCORE',
+  total: 'entry.REPLACE_TOTAL',
+  pct: 'entry.REPLACE_PCT',
+  productScore: 'entry.REPLACE_PRODUCT',        // <- from data.categoryScores['PRODUCT']
+  connectedScore: 'entry.REPLACE_CONNECTED',    // <- from data.categoryScores['CONNECTED SERVICES']
+  certified: 'entry.REPLACE_CERTIFIED',
+  attempt: 'entry.REPLACE_ATTEMPT',
+  timeSec: 'entry.REPLACE_TIME',
+  sessionDate: 'entry.REPLACE_DATE'
 };
 
 function submitToGoogleForm(data) {
