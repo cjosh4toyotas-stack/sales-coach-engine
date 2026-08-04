@@ -794,15 +794,27 @@ function typeAnonWarning() {
   const el = document.getElementById('anon-typed-text');
   const cursor = document.getElementById('anon-cursor');
   const btn = document.getElementById('anon-proceed-btn');
+  btn.classList.add('shown'); // PROCEED is available immediately — never blocks the rep
   let i = 0;
+  let done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    el.textContent = ANON_WARNING_TEXT;
+    cursor.style.display = 'none';
+  }
+  // Tap anywhere on the screen to skip straight to the full text
+  document.getElementById('anon-warning-overlay').addEventListener('click', (e) => {
+    if (e.target.id !== 'anon-proceed-btn') finish();
+  });
   function step() {
+    if (done) return;
     if (i <= ANON_WARNING_TEXT.length) {
       el.textContent = ANON_WARNING_TEXT.slice(0, i);
       i++;
-      setTimeout(step, 14 + Math.random() * 18);
+      setTimeout(step, 4 + Math.random() * 6); // ~4x faster than before
     } else {
-      cursor.style.display = 'none';
-      btn.classList.add('shown');
+      finish();
     }
   }
   step();
