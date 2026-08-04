@@ -6060,11 +6060,14 @@ function selectDeck(deckName) {
 
   // Deck-specific scores
   scores = JSON.parse(localStorage.getItem(scoresKey()) || '[]');
-  // Scrub known junk names (not in Staff Master)
-  const SCRUB_NAMES = ['balbazor'];
-  const beforeLen = scores.length;
-  scores = scores.filter(s => !SCRUB_NAMES.includes((s.name || '').trim().toLowerCase()));
-  if (scores.length !== beforeLen) { try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {} }
+  // Correct known junk names to their Staff Master identity
+  const NAME_CORRECTIONS = { 'balbazor': 'Mike Wells' };
+  let corrected = false;
+  scores.forEach(s => {
+    const fix = NAME_CORRECTIONS[(s.name || '').trim().toLowerCase()];
+    if (fix) { s.name = fix; corrected = true; }
+  });
+  if (corrected) { try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {} }
 
   document.getElementById('splash').classList.add('hide');
   setTimeout(() => document.getElementById('splash').remove(), 900);
