@@ -6346,7 +6346,7 @@ async function fetchGoogleFormResults() {
     if (rows.length < 2) return;
     const headers = rows[0].map(h => h.trim());
     const col = name => headers.indexOf(name);
-    const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), total: col('total'), certified: col('certified'), attempt: col('attempt'), pct: col('pct'), sessionDate: col('sessionDate') };
+    const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), total: col('total'), certified: col('certified'), attempt: col('attempt'), pct: col('pct'), sessionDate: col('sessionDate'), missedQuestions: col('missedQuestions') };
     // MIRROR MODE: the Google Sheet is the source of truth for its own rows.
     // Every poll rebuilds sheet-derived entries from scratch, so edits and
     // deletions in the Sheet show up on the leaderboard within 15 seconds.
@@ -6371,7 +6371,11 @@ async function fetchGoogleFormResults() {
         pct: Math.round(score / (rowTotal || deckTotal()) * 100),
         ts: Date.parse(sessionDate) || 0,
         _sessionDate: sessionDate || 'sheet',
-        missedQuestions: []
+        missedQuestions: (() => {
+          if (idx.missedQuestions < 0) return [];
+          try { const a = JSON.parse(r[idx.missedQuestions] || '[]'); return Array.isArray(a) ? a : []; }
+          catch(e) { return []; }
+        })()
       });
     });
     const manual = scores.filter(s => s._sessionDate === undefined);
@@ -6438,14 +6442,18 @@ function getCertifiedList() {
 }
 
 function getMissedQuestionStats() {
-  const tracked = scores.filter(s => Array.isArray(s.missedQuestions));
+  const tracked = scores.filter(s => Array.isArray(s.missedQuestions) && s.missedQuestions.length);
   const counts = {};
   tracked.forEach(s => {
-    s.missedQuestions.forEach(q => { counts[q] = (counts[q] || 0) + 1; });
+    s.missedQuestions.forEach(q => {
+      if (!counts[q]) counts[q] = { count: 0, names: [] };
+      counts[q].count++;
+      if (s.name && counts[q].names.indexOf(s.name) === -1) counts[q].names.push(s.name);
+    });
   });
-  const denom = tracked.length || 1;
+  const denom = scores.filter(s => Array.isArray(s.missedQuestions)).length || 1;
   return Object.keys(counts)
-    .map(q => ({ q, count: counts[q], pct: Math.round(counts[q] / denom * 100) }))
+    .map(q => ({ q, count: counts[q].count, names: counts[q].names, pct: Math.round(counts[q].count / denom * 100) }))
     .sort((a, b) => b.count - a.count);
 }
 
@@ -6496,12 +6504,15 @@ function openFocusModal() {
   if (!stats.length) {
     body.innerHTML = '<div style="color:var(--text-muted)">No missed-question data captured yet this session. This populates automatically as quiz results (via the Copy Result Code JSON or auto-submit) come in.</div>';
   } else {
-    body.innerHTML = stats.slice(0, 15).map(s => `
+    body.innerHTML = stats.slice(0, 15).map(s => {
+      const who = s.names.slice(0, 6).join(', ') + (s.names.length > 6 ? ` +${s.names.length - 6} more` : '');
+      return `
       <div class="focus-list-item">
         <div class="focus-q-text">${s.q}</div>
         <div class="focus-q-stat">${s.pct}% missed this (${s.count} of ${scores.filter(sc => Array.isArray(sc.missedQuestions)).length})</div>
+        <div class="focus-q-stat" style="color:var(--text-muted)">Missed by: ${who}</div>
       </div>
-    `).join('');
+    `;}).join('');
   }
   document.getElementById('detail-modal-overlay').classList.add('open');
 }
