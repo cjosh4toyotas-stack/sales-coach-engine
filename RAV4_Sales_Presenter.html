@@ -6023,6 +6023,8 @@ function deckPassThreshold(){ return (DECK_CONFIG[currentDeck] && DECK_CONFIG[cu
 // Per-entry length/certification: trust the quiz's own reported values first,
 // falling back to deck config only for legacy entries that lack them.
 function entryTotal(s){ return (s && Number(s.total)) || deckTotal(); }
+function entryTime(s){ const t = Number(s && s.timeSec); return t > 0 ? t : Infinity; }
+function fmtQuizTime(s){ const t = Number(s && s.timeSec); if (!(t > 0)) return ''; const m = Math.floor(t / 60), sec = Math.round(t % 60); return m ? m + 'm ' + sec + 's' : sec + 's'; }
 function entryCertified(s){ return (s && s.certified !== undefined && s.certified !== '') ? (s.certified === true || s.certified === 'true' || s.certified === 'TRUE') : (s.score >= deckPassThreshold()); }
 
 function scoresKey(){ return 'presenter_scores_' + currentDeck; }
@@ -6293,7 +6295,7 @@ function importJSON() {
     const entries = Array.isArray(data) ? data : [data];
     entries.forEach(e => {
       if (e.name && e.score !== undefined) {
-        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, total: Number(e.total) || undefined, certified: e.certified, attempt: Number(e.attempt) || undefined, pct: e.pct || Math.round(e.score / (Number(e.total) || deckTotal()) * 100), ts: Date.now(), missedQuestions: Array.isArray(e.missedQuestions) ? e.missedQuestions : [] });
+        scores.push({ name: e.name, dealer: e.dealer || e.dealerName || '', score: e.score, total: Number(e.total) || undefined, certified: e.certified, attempt: Number(e.attempt) || undefined, timeSec: Number(e.timeSec) || undefined, pct: e.pct || Math.round(e.score / (Number(e.total) || deckTotal()) * 100), ts: Date.now(), missedQuestions: Array.isArray(e.missedQuestions) ? e.missedQuestions : [] });
       }
     });
     scores.sort((a, b) => b.score - a.score);
@@ -6346,7 +6348,7 @@ async function fetchGoogleFormResults() {
     if (rows.length < 2) return;
     const headers = rows[0].map(h => h.trim());
     const col = name => headers.indexOf(name);
-    const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), total: col('total'), certified: col('certified'), attempt: col('attempt'), pct: col('pct'), sessionDate: col('sessionDate'), missedQuestions: col('missedQuestions') };
+    const idx = { name: col('name'), dealerName: col('dealerName'), score: col('score'), total: col('total'), certified: col('certified'), attempt: col('attempt'), pct: col('pct'), sessionDate: col('sessionDate'), missedQuestions: col('missedQuestions'), timeSec: col('timeSec') };
     // MIRROR MODE: the Google Sheet is the source of truth for its own rows.
     // Every poll rebuilds sheet-derived entries from scratch, so edits and
     // deletions in the Sheet show up on the leaderboard within 15 seconds.
@@ -6369,6 +6371,7 @@ async function fetchGoogleFormResults() {
         certified: idx.certified > -1 ? r[idx.certified] : undefined,
         attempt: idx.attempt > -1 ? (Number(r[idx.attempt]) || undefined) : undefined,
         pct: Math.round(score / (rowTotal || deckTotal()) * 100),
+        timeSec: idx.timeSec > -1 ? (Number(r[idx.timeSec]) || undefined) : undefined,
         ts: Date.parse(sessionDate) || 0,
         _sessionDate: sessionDate || 'sheet',
         missedQuestions: (() => {
@@ -6380,8 +6383,8 @@ async function fetchGoogleFormResults() {
     });
     const manual = scores.filter(s => s._sessionDate === undefined);
     const next = manual.concat(fetched);
-    next.sort((a, b) => b.score - a.score || a.ts - b.ts);
-    const sig = a => JSON.stringify(a.map(s => [s.name, s.score, s.total, s.attempt, s.certified, s._sessionDate]));
+    next.sort((a, b) => b.score - a.score || entryTime(a) - entryTime(b) || a.ts - b.ts);
+    const sig = a => JSON.stringify(a.map(s => [s.name, s.score, s.total, s.attempt, s.certified, s.timeSec, s._sessionDate]));
     const changed = sig(next) !== sig(scores);
     scores = next;
     if (changed) {
@@ -6406,11 +6409,11 @@ function groupScoresByPerson() {
     map[key].push(s);
   });
   return order.map(key => {
-    const entries = map[key].slice().sort((a, b) => b.score - a.score || (b.attempt || 0) - (a.attempt || 0));
+    const entries = map[key].slice().sort((a, b) => b.score - a.score || entryTime(a) - entryTime(b) || (b.attempt || 0) - (a.attempt || 0));
     const best = entries[0];
     const maxAttempt = Math.max(entries.length, ...entries.map(e => Number(e.attempt) || 0));
     return { key, best, others: entries.slice(1), attempts: maxAttempt };
-  }).sort((a, b) => b.best.score - a.best.score || a.best.ts - b.best.ts);
+  }).sort((a, b) => b.best.score - a.best.score || entryTime(a.best) - entryTime(b.best) || a.best.ts - b.best.ts);
 }
 
 let _expandedPeople = {};
@@ -6438,12 +6441,12 @@ function renderScoreboard() {
       <div class="score-name"><div class="score-name-main">${s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
-      <div style="font-size:11px;color:var(--text-muted);min-width:74px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}</div>
+      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
     </div>`;
     const subs = open ? g.others.map((o, oi) => `
     <div class="score-row" style="opacity:.6;margin-left:44px">
       <div class="score-rank" style="font-size:11px;color:var(--text-muted)">#${o.attempt || '?'}</div>
-      <div class="score-name"><div class="score-name-dealer">Attempt ${o.attempt || '—'}</div></div>
+      <div class="score-name"><div class="score-name-dealer">Attempt ${o.attempt || '—'}${fmtQuizTime(o) ? ' · ' + fmtQuizTime(o) : ''}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${o.pct}%;opacity:.7"></div></div></div>
       <div class="score-num" style="font-size:16px">${o.score}<span style="font-size:12px;color:var(--text-muted)">/${entryTotal(o)}</span></div>
       ${o._sessionDate === undefined ? `<button class="score-remove" onclick="event.stopPropagation();removeGroupedScore(${i},${oi})" title="Remove this entry" style="background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:0 6px;line-height:1">&times;</button>` : ''}
@@ -6475,7 +6478,7 @@ function renderFinalScoreboard() {
       <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
-      <div style="font-size:11px;color:var(--text-muted);min-width:74px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}</div>
+      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
     </div>
   `;}).join('');
   renderCertSummary();
