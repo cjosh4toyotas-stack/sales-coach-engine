@@ -1835,18 +1835,22 @@ const GFORM_ENTRIES = {
   certified: 'entry.1987647027',
   attempt: 'entry.1371135140',
   timeSec: 'entry.1754842867',
-  sessionDate: 'entry.46726006'
+  sessionDate: 'entry.46726006',
+  missedQuestions: 'entry.1998719300'
 };
 
 function submitToGoogleForm(data) {
   if (GFORM_ACTION.indexOf('REPLACE') !== -1) return; // not wired yet — localStorage + JSON import still work
+  // AUTHOR EXCLUSION: quiz author's attempts are never logged to the results sheet
+  if (String(data.spin || '') === '104083046615' || String(data.name || '').trim().toLowerCase() === 'josh hicks') return;
   try {
     const cs = data.categoryScores || {};
     const flat = {
       ...data,
       dealerName: data.dealerName || data.dealer || '',
       productScore: cs['PRODUCT'] || 0,
-      connectedScore: cs['CONNECTED SERVICES'] || 0
+      connectedScore: cs['CONNECTED SERVICES'] || 0,
+      missedQuestions: JSON.stringify(data.missedQuestions || [])
     };
     const formData = new FormData();
     Object.keys(GFORM_ENTRIES).forEach(key => {
