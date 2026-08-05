@@ -311,7 +311,7 @@ h1 span{color:var(--red)}
       var rank = pos <= 3 ? '<span class="medal">' + medals[pos-1] + '</span>' : pos;
       var pct = Math.max(4, Math.round((r.score / MAX) * 100));
       var badge = certified
-        ? '<span class="badge ok">Certified</span>'
+        ? '<span class="badge ok">Certified</span> \uD83C\uDFC6'
         : '<span class="badge no">' + (THRESH - r.score) + ' to go</span>';
       var meta = [];
       if(r.attempts) meta.push(r.attempts + (r.attempts === 1 ? " attempt" : " attempts"));
