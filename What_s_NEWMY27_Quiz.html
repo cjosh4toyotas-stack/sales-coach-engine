@@ -25,6 +25,7 @@
   --wrong-dim: rgba(255,68,68,0.1);
 }
 html, body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+.screen { position: relative; z-index: 1; }
 
 .screen { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px 20px; }
 .screen.active { display: flex; }
@@ -174,12 +175,14 @@ select.form-input { cursor: pointer; }
 /* ── PRE-QUIZ WARNING SCREEN ─────────────────────────────── */
 #anon-warning-overlay {
   position: fixed; inset: 0; z-index: 9000; background: #000;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; overflow: hidden; padding: 24px;
+  display: flex; align-items: flex-start; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 24px;
 }
-#matrix-rain-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0.55; }
+#matrix-rain-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; opacity: 0.55; }
+#reg-matrix-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; opacity: 0.28; z-index: 0; pointer-events: none; }
 .anon-scanlines {
-  position: absolute; inset: -50% 0; pointer-events: none;
+  position: fixed; inset: -50% 0; pointer-events: none;
   background: repeating-linear-gradient(0deg, rgba(235,10,30,0.05) 0px, transparent 1px, transparent 3px);
   animation: anonScanMove 9s linear infinite;
 }
@@ -187,6 +190,7 @@ select.form-input { cursor: pointer; }
 .anon-content {
   max-width: 620px; text-align: center; position: relative; z-index: 1;
   background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
+  margin: auto; /* centers when short, remains fully scrollable when tall */
 }
 .anon-glitch-title {
   font-size: 44px; font-weight: 700; color: var(--red); letter-spacing: 6px;
@@ -396,6 +400,7 @@ select.form-input { cursor: pointer; }
 </div>
 
 <!-- ════ SCREEN 1: REGISTRATION ════ -->
+<canvas id="reg-matrix-canvas"></canvas>
 <div class="screen active" id="screen-reg">
   <div class="quiz-header">
     <div class="quiz-logo">
@@ -804,16 +809,23 @@ function typeAnonWarning() {
     cursor.style.display = 'none';
   }
   // Tap anywhere on the screen to skip straight to the full text
-  document.getElementById('anon-warning-overlay').addEventListener('click', (e) => {
+  const overlay = document.getElementById('anon-warning-overlay');
+  overlay.addEventListener('click', (e) => {
     if (e.target.id !== 'anon-proceed-btn') finish();
   });
+  // Auto-follow the typing so the PROCEED button stays on screen —
+  // but back off the moment the rep scrolls on their own.
+  let userScrolled = false;
+  ['wheel', 'touchmove'].forEach(ev => overlay.addEventListener(ev, () => { userScrolled = true; }, { passive: true }));
   function step() {
     if (done) return;
     if (i <= ANON_WARNING_TEXT.length) {
       el.textContent = ANON_WARNING_TEXT.slice(0, i);
       i++;
+      if (!userScrolled && i % 20 === 0) overlay.scrollTop = overlay.scrollHeight;
       setTimeout(step, 4 + Math.random() * 6); // ~4x faster than before
     } else {
+      if (!userScrolled) overlay.scrollTop = overlay.scrollHeight;
       finish();
     }
   }
@@ -821,8 +833,8 @@ function typeAnonWarning() {
 }
 
 let matrixRainTimer = null;
-function startMatrixRain() {
-  const canvas = document.getElementById('matrix-rain-canvas');
+function startMatrixRain(canvasId) {
+  const canvas = document.getElementById(canvasId || 'matrix-rain-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
@@ -854,11 +866,27 @@ function startMatrixRain() {
       drops[i]++;
     }
   }
-  matrixRainTimer = setInterval(draw, 45);
+  const timer = setInterval(draw, 45);
+  if ((canvasId || 'matrix-rain-canvas') === 'matrix-rain-canvas') matrixRainTimer = timer;
+  else regMatrixTimer = timer;
 }
 
 function stopMatrixRain() {
   if (matrixRainTimer) { clearInterval(matrixRainTimer); matrixRainTimer = null; }
+}
+
+// ── REGISTRATION-SCREEN MATRIX RAIN ───────────────────────────
+let regMatrixTimer = null;
+function startRegMatrix() {
+  const c = document.getElementById('reg-matrix-canvas');
+  if (!c || regMatrixTimer) return;
+  c.style.display = 'block';
+  startMatrixRain('reg-matrix-canvas');
+}
+function stopRegMatrix() {
+  const c = document.getElementById('reg-matrix-canvas');
+  if (c) c.style.display = 'none';
+  if (regMatrixTimer) { clearInterval(regMatrixTimer); regMatrixTimer = null; }
 }
 
 // ── BURN-AWAY TRANSITION ──────────────────────────────────────
@@ -1046,6 +1074,7 @@ function dismissAnonWarning() {
   const btn = document.getElementById('anon-proceed-btn');
   btn.disabled = true;
   stopMatrixRain();
+  startRegMatrix(); // keep the rain falling behind the registration screen
   burnAwayAnonWarning();
 }
 
@@ -1528,6 +1557,7 @@ function startQuiz() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  if (id === 'screen-reg') { startRegMatrix(); } else { stopRegMatrix(); }
   window.scrollTo(0, 0);
 }
 
