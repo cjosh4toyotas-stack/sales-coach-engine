@@ -74,7 +74,7 @@ h1 span{color:var(--red)}
 .board{display:grid;gap:14px}
 .row{
   display:grid;
-  grid-template-columns:64px 1fr minmax(140px,340px) 96px 120px 34px;
+  grid-template-columns:64px 1fr minmax(140px,340px) 96px 120px;
   align-items:center;gap:18px;
   background:var(--panel);
   border:1px solid var(--line);
@@ -98,12 +98,7 @@ h1 span{color:var(--red)}
   font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:.08em;font-size:16px;
 }
 .req .lbl{text-transform:uppercase;color:#4ADE80}
-.req input{
-  width:64px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;
-  color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:17px;
-  text-align:center;padding:6px 4px;
-}
-.req input:focus{outline:2px solid #22C55E;outline-offset:-1px}
+
 .req .pct{color:var(--dim);font-size:14px}
 .rank{
   font-family:'Rajdhani',sans-serif;font-weight:700;font-size:30px;
@@ -120,62 +115,24 @@ h1 span{color:var(--red)}
 }
 .score small{font-size:15px;color:var(--dim);font-weight:600}
 .meta{font-size:12.5px;color:var(--dim);text-align:right;line-height:1.5}
-.del{
-  background:none;border:none;color:#3A3A42;font-size:18px;cursor:pointer;
-  line-height:1;padding:4px;border-radius:6px;
-}
-.del:hover{color:var(--red);background:rgba(242,25,46,.08)}
-.del:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
 .empty{
   text-align:center;color:var(--dim);padding:60px 20px;
   border:1px dashed var(--line);border-radius:10px;
   font-family:'Rajdhani',sans-serif;letter-spacing:.12em;text-transform:uppercase;
 }
 
-.controls{
-  position:fixed;left:0;right:0;bottom:0;
-  background:rgba(8,8,10,.92);backdrop-filter:blur(8px);
-  border-top:1px solid var(--line);
-  padding:16px 28px;
-  display:none;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;
-}
-body.admin .controls{display:flex}
-.del{display:none}
-body.admin .del{display:inline-block}
-body:not(.admin) .req input{pointer-events:none}
-.controls input{
-  background:var(--panel2);border:1px solid var(--line);border-radius:8px;
-  color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;
-  padding:12px 16px;min-width:0;
-}
-.controls input::placeholder{color:#5A5A64}
-.controls input:focus{outline:2px solid var(--red);outline-offset:-1px;border-color:var(--red)}
-#f-name{flex:2 1 200px}
-#f-dealer{flex:2 1 200px}
-#f-score{flex:1 1 90px;max-width:110px}
-#f-attempts{flex:1 1 90px;max-width:110px}
-#f-time{flex:1 1 100px;max-width:120px}
-.btn{
-  border:none;border-radius:8px;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;
-  letter-spacing:.06em;padding:12px 22px;white-space:nowrap;
-}
-.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.btn-add{background:var(--red);color:#fff;box-shadow:0 0 18px rgba(242,25,46,.45)}
-.btn-add:hover{background:#FF2B40}
-.btn-clear{background:#1C1C22;color:var(--text);border:1px solid var(--line)}
-.btn-clear:hover{border-color:#3A3A42}
+
 
 @media(max-width:820px){
   .topbar{padding:12px 14px}
   .topbar .title{letter-spacing:.12em;font-size:12px}
   .live{padding:5px 10px;font-size:10px;letter-spacing:.14em}
   .wrap{padding:22px 14px 100px}
-  body.admin .wrap{padding-bottom:290px}
   h1{margin-bottom:22px}
   .req{font-size:14px;padding:12px 14px;gap:8px}
   .board{gap:10px}
-  .row{grid-template-columns:38px 1fr 62px 66px 20px;gap:8px;padding:13px 12px}
+  .row{grid-template-columns:38px 1fr 62px 66px;gap:8px;padding:13px 12px}
   .meter{display:none}
   .rank{font-size:19px}
   .rank .medal{font-size:20px}
@@ -185,9 +142,6 @@ body:not(.admin) .req input{pointer-events:none}
   .score{font-size:21px}
   .score small{font-size:12px}
   .meta{font-size:11px;line-height:1.45}
-  .controls{padding:12px 14px;gap:8px}
-  .controls input{padding:10px 12px;font-size:14px}
-  .btn{padding:10px 16px;font-size:14px}
 }
 </style>
 </head>
@@ -207,63 +161,32 @@ body:not(.admin) .req input{pointer-events:none}
   <h1>Session <span>Leaderboard</span></h1>
   <div class="req">
     <span class="lbl">Certification Requirement</span>
-    <span><input id="f-thresh" type="number" min="1" max="30" aria-label="Certification threshold score"> / 30</span>
+    <span><strong id="req-num">24</strong> / 30</span>
     <span class="pct" id="req-pct"></span>
     <span class="pct" id="sync-status" style="margin-left:auto"></span>
   </div>
   <div class="board" id="board"></div>
 </div>
 
-<div class="controls">
-  <input id="f-name" type="text" placeholder="Name" aria-label="Name">
-  <input id="f-dealer" type="text" placeholder="Dealership" aria-label="Dealership" value="McGrath Toyota of Iowa City">
-  <input id="f-score" type="number" min="0" max="30" placeholder="Score" aria-label="Score out of 30">
-  <input id="f-attempts" type="number" min="1" placeholder="Attempts" aria-label="Attempts">
-  <input id="f-time" type="text" placeholder="Time 1m 44s" aria-label="Time">
-  <button class="btn btn-add" id="btn-add">+ Add Score</button>
-  <button class="btn btn-clear" id="btn-clear">Clear All</button>
-</div>
+
 
 <script>
 (function(){
   var MAX = 30;
-  var KEY = "my27_kb_leaderboard_v1";
-  var thresh = 24; // certification requirement, editable in the banner
-
-  // Admin mode: append ?admin or #admin to the URL to show entry controls.
-  var ADMIN = /(\?|&|#)admin\b/i.test(location.search + location.hash);
-  if(ADMIN) document.body.classList.add("admin");
+  var THRESH = 24;   // certification requirement
 
   // ====== LIVE DATA SOURCE ======
   // Google Sheet linked to the What's New MY27 quiz form responses.
-  // Sheet must be shared as "Anyone with the link can view".
   var SHEET_ID = "15I3picx4snFXq4pr_5_fevvB0twyBBFLBoMHeofMytk";
   var SHEET_GID = "789292810";
   var REFRESH_MS = 15000;
 
-  // Local overrides (admin manual adds + threshold) persist per browser.
-  var mem = null;
-  function loadLocal(){
-    try{ var raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(e){}
-    return mem;
-  }
-  function saveLocal(){
-    var d = {manual:manualRows, thresh:thresh};
-    mem = d;
-    try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){}
-  }
-
-  var manualRows = [];
-  var saved = loadLocal();
-  if(saved){ manualRows = saved.manual || []; if(saved.thresh) thresh = saved.thresh; }
-
-  var sheetRows = [];      // aggregated best-per-person from the sheet
+  var sheetRows = [];
   var lastFetch = null;
   var fetchError = false;
+  var loadedOnce = false;
 
   function aggregate(raw){
-    // raw: [{name, score, secs, attempt, ts}]  -> best score per person,
-    // tie-break fastest time; attempts = number of submissions seen.
     var by = {};
     raw.forEach(function(r){
       if(!r.name) return;
@@ -280,56 +203,53 @@ body:not(.admin) .req input{pointer-events:none}
     return Object.keys(by).map(function(k){ return by[k]; });
   }
 
+  // JSONP loader: the sheet response loads as a script tag, which browsers
+  // never block cross-origin. Google's gviz API supports a custom handler name.
+  window.__lbData = function(json){
+    try{
+      var cols = json.table.cols.map(function(c){ return (c.label || "").toLowerCase(); });
+      function idx(names){
+        for(var n=0;n<names.length;n++){ for(var i=0;i<cols.length;i++){
+          if(cols[i] === names[n] || cols[i].indexOf(names[n]) === 0) return i; } }
+        return -1;
+      }
+      var iName = idx(["name"]), iDealer = idx(["dealername","dealer"]),
+          iScore = idx(["score"]), iTime = idx(["timesec"]);
+      var raw = (json.table.rows || []).map(function(r){
+        function v(i){ return (i >= 0 && r.c && r.c[i]) ? r.c[i].v : null; }
+        var score = parseInt(v(iScore), 10);
+        var secs = parseInt(v(iTime), 10);
+        return {
+          name: v(iName) ? String(v(iName)) : null,
+          dealer: v(iDealer) ? String(v(iDealer)) : "",
+          score: isNaN(score) ? null : score,
+          secs: isNaN(secs) ? null : secs
+        };
+      }).filter(function(r){
+        return r.name && r.score != null && r.name.toUpperCase().indexOf("TEST") !== 0;
+      });
+      sheetRows = aggregate(raw);
+      lastFetch = new Date();
+      fetchError = false;
+      loadedOnce = true;
+    }catch(e){
+      fetchError = true;
+    }
+    render();
+  };
+
   function fetchSheet(){
-    if(SHEET_ID.indexOf("PASTE") === 0){ fetchError = "unconfigured"; render(); return; }
-    var url = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json&gid=" + SHEET_GID;
-    fetch(url)
-      .then(function(res){ return res.text(); })
-      .then(function(txt){
-        var json = JSON.parse(txt.replace(/^[\s\S]*?setResponse\(/, "").replace(/\);?\s*$/, ""));
-        var cols = json.table.cols.map(function(c){ return (c.label || "").toLowerCase(); });
-        function idx(names){
-          for(var n=0;n<names.length;n++){ for(var i=0;i<cols.length;i++){
-            if(cols[i] === names[n] || cols[i].indexOf(names[n]) === 0) return i; } }
-          return -1;
-        }
-        var iName = idx(["name"]), iDealer = idx(["dealername","dealer"]), iScore = idx(["score"]),
-            iTime = idx(["timesec"]), iTotal = idx(["total"]);
-        var raw = (json.table.rows || []).map(function(r){
-          function v(i){ return (i >= 0 && r.c && r.c[i]) ? r.c[i].v : null; }
-          var score = parseInt(v(iScore), 10);
-          var secs = parseInt(v(iTime), 10);
-          return {
-            name: v(iName) ? String(v(iName)) : null,
-            dealer: v(iDealer) ? String(v(iDealer)) : "",
-            score: isNaN(score) ? null : score,
-            secs: isNaN(secs) ? null : secs
-          };
-        }).filter(function(r){
-          return r.name && r.score != null && r.name.toUpperCase().indexOf("TEST") !== 0;
-        });
-        sheetRows = aggregate(raw);
-        lastFetch = new Date();
-        fetchError = false;
-        render();
-      })
-      .catch(function(){ fetchError = true; render(); });
+    var old = document.getElementById("lb-jsonp");
+    if(old && old.parentNode) old.parentNode.removeChild(old);
+    var s = document.createElement("script");
+    s.id = "lb-jsonp";
+    s.src = "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
+            "/gviz/tq?gid=" + SHEET_GID +
+            "&tqx=out:json;responseHandler:__lbData&_=" + Date.now();
+    s.onerror = function(){ fetchError = true; render(); };
+    document.body.appendChild(s);
   }
 
-  function allRows(){ return sheetRows.concat(manualRows); }
-
-  function parseTime(str){
-    if(!str) return null;
-    str = String(str).trim().toLowerCase();
-    var m = str.match(/^(\d+)\s*m(?:in)?\s*(\d+)?\s*s?(?:ec)?$/);   // "1m 44s", "1m", "1min 44"
-    if(m) return (+m[1])*60 + (m[2]? +m[2] : 0);
-    var c = str.match(/^(\d+):(\d{1,2})$/);                          // "1:44"
-    if(c) return (+c[1])*60 + (+c[2]);
-    var s = str.match(/^(\d+)\s*s(?:ec)?s?$/);                       // "95s"
-    if(s) return +s[1];
-    if(/^\d+$/.test(str)) return +str;                               // bare seconds
-    return null;
-  }
   function fmtTime(secs){
     if(secs == null) return "";
     var m = Math.floor(secs/60), s = secs % 60;
@@ -337,7 +257,7 @@ body:not(.admin) .req input{pointer-events:none}
   }
 
   function sorted(){
-    return allRows().slice().sort(function(a,b){
+    return sheetRows.slice().sort(function(a,b){
       if(b.score !== a.score) return b.score - a.score;
       var at = a.secs == null ? Infinity : a.secs;
       var bt = b.secs == null ? Infinity : b.secs;
@@ -355,39 +275,38 @@ body:not(.admin) .req input{pointer-events:none}
   }
 
   function render(){
-    var board = document.getElementById("board");
-    var ti = document.getElementById("f-thresh");
-    if(document.activeElement !== ti) ti.value = thresh;
+    document.getElementById("req-num").textContent = THRESH;
     document.getElementById("req-pct").textContent =
-      Math.round((thresh / MAX) * 100) + "% required to certify";
+      Math.round((THRESH / MAX) * 100) + "% required to certify";
     var st = document.getElementById("sync-status");
-    if(fetchError === "unconfigured"){ st.textContent = "Results feed not connected yet"; }
-    else if(fetchError){ st.textContent = "Reconnecting to results feed\u2026"; }
+    if(fetchError && !loadedOnce){ st.textContent = "Reconnecting to results feed\u2026"; }
+    else if(fetchError){ st.textContent = "Live \u00b7 retrying\u2026"; }
     else if(lastFetch){ st.textContent = "Live \u00b7 updated " + lastFetch.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
     else { st.textContent = "Loading live results\u2026"; }
+
+    var board = document.getElementById("board");
     var list = sorted();
     if(list.length === 0){
-      board.innerHTML = '<div class="empty">No scores yet — add the first result below</div>';
+      board.innerHTML = '<div class="empty">' +
+        (loadedOnce ? "Waiting for the first quiz result" : "Connecting to live results") +
+        '\u2026</div>';
       return;
     }
     board.innerHTML = list.map(function(r, i){
       var pos = i + 1;
-      var certified = r.score >= thresh;
+      var certified = r.score >= THRESH;
       var cls = certified ? "certified" : "";
       var style = "";
       if(!certified){
-        // Fade from orange near the requirement down to red at the bottom
-        var ratio = Math.max(0, Math.min(1, r.score / thresh));
+        var ratio = Math.max(0, Math.min(1, r.score / THRESH));
         var hue = Math.round(35 * ratio);
         style = ' style="background:hsla(' + hue + ',75%,45%,.10);border-color:hsla(' + hue + ',75%,55%,.35)"';
       }
-      var rank = pos <= 3
-        ? '<span class="medal">' + medals[pos-1] + '</span>'
-        : pos;
+      var rank = pos <= 3 ? '<span class="medal">' + medals[pos-1] + '</span>' : pos;
       var pct = Math.max(4, Math.round((r.score / MAX) * 100));
       var badge = certified
         ? '<span class="badge ok">Certified</span>'
-        : '<span class="badge no">' + (thresh - r.score) + ' to go</span>';
+        : '<span class="badge no">' + (THRESH - r.score) + ' to go</span>';
       var meta = [];
       if(r.attempts) meta.push(r.attempts + (r.attempts === 1 ? " attempt" : " attempts"));
       if(r.secs != null) meta.push(fmtTime(r.secs));
@@ -397,58 +316,9 @@ body:not(.admin) .req input{pointer-events:none}
         '<div class="meter"><i style="width:' + pct + '%"></i></div>' +
         '<div class="score">' + r.score + '<small>/' + MAX + '</small></div>' +
         '<div class="meta">' + meta.join("<br>") + '</div>' +
-        (manualRows.indexOf(r) !== -1 ? '<button class="del" data-i="' + manualRows.indexOf(r) + '" title="Remove ' + esc(r.name) + '" aria-label="Remove ' + esc(r.name) + '">&times;</button>' : '<span></span>') +
       '</div>';
     }).join("");
   }
-
-  document.getElementById("f-thresh").addEventListener("input", function(){
-    var v = parseInt(this.value, 10);
-    if(!isNaN(v) && v >= 1 && v <= MAX){
-      thresh = v;
-      saveLocal(); render();
-    }
-  });
-
-  document.getElementById("board").addEventListener("click", function(e){
-    var btn = e.target.closest(".del");
-    if(!btn) return;
-    var idx = +btn.getAttribute("data-i");
-    manualRows.splice(idx, 1);
-    saveLocal(); render();
-  });
-
-  function addEntry(){
-    var name = document.getElementById("f-name").value.trim();
-    var dealer = document.getElementById("f-dealer").value.trim();
-    var score = parseInt(document.getElementById("f-score").value, 10);
-    var attempts = parseInt(document.getElementById("f-attempts").value, 10);
-    var secs = parseTime(document.getElementById("f-time").value);
-    if(!name || isNaN(score)) return;
-    score = Math.max(0, Math.min(MAX, score));
-    manualRows.push({
-      name:name, dealer:dealer, score:score,
-      attempts:isNaN(attempts)? null : attempts,
-      secs:secs
-    });
-    saveLocal(); render();
-    document.getElementById("f-name").value = "";
-    document.getElementById("f-score").value = "";
-    document.getElementById("f-attempts").value = "";
-    document.getElementById("f-time").value = "";
-    document.getElementById("f-name").focus();
-  }
-
-  document.getElementById("btn-add").addEventListener("click", addEntry);
-  document.querySelector(".controls").addEventListener("keydown", function(e){
-    if(e.key === "Enter") addEntry();
-  });
-  document.getElementById("btn-clear").addEventListener("click", function(){
-    if(confirm("Clear manually added scores? (Quiz results from the live feed stay.)")){
-      manualRows = [];
-      saveLocal(); render();
-    }
-  });
 
   render();
   fetchSheet();
