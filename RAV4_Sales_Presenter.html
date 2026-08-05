@@ -6396,24 +6396,69 @@ async function fetchGoogleFormResults() {
 
 setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops for decks without a configured Sheet
 
+// ── GROUPED LEADERBOARD: one row per consultant, best score + attempt count ──
+function groupScoresByPerson() {
+  const map = {};
+  const order = [];
+  scores.forEach(s => {
+    const key = (s.name || '').trim().toLowerCase();
+    if (!map[key]) { map[key] = []; order.push(key); }
+    map[key].push(s);
+  });
+  return order.map(key => {
+    const entries = map[key].slice().sort((a, b) => b.score - a.score || (b.attempt || 0) - (a.attempt || 0));
+    const best = entries[0];
+    const maxAttempt = Math.max(entries.length, ...entries.map(e => Number(e.attempt) || 0));
+    return { key, best, others: entries.slice(1), attempts: maxAttempt };
+  }).sort((a, b) => b.best.score - a.best.score || a.best.ts - b.best.ts);
+}
+
+let _expandedPeople = {};
+let _lastGroups = [];
+
+function togglePerson(gi) {
+  const g = _lastGroups[gi];
+  if (!g || !g.others.length) return;
+  _expandedPeople[g.key] = !_expandedPeople[g.key];
+  renderScoreboard();
+}
+
 function renderScoreboard() {
   const el = document.getElementById('scoreboard-list-' + currentDeck);
   if (!el) return;
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
-  el.innerHTML = scores.slice(0, 25).map((s, i) => `
-    <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
+  _lastGroups = groupScoresByPerson();
+  el.innerHTML = _lastGroups.slice(0, 25).map((g, i) => {
+    const s = g.best;
+    const open = !!_expandedPeople[g.key];
+    const chev = g.others.length ? `<span style="font-size:11px;color:var(--text-muted);margin-left:6px">${open ? '▾' : '▸'}</span>` : '';
+    const main = `
+    <div class="score-row rank-${i < 3 ? i+1 : 'n'}" ${g.others.length ? `onclick="togglePerson(${i})" style="cursor:pointer"` : ''}>
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-      <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
+      <div class="score-name"><div class="score-name-main">${s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
-      <button class="score-remove" onclick="removeScore(${i})" title="Remove this entry" style="background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:0 6px;line-height:1">&times;</button>
-    </div>
-  `).join('');
+      <div style="font-size:11px;color:var(--text-muted);min-width:74px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}</div>
+    </div>`;
+    const subs = open ? g.others.map((o, oi) => `
+    <div class="score-row" style="opacity:.6;margin-left:44px">
+      <div class="score-rank" style="font-size:11px;color:var(--text-muted)">#${o.attempt || '?'}</div>
+      <div class="score-name"><div class="score-name-dealer">Attempt ${o.attempt || '—'}</div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${o.pct}%;opacity:.7"></div></div></div>
+      <div class="score-num" style="font-size:16px">${o.score}<span style="font-size:12px;color:var(--text-muted)">/${entryTotal(o)}</span></div>
+      ${o._sessionDate === undefined ? `<button class="score-remove" onclick="event.stopPropagation();removeGroupedScore(${i},${oi})" title="Remove this entry" style="background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:0 6px;line-height:1">&times;</button>` : ''}
+    </div>`).join('') : '';
+    return main + subs;
+  }).join('');
 }
 
-function removeScore(i) {
-  if (i < 0 || i >= scores.length) return;
-  if (!confirm('Remove ' + scores[i].name + ' (' + scores[i].score + ') from the leaderboard?')) return;
+function removeGroupedScore(gi, oi) {
+  const g = _lastGroups[gi];
+  if (!g || !g.others[oi]) return;
+  const entry = g.others[oi];
+  if (!confirm('Remove ' + entry.name + ' (' + entry.score + ') from the leaderboard?')) return;
+  const i = scores.indexOf(entry);
+  if (i === -1) return;
   scores.splice(i, 1);
   try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {}
   renderScoreboard();
@@ -6424,21 +6469,29 @@ function renderFinalScoreboard() {
   const el = document.getElementById('final-scoreboard-' + currentDeck);
   if (!el) return;
   if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No quiz results yet.</div>'; return; }
-  el.innerHTML = scores.slice(0, 5).map((s, i) => `
+  el.innerHTML = groupScoresByPerson().slice(0, 5).map((g, i) => { const s = g.best; return `
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
       <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
+      <div style="font-size:11px;color:var(--text-muted);min-width:74px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}</div>
     </div>
-  `).join('');
+  `;}).join('');
   renderCertSummary();
   renderFocusSummary();
 }
 
 // ── CERTIFICATION PROGRESS & FOCUS AREA ──────────────────────
 function getCertifiedList() {
-  return scores.filter(s => entryCertified(s)).sort((a, b) => b.score - a.score);
+  const certified = scores.filter(s => entryCertified(s)).sort((a, b) => b.score - a.score);
+  const seen = {};
+  return certified.filter(s => {
+    const key = (s.name || '').trim().toLowerCase();
+    if (seen[key]) return false;
+    seen[key] = true;
+    return true;
+  });
 }
 
 function getMissedQuestionStats() {
