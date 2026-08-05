@@ -6353,7 +6353,7 @@ async function fetchGoogleFormResults() {
     // Every poll rebuilds sheet-derived entries from scratch, so edits and
     // deletions in the Sheet show up on the leaderboard within 15 seconds.
     // Manual Add Score and Import Results entries (no _sessionDate) are kept.
-    const SHEET_NAME_FIXES = { 'balbazor': 'Mike Wells' };
+    const SHEET_NAME_FIXES = { 'balbazor': 'Michael Wells', 'mike wells': 'Michael Wells' };
     const fetched = [];
     rows.slice(1).filter(r => r.length > 1).forEach(r => {
       const sessionDate = r[idx.sessionDate] || '';
@@ -6400,10 +6400,13 @@ async function fetchGoogleFormResults() {
 setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops for decks without a configured Sheet
 
 // ── GROUPED LEADERBOARD: one row per consultant, best score + attempt count ──
+const PERSON_ALIASES = { 'mike wells': 'Michael Wells', 'balbazor': 'Michael Wells' };
 function groupScoresByPerson() {
   const map = {};
   const order = [];
   scores.forEach(s => {
+    const alias = PERSON_ALIASES[(s.name || '').trim().toLowerCase()];
+    if (alias) s.name = alias;
     const key = (s.name || '').trim().toLowerCase();
     if (!map[key]) { map[key] = []; order.push(key); }
     map[key].push(s);
@@ -6438,7 +6441,7 @@ function renderScoreboard() {
     const main = `
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}" ${g.others.length ? `onclick="togglePerson(${i})" style="cursor:pointer"` : ''}>
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-      <div class="score-name"><div class="score-name-main">${s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
+      <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
       <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
@@ -6475,7 +6478,7 @@ function renderFinalScoreboard() {
   el.innerHTML = groupScoresByPerson().slice(0, 5).map((g, i) => { const s = g.best; return `
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-      <div class="score-name"><div class="score-name-main">${s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
+      <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
       <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
@@ -6579,7 +6582,7 @@ function closeDetailModal() {
 
 // ── SECURITY SYSTEM ──────────────────────────────────────────
 const _SEC_KEY='rav4_sec_v1';
-const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _SEC_DEF={masterPin:'7522',managerPin:'1461',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
 const _FILE_REQ='manager';
 let _secPin='',_secCfg={},_secLevel=null;
 function _getSecCfg(){try{const s=localStorage.getItem(_SEC_KEY);return s?{..._SEC_DEF,...JSON.parse(s)}:{..._SEC_DEF}}catch(e){return{..._SEC_DEF}}}
