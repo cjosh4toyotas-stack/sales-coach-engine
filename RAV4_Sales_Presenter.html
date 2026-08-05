@@ -6356,8 +6356,8 @@ async function fetchGoogleFormResults() {
     rows.slice(1).filter(r => r.length > 1).forEach(r => {
       const sessionDate = r[idx.sessionDate] || '';
       let name = (r[idx.name] || '').trim();
-      // Skip blank rows and pipeline test submissions — they stay in the sheet but never hit the leaderboard
-      if (!name || /^test\b/i.test(name)) return;
+      // Skip blank rows, pipeline test submissions, and the quiz author's own attempts
+      if (!name || /^test\b/i.test(name) || name.toLowerCase() === 'josh hicks') return;
       name = SHEET_NAME_FIXES[name.toLowerCase()] || name;
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
