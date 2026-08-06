@@ -291,9 +291,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
   background: var(--surface); border: 1px solid var(--border);
   transition: all .3s;
 }
-.score-row.rank-1 { background: rgba(235,10,30,0.08); border-color: rgba(235,10,30,0.3); }
-.score-row.rank-2 { background: rgba(118,185,255,0.06); border-color: rgba(118,185,255,0.2); }
-.score-row.rank-3 { background: rgba(0,229,160,0.06); border-color: rgba(0,229,160,0.2); }
+.score-row.rank-1 { background: rgba(212,175,55,0.07); border: 2px solid #D4AF37; }
+.score-row.rank-2 { background: rgba(192,192,192,0.06); border: 2px solid #C0C0C0; }
+.score-row.rank-3 { background: rgba(205,127,50,0.07); border: 2px solid #CD7F32; }
 .score-rank { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; width: 40px; color: var(--text-muted); }
 .score-row.rank-1 .score-rank { color: var(--red); }
 .score-name { flex: 1; }
@@ -6025,7 +6025,12 @@ function deckPassThreshold(){ return (DECK_CONFIG[currentDeck] && DECK_CONFIG[cu
 function entryTotal(s){ return (s && Number(s.total)) || deckTotal(); }
 function entryTime(s){ const t = Number(s && s.timeSec); return t > 0 ? t : Infinity; }
 function fmtQuizTime(s){ const t = Number(s && s.timeSec); if (!(t > 0)) return ''; const m = Math.floor(t / 60), sec = Math.round(t % 60); return m ? m + 'm ' + sec + 's' : sec + 's'; }
-function entryCertified(s){ return (s && s.certified !== undefined && s.certified !== '') ? (s.certified === true || s.certified === 'true' || s.certified === 'TRUE') : (s.score >= deckPassThreshold()); }
+function entryCertified(s){
+  if (!s) return false;
+  if (s.certified === true || s.certified === 'true' || s.certified === 'TRUE') return true;
+  // A stale FALSE from a hand-edited sheet row shouldn't block certification the score has earned
+  return Number(s.score) >= deckPassThreshold();
+}
 
 function scoresKey(){ return 'presenter_scores_' + currentDeck; }
 
