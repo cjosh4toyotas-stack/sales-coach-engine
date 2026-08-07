@@ -6068,10 +6068,10 @@ function selectDeck(deckName) {
   // Deck-specific scores
   scores = JSON.parse(localStorage.getItem(scoresKey()) || '[]');
   // Correct known junk names to their Staff Master identity
-  const NAME_CORRECTIONS = { 'balbazor': 'Michael Wells', 'mike wells': 'Michael Wells', 'nikki elledge': 'Nicole Elledge' };
+  const NAME_CORRECTIONS = { 'balbazor': 'Michael Wells', 'mikewells': 'Michael Wells', 'nikkielledge': 'Nicole Elledge' };
   let corrected = false;
   scores.forEach(s => {
-    const fix = NAME_CORRECTIONS[(s.name || '').trim().toLowerCase()];
+    const fix = NAME_CORRECTIONS[String(s.name || '').toLowerCase().replace(/[^a-z]/g, '')];
     if (fix) { s.name = fix; corrected = true; }
   });
   if (corrected) { try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {} }
@@ -6358,14 +6358,14 @@ async function fetchGoogleFormResults() {
     // Every poll rebuilds sheet-derived entries from scratch, so edits and
     // deletions in the Sheet show up on the leaderboard within 15 seconds.
     // Manual Add Score and Import Results entries (no _sessionDate) are kept.
-    const SHEET_NAME_FIXES = { 'balbazor': 'Michael Wells', 'mike wells': 'Michael Wells', 'nikki elledge': 'Nicole Elledge' };
+    const SHEET_NAME_FIXES = { 'balbazor': 'Michael Wells', 'mikewells': 'Michael Wells', 'nikkielledge': 'Nicole Elledge' };
     const fetched = [];
     rows.slice(1).filter(r => r.length > 1).forEach(r => {
       const sessionDate = r[idx.sessionDate] || '';
       let name = (r[idx.name] || '').trim();
       // Skip blank rows, pipeline test submissions, and the quiz author's own attempts
       if (!name || /^test\b/i.test(name) || name.toLowerCase() === 'josh hicks') return;
-      name = SHEET_NAME_FIXES[name.toLowerCase()] || name;
+      name = SHEET_NAME_FIXES[nameKey(name)] || name;
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
       fetched.push({
@@ -6405,14 +6405,16 @@ async function fetchGoogleFormResults() {
 setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops for decks without a configured Sheet
 
 // ── GROUPED LEADERBOARD: one row per consultant, best score + attempt count ──
-const PERSON_ALIASES = { 'mike wells': 'Michael Wells', 'balbazor': 'Michael Wells', 'nikki elledge': 'Nicole Elledge' };
+// nameKey: letters only, lowercased — 'Nikki  Elledge', 'Nikki\u00A0Elledge', 'nikki elledge.' all collapse to the same key
+function nameKey(n) { return String(n || '').toLowerCase().replace(/[^a-z]/g, ''); }
+const PERSON_ALIASES = { 'mikewells': 'Michael Wells', 'balbazor': 'Michael Wells', 'nikkielledge': 'Nicole Elledge' };
 function groupScoresByPerson() {
   const map = {};
   const order = [];
   scores.forEach(s => {
-    const alias = PERSON_ALIASES[(s.name || '').trim().toLowerCase()];
+    const alias = PERSON_ALIASES[nameKey(s.name)];
     if (alias) s.name = alias;
-    const key = (s.name || '').trim().toLowerCase();
+    const key = nameKey(s.name);
     if (!map[key]) { map[key] = []; order.push(key); }
     map[key].push(s);
   });
@@ -6498,7 +6500,7 @@ function getCertifiedList() {
   const certified = scores.filter(s => entryCertified(s)).sort((a, b) => b.score - a.score);
   const seen = {};
   return certified.filter(s => {
-    const key = (s.name || '').trim().toLowerCase();
+    const key = nameKey(s.name);
     if (seen[key]) return false;
     seen[key] = true;
     return true;
