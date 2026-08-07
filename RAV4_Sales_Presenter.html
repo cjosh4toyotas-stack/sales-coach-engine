@@ -291,11 +291,15 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
   background: var(--surface); border: 1px solid var(--border);
   transition: all .3s;
 }
-.score-row.rank-1 { background: rgba(212,175,55,0.07); border: 2px solid #D4AF37; }
-.score-row.rank-2 { background: rgba(192,192,192,0.06); border: 2px solid #C0C0C0; }
-.score-row.rank-3 { background: rgba(205,127,50,0.07); border: 2px solid #CD7F32; }
+.score-row.rank-1 { background: rgba(212,175,55,0.18); border: 2px solid #D4AF37; }
+.score-row.rank-2 { background: rgba(192,192,192,0.14); border: 2px solid #C0C0C0; }
+.score-row.rank-3 { background: rgba(205,127,50,0.16); border: 2px solid #CD7F32; }
+.score-row.rank-1 .score-rank, .score-row.rank-2 .score-rank, .score-row.rank-3 .score-rank { font-size: 42px; width: 56px; line-height: 1; }
+.score-row.rank-1 .score-num { font-size: 34px; color: #D4AF37; text-shadow: 0 0 14px rgba(212,175,55,0.55); }
+.score-row.rank-2 .score-num { font-size: 34px; color: #C0C0C0; text-shadow: 0 0 14px rgba(192,192,192,0.45); }
+.score-row.rank-3 .score-num { font-size: 34px; color: #CD7F32; text-shadow: 0 0 14px rgba(205,127,50,0.5); }
 .score-rank { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; width: 40px; color: var(--text-muted); }
-.score-row.rank-1 .score-rank { color: var(--red); }
+
 .score-name { flex: 1; }
 .score-name-main { font-size: 16px; font-weight: 600; }
 .score-name-dealer { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
@@ -303,7 +307,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 .score-bar-bg { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
 .score-bar-fill { height: 100%; background: var(--red); border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
 .score-num { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; min-width: 60px; text-align: right; }
-.score-row.rank-1 .score-num { color: var(--red); }
+
 
 /* ── FEATURES LIST ────────────────────────────────────── */
 .feature-list { display: flex; flex-direction: column; gap: 10px; }
@@ -6449,7 +6453,7 @@ function renderScoreboard() {
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}" ${g.others.length ? `onclick="togglePerson(${i})" style="cursor:pointer"` : ''}>
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
       <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
-      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%;background:${entryCertified(s) ? 'var(--green)' : 'var(--red)'}"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
       <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
     </div>`;
@@ -6457,7 +6461,7 @@ function renderScoreboard() {
     <div class="score-row" style="opacity:.6;margin-left:44px">
       <div class="score-rank" style="font-size:11px;color:var(--text-muted)">#${o.attempt || '?'}</div>
       <div class="score-name"><div class="score-name-dealer">Attempt ${o.attempt || '—'}${fmtQuizTime(o) ? ' · ' + fmtQuizTime(o) : ''}</div></div>
-      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${o.pct}%;opacity:.7"></div></div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${o.pct}%;opacity:.7;background:${entryCertified(o) ? 'var(--green)' : 'var(--red)'}"></div></div></div>
       <div class="score-num" style="font-size:16px">${o.score}<span style="font-size:12px;color:var(--text-muted)">/${entryTotal(o)}</span></div>
       ${o._sessionDate === undefined ? `<button class="score-remove" onclick="event.stopPropagation();removeGroupedScore(${i},${oi})" title="Remove this entry" style="background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:0 6px;line-height:1">&times;</button>` : ''}
     </div>`).join('') : '';
@@ -6486,7 +6490,7 @@ function renderFinalScoreboard() {
     <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
       <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
       <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
-      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%"></div></div></div>
+      <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%;background:${entryCertified(s) ? 'var(--green)' : 'var(--red)'}"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
       <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
     </div>
