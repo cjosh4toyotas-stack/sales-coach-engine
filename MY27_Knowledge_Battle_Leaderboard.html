@@ -186,6 +186,28 @@ h1 span{color:var(--red)}
   var fetchError = false;
   var loadedOnce = false;
 
+  // ====== DNS OVERRIDES ======
+  // These reps show as DNS · 0/30. Any sheet rows for them stamped BEFORE
+  // the cutoff are wiped from the board; if they choose to take the quiz,
+  // a submission AFTER the cutoff scores normally and replaces the DNS row.
+  var DNS_CUTOFF = new Date(2026, 7, 10, 10, 0, 0);   // Aug 10, 2026 10:00 AM (sheet local time)
+  var DNS_NAMES = ["kaden darby", "shawn still", "joe vogt", "joseph vogt"];
+  var DNS_PINNED = [
+    {name:"Kaden Darby", key:["kaden darby"]},
+    {name:"Shawn Still", key:["shawn still"]},
+    {name:"Joe Vogt",    key:["joe vogt","joseph vogt"]}
+  ];
+  var DNS_DEALER = "McGrath Toyota of Iowa City";
+
+  // gviz datetime cells arrive as "Date(y,m,d,h,mi,s)" (month is 0-based).
+  function parseGvizDate(v){
+    if(v == null) return null;
+    var m = /Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?/.exec(String(v));
+    if(m) return new Date(+m[1], +m[2], +m[3], +(m[4]||0), +(m[5]||0), +(m[6]||0));
+    var d = new Date(v);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   function aggregate(raw){
     var by = {};
     raw.forEach(function(r){
@@ -214,9 +236,10 @@ h1 span{color:var(--red)}
         return -1;
       }
       var iName = idx(["name"]), iDealer = idx(["dealername","dealer"]),
-          iScore = idx(["score"]), iTime = idx(["timesec"]);
+          iScore = idx(["score"]), iTime = idx(["timesec"]),
+          iStamp = idx(["timestamp"]);
       var HIDDEN = ["josh hicks"];   // never displayed on the board
-      var ALIASES = { "mike wells": "Michael Wells" };   // same person, merged
+      var ALIASES = { "mike wells": "Michael Wells", "joseph vogt": "Joe Vogt" };   // same person, merged
       var raw = (json.table.rows || []).map(function(r){
         function v(i){ return (i >= 0 && r.c && r.c[i]) ? r.c[i].v : null; }
         var score = parseInt(v(iScore), 10);
@@ -225,16 +248,27 @@ h1 span{color:var(--red)}
           name: v(iName) ? String(v(iName)) : null,
           dealer: v(iDealer) ? String(v(iDealer)) : "",
           score: isNaN(score) ? null : score,
-          secs: isNaN(secs) ? null : secs
+          secs: isNaN(secs) ? null : secs,
+          stamp: parseGvizDate(v(iStamp))
         };
       }).filter(function(r){
         if(!r.name || r.score == null) return false;
         var n = r.name.trim().toLowerCase();
         if(ALIASES[n]){ r.name = ALIASES[n]; n = r.name.toLowerCase(); }
         if(n.indexOf("test") === 0) return false;
-        return HIDDEN.indexOf(n) === -1;
+        if(HIDDEN.indexOf(n) !== -1) return false;
+        // DNS wipe: drop this rep's pre-cutoff scores (no timestamp = old row).
+        if(DNS_NAMES.indexOf(n) !== -1 && (!r.stamp || r.stamp < DNS_CUTOFF)) return false;
+        return true;
       });
       sheetRows = aggregate(raw);
+      // Pin a DNS · 0/30 row for each listed rep with no post-cutoff score.
+      DNS_PINNED.forEach(function(p){
+        var has = sheetRows.some(function(r){
+          return p.key.indexOf(r.name.trim().toLowerCase()) !== -1;
+        });
+        if(!has) sheetRows.push({name:p.name, dealer:DNS_DEALER, score:0, secs:null, attempts:0, dns:true});
+      });
       lastFetch = new Date();
       fetchError = false;
       loadedOnce = true;
@@ -308,14 +342,20 @@ h1 span{color:var(--red)}
         var hue = Math.round(35 * ratio);
         style = ' style="background:hsla(' + hue + ',75%,45%,.10);border-color:hsla(' + hue + ',75%,55%,.35)"';
       }
-      var rank = pos <= 3 ? '<span class="medal">' + medals[pos-1] + '</span>' : pos;
-      var pct = Math.max(4, Math.round((r.score / MAX) * 100));
+      var rank = r.dns ? '&mdash;' : (pos <= 3 ? '<span class="medal">' + medals[pos-1] + '</span>' : pos);
+      var pct = r.dns ? 0 : Math.max(4, Math.round((r.score / MAX) * 100));
       var badge = certified
         ? '<span class="badge ok">Certified</span> \uD83C\uDFC6'
-        : '<span class="badge no">' + (THRESH - r.score) + ' to go</span>';
+        : (r.dns
+          ? '<span class="badge no">DNS</span>'
+          : '<span class="badge no">' + (THRESH - r.score) + ' to go</span>');
       var meta = [];
-      if(r.attempts) meta.push(r.attempts + (r.attempts === 1 ? " attempt" : " attempts"));
-      if(r.secs != null) meta.push(fmtTime(r.secs));
+      if(r.dns){
+        meta.push("Did not start");
+      } else {
+        if(r.attempts) meta.push(r.attempts + (r.attempts === 1 ? " attempt" : " attempts"));
+        if(r.secs != null) meta.push(fmtTime(r.secs));
+      }
       return '<div class="row ' + cls + '"' + style + '>' +
         '<div class="rank">' + rank + '</div>' +
         '<div class="who"><div class="name">' + esc(r.name) + badge + '</div><div class="dealer">' + esc(r.dealer||"") + '</div></div>' +
