@@ -346,7 +346,7 @@ select.form-input { cursor: pointer; }
     <div class="sec-brand">TOYOTA · WHAT'S NEW 2027</div>
     <div class="sec-heading">Knowledge <span>Battle</span></div>
     <div class="sec-sub" id="sec-access-label">Enter Your Access PIN</div>
-    <div class="pin-dots" id="sec-pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div class="pin-dots" id="sec-pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div><div class="pin-dot" id="pd4"></div><div class="pin-dot" id="pd5"></div></div>
     <div class="pin-err-msg" id="pin-err-msg"></div>
     <div class="pin-pad">
       <div class="pin-key" onclick="secKey('1')">1</div><div class="pin-key" onclick="secKey('2')">2</div><div class="pin-key" onclick="secKey('3')">3</div>
@@ -376,10 +376,10 @@ select.form-input { cursor: pointer; }
   <div class="admin-panel">
     <div class="admin-title">Master Admin</div>
     <div class="admin-badge">● MASTER ACCESS</div>
-    <div class="admin-sec-label">Access PINs (4 digits each)</div>
-    <div class="admin-pin-row"><span class="admin-pin-lbl">Master PIN</span><input class="admin-pin-inp" id="ap-master" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
-    <div class="admin-pin-row"><span class="admin-pin-lbl">Manager PIN</span><input class="admin-pin-inp" id="ap-manager" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
-    <div class="admin-pin-row" style="margin-bottom:16px"><span class="admin-pin-lbl">Sales PIN</span><input class="admin-pin-inp" id="ap-sales" type="password" maxlength="4" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-sec-label">Access PINs (4–6 digits)</div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Master PIN</span><input class="admin-pin-inp" id="ap-master" type="password" maxlength="6" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row"><span class="admin-pin-lbl">Manager PIN</span><input class="admin-pin-inp" id="ap-manager" type="password" maxlength="6" placeholder="••••" autocomplete="off"></div>
+    <div class="admin-pin-row" style="margin-bottom:16px"><span class="admin-pin-lbl">Sales PIN</span><input class="admin-pin-inp" id="ap-sales" type="password" maxlength="6" placeholder="••••••" autocomplete="off"></div>
     <div class="admin-sec-label">Lock Message</div>
     <textarea class="admin-lock-ta" id="ap-lock-msg" placeholder="Message displayed when system is locked..."></textarea>
     <div class="admin-actions" style="display:flex;gap:8px;flex-wrap:wrap">
@@ -599,8 +599,9 @@ function wireNameAutocomplete() {
 document.addEventListener('DOMContentLoaded', wireNameAutocomplete);
 
 // ── SECURITY SYSTEM ──────────────────────────────────────────
-const _SEC_KEY='whatsnew2027_sec_v1';
-const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'1234',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _SEC_KEY='whatsnew2027_sec_v2';
+const _SEC_DEF={masterPin:'7522',managerPin:'4321',salesPin:'262027',locked:false,lockMsg:'This training system has been temporarily locked by your administrator.'};
+const _SEC_MAXLEN=6;
 const _FILE_REQ='sales';
 let _secPin='',_secCfg={},_secLevel=null;
 function _getSecCfg(){try{const s=localStorage.getItem(_SEC_KEY);return s?{..._SEC_DEF,...JSON.parse(s)}:{..._SEC_DEF}}catch(e){return{..._SEC_DEF}}}
@@ -616,10 +617,10 @@ function secInit(){
   else{lk.style.display='none';pe.style.display='flex'}
 }
 function secShowPin(){document.getElementById('lock-screen').style.display='none';const pe=document.getElementById('pin-entry');pe.style.display='flex';document.getElementById('sec-access-label').textContent='Master PIN Required'}
-function secKey(k){if(_secPin.length>=4)return;_secPin+=k;_secUpdateDots();if(_secPin.length===4)setTimeout(_secCheck,130)}
+function secKey(k){if(_secPin.length>=_SEC_MAXLEN)return;_secPin+=k;_secUpdateDots();const c=_getSecCfg();const hit=[c.masterPin,c.managerPin,c.salesPin].includes(_secPin);if(hit||_secPin.length===_SEC_MAXLEN)setTimeout(_secCheck,130)}
 function secDel(){_secPin=_secPin.slice(0,-1);_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
 function secClear(){_secPin='';_secUpdateDots();document.getElementById('pin-err-msg').textContent=''}
-function _secUpdateDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<_secPin.length);d.classList.remove('error')}}
+function _secUpdateDots(){for(let i=0;i<_SEC_MAXLEN;i++){const d=document.getElementById('pd'+i);d.classList.toggle('filled',i<_secPin.length);d.classList.remove('error')}}
 function _secCheck(){
   _secCfg=_getSecCfg();
   let level=null;
@@ -634,7 +635,7 @@ function _secCheck(){
     if(level==='master'){document.getElementById('admin-fab').style.display='flex';if(_secCfg.locked){_secCfg.locked=false;_saveSecCfg(_secCfg)}}
   }else{
     const dots=document.getElementById('sec-pin-dots');dots.classList.add('pin-shake');
-    for(let i=0;i<4;i++)document.getElementById('pd'+i).classList.add('error');
+    for(let i=0;i<_SEC_MAXLEN;i++)document.getElementById('pd'+i).classList.add('error');
     document.getElementById('pin-err-msg').textContent='Incorrect PIN. Try again.';
     setTimeout(()=>{_secPin='';_secUpdateDots();dots.classList.remove('pin-shake')},700)
   }
@@ -652,9 +653,9 @@ function openAdminPanel(){
 function secSaveAdmin(){
   _secCfg=_getSecCfg();
   const m=document.getElementById('ap-master').value.trim(),mg=document.getElementById('ap-manager').value.trim(),s=document.getElementById('ap-sales').value.trim();
-  if(m.length===4&&/^\d+$/.test(m))_secCfg.masterPin=m;
-  if(mg.length===4&&/^\d+$/.test(mg))_secCfg.managerPin=mg;
-  if(s.length===4&&/^\d+$/.test(s))_secCfg.salesPin=s;
+  if(/^\d{4,6}$/.test(m))_secCfg.masterPin=m;
+  if(/^\d{4,6}$/.test(mg))_secCfg.managerPin=mg;
+  if(/^\d{4,6}$/.test(s))_secCfg.salesPin=s;
   _secCfg.lockMsg=document.getElementById('ap-lock-msg').value.trim()||_SEC_DEF.lockMsg;
   _saveSecCfg(_secCfg);document.getElementById('admin-status-txt').textContent='✓ PINs saved · '+new Date().toLocaleTimeString();
 }
