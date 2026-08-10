@@ -537,6 +537,7 @@ const SALES_ROSTER = [
   { first: 'Shawn', last: 'Still', spin: '104100368462' },
   { first: 'Theron', last: 'Stuelke', spin: '104100543377' },
   { first: 'Kyle', last: 'Triplett', spin: '104100409731' },
+  { first: 'Eon', last: 'Van Rooyen', spin: '104100669723' },
   { first: 'Joseph', last: 'Vogt', spin: '104100579616' },
   { first: 'Michael', last: 'Wells', spin: '104100643902' },
   { first: 'Aaron', last: 'Woodward', spin: '104100543113' }
@@ -1670,6 +1671,60 @@ function retakeQuiz() {
   } catch(e) {
     // If anything's malformed, fall back to the normal registration screen
   }
+})();
+
+// ── ROSTER LOCK ───────────────────────────────────────────────
+// Identity comes from exactly two inputs: a name that matches the staff
+// roster and a valid dealer code. Everything else auto-fills from those
+// and is locked. Edited or non-matching fields never advance.
+(function(){
+  function rosterLock(){
+    const nameI = document.getElementById('f-name');
+    const spinI = document.getElementById('f-spin');
+    const codeI = document.getElementById('f-dealer-code');
+    const dealerI = document.getElementById('f-dealer');
+    const stateI = document.getElementById('f-state');
+    const regionS = document.getElementById('f-region');
+    if (!nameI || !spinI || !codeI) return;
+
+    spinI.setAttribute('readonly','');
+    spinI.placeholder = 'Auto-fills when your name matches the staff list';
+    if (dealerI) dealerI.setAttribute('readonly','');
+    if (stateI) stateI.setAttribute('readonly','');
+    if (regionS) regionS.setAttribute('disabled','');
+
+    function rosterMatch(){
+      const q = nameI.value.trim().toLowerCase();
+      return SALES_ROSTER.find(p => (p.first + ' ' + p.last).toLowerCase() === q) || null;
+    }
+    function syncSpin(){
+      const m = rosterMatch();
+      spinI.value = m ? m.spin : '';
+    }
+    nameI.addEventListener('input', syncSpin);
+    nameI.addEventListener('blur', function(){ setTimeout(syncSpin, 150); });
+
+    const origStartQuiz = window.startQuiz;
+    window.startQuiz = function(){
+      const m = rosterMatch();
+      if (!m) {
+        alert('Your name must match the staff list exactly — start typing and pick it from the list.');
+        return;
+      }
+      const code = codeI.value.trim();
+      if (!code) { alert('Please enter your dealer code.'); return; }
+      const dl = (typeof DEALER_LOOKUP !== 'undefined') ? DEALER_LOOKUP[code] : null;
+      if (!dl) { alert('That dealer code wasn’t recognized. Please double-check it and try again.'); return; }
+      // Re-assert authoritative values so edits to locked fields can never advance.
+      nameI.value = m.first + ' ' + m.last;
+      spinI.value = m.spin;
+      if (dealerI) dealerI.value = dl.name;
+      if (stateI) stateI.value = dl.state;
+      origStartQuiz();
+    };
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', rosterLock);
+  else rosterLock();
 })();
 </script>
 </body>
