@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1471,7 +1470,8 @@ function buildActiveQuestions(sourceQuestions) {
 function saveActiveSession(){
   try {
     localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
-      userData, currentQ, score, catScores, userAnswers, startTime, refreshCount, activeQuestions
+      userData, currentQ, score, catScores, userAnswers, startTime, refreshCount, activeQuestions,
+      savedAt: Date.now()
     }));
   } catch(e) {}
 }
@@ -1855,10 +1855,39 @@ function retakeQuiz() {
 }
 
 // ── RESUME ON REFRESH (closes the "refresh to reroll" loophole) ──
+// Guardrails: abandoned sessions expire, and a resumed session announces
+// whose it is with a "not you? start over" escape hatch — so the next
+// person at a shared device never inherits someone else's half-done quiz.
+const SESSION_MAX_AGE_MS = 30 * 60 * 1000;   // 30 minutes
+
+function showResumeNotice(name){
+  const esc = String(name).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const first = esc.split(' ')[0];
+  const bar = document.createElement('div');
+  bar.id = 'resume-notice';
+  bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:7500;background:#16161c;border:1px solid rgba(235,10,30,0.45);border-radius:12px;padding:10px 14px;font-size:12.5px;color:#f0f0f4;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,0.55);max-width:92vw;flex-wrap:wrap;justify-content:center';
+  bar.innerHTML = '<span>Resumed <b>' + esc + '</b>’s attempt in progress.</span>' +
+    '<button id="resume-restart-btn" style="background:rgba(235,10,30,0.14);border:1px solid rgba(235,10,30,0.5);color:#EB0A1E;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer">Not ' + first + '? Start over</button>' +
+    '<button id="resume-dismiss-btn" style="background:none;border:none;color:rgba(240,240,244,0.45);font-size:14px;cursor:pointer;padding:4px">✕</button>';
+  document.body.appendChild(bar);
+  document.getElementById('resume-restart-btn').onclick = function(){
+    if (confirm('Discard this in-progress attempt and return to sign-in?')) {
+      clearActiveSession();
+      location.reload();
+    }
+  };
+  document.getElementById('resume-dismiss-btn').onclick = function(){ bar.remove(); };
+}
+
 (function resumeSessionIfActive(){
   try {
     const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
     if (!saved || !saved.userData || !saved.userData.name) return;
+    // Abandoned session: expire it instead of dropping the next person into it.
+    if (!saved.savedAt || (Date.now() - saved.savedAt) > SESSION_MAX_AGE_MS) {
+      clearActiveSession();
+      return;
+    }
     userData = saved.userData;
     currentQ = saved.currentQ || 0;
     score = saved.score || 0;
@@ -1874,6 +1903,7 @@ function retakeQuiz() {
     } else {
       showScreen('screen-quiz');
       loadQuestion();
+      showResumeNotice(userData.name);
     }
   } catch(e) {
     // If anything's malformed, fall back to the normal registration screen
