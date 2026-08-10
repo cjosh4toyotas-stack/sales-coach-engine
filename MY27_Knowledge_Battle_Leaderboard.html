@@ -190,12 +190,13 @@ h1 span{color:var(--red)}
   // These reps show as DNS · 0/30. Any sheet rows for them stamped BEFORE
   // the cutoff are wiped from the board; if they choose to take the quiz,
   // a submission AFTER the cutoff scores normally and replaces the DNS row.
-  var DNS_CUTOFF = new Date(2026, 7, 10, 10, 0, 0);   // Aug 10, 2026 10:00 AM (sheet local time)
-  var DNS_NAMES = ["kaden darby", "shawn still", "joe vogt", "joseph vogt"];
+  var DNS_CUTOFF = new Date(2026, 7, 10, 11, 5, 0);   // Aug 10, 2026 11:05 AM (sheet local time)
+  var DNS_NAMES = ["kaden darby", "shawn still", "joe vogt", "joseph vogt", "eon van rooyen"];
   var DNS_PINNED = [
-    {name:"Kaden Darby", key:["kaden darby"]},
-    {name:"Shawn Still", key:["shawn still"]},
-    {name:"Joe Vogt",    key:["joe vogt","joseph vogt"]}
+    {name:"Kaden Darby",    key:["kaden darby"]},
+    {name:"Shawn Still",    key:["shawn still"]},
+    {name:"Joe Vogt",       key:["joe vogt","joseph vogt"]},
+    {name:"Eon Van Rooyen", key:["eon van rooyen"]}
   ];
   var DNS_DEALER = "McGrath Toyota of Iowa City";
 
