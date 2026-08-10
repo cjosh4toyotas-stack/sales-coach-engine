@@ -6099,6 +6099,14 @@ function selectDeck(deckName) {
   });
   if (corrected) { try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {} }
 
+  // One-time wipe of stored (manual or sheet) entries for DNS'd reps — What's New deck
+  if (deckName === DNS_DECK && !localStorage.getItem('presenter_dns_wipe_v1')) {
+    const beforeLen = scores.length;
+    scores = scores.filter(s => !DNS_CANON[nameKey(s.name)]);
+    if (scores.length !== beforeLen) { try { localStorage.setItem(scoresKey(), JSON.stringify(scores)); } catch(e) {} }
+    try { localStorage.setItem('presenter_dns_wipe_v1', '1'); } catch(e) {}
+  }
+
   document.getElementById('splash').classList.add('hide');
   setTimeout(() => document.getElementById('splash').remove(), 900);
   updateUI();
@@ -6389,6 +6397,11 @@ async function fetchGoogleFormResults() {
       // Skip blank rows, pipeline test submissions, and the quiz author's own attempts
       if (!name || /^test\b/i.test(name) || name.toLowerCase() === 'josh hicks') return;
       name = SHEET_NAME_FIXES[nameKey(name)] || name;
+      // DNS wipe: this rep's pre-cutoff sheet rows never reach the board
+      if (currentDeck === DNS_DECK && DNS_CANON[nameKey(name)]) {
+        const dnsT = Date.parse(sessionDate) || 0;
+        if (dnsT < DNS_CUTOFF_TS) return;
+      }
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
       fetched.push({
@@ -6431,6 +6444,20 @@ setInterval(fetchGoogleFormResults, 15000); // poll every 15s; no-ops for decks 
 // nameKey: letters only, lowercased — 'Nikki  Elledge', 'Nikki\u00A0Elledge', 'nikki elledge.' all collapse to the same key
 function nameKey(n) { return String(n || '').toLowerCase().replace(/[^a-z]/g, ''); }
 const PERSON_ALIASES = { 'mikewells': 'Michael Wells', 'balbazor': 'Michael Wells', 'nikkielledge': 'Nicole Elledge' };
+
+// ── DNS OVERRIDES (What's New MY27 deck) ─────────────────────
+// These reps show as DNS · 0. Their scores from before the cutoff are
+// wiped; a quiz attempt AFTER the cutoff scores normally and replaces
+// the DNS row automatically.
+const DNS_DECK = 'whatsnew';
+const DNS_CUTOFF_TS = new Date(2026, 7, 10, 11, 5, 0).getTime();  // Aug 10, 2026 11:05 AM
+const DNS_CANON = { kadendarby: 'Kaden Darby', shawnstill: 'Shawn Still', joevogt: 'Joe Vogt', josephvogt: 'Joe Vogt', eonvanrooyen: 'Eon Van Rooyen' };
+const DNS_PINNED = [
+  { name: 'Kaden Darby', keys: ['kadendarby'] },
+  { name: 'Shawn Still', keys: ['shawnstill'] },
+  { name: 'Joe Vogt', keys: ['joevogt', 'josephvogt'] },
+  { name: 'Eon Van Rooyen', keys: ['eonvanrooyen'] }
+];
 function groupScoresByPerson() {
   const map = {};
   const order = [];
@@ -6441,12 +6468,21 @@ function groupScoresByPerson() {
     if (!map[key]) { map[key] = []; order.push(key); }
     map[key].push(s);
   });
-  return order.map(key => {
+  const groups = order.map(key => {
     const entries = map[key].slice().sort((a, b) => b.score - a.score || entryTime(a) - entryTime(b) || (b.attempt || 0) - (a.attempt || 0));
     const best = entries[0];
     const maxAttempt = Math.max(entries.length, ...entries.map(e => Number(e.attempt) || 0));
     return { key, best, others: entries.slice(1), attempts: maxAttempt };
   }).sort((a, b) => b.best.score - a.best.score || entryTime(a.best) - entryTime(b.best) || a.best.ts - b.best.ts);
+  // Pin a DNS · 0 row for each listed rep with no surviving score (What's New deck)
+  if (currentDeck === DNS_DECK) {
+    DNS_PINNED.forEach(p => {
+      if (!groups.some(g => p.keys.indexOf(g.key) !== -1)) {
+        groups.push({ key: p.keys[0], best: { name: p.name, dealer: 'McGrath Toyota of Iowa City', score: 0, pct: 0, dns: true }, others: [], attempts: 0 });
+      }
+    });
+  }
+  return groups;
 }
 
 let _expandedPeople = {};
@@ -6462,19 +6498,20 @@ function togglePerson(gi) {
 function renderScoreboard() {
   const el = document.getElementById('scoreboard-list-' + currentDeck);
   if (!el) return;
-  if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
   _lastGroups = groupScoresByPerson();
+  if (!_lastGroups.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No scores yet. Add scores above or import quiz results.</div>'; return; }
   el.innerHTML = _lastGroups.slice(0, 25).map((g, i) => {
     const s = g.best;
     const open = !!_expandedPeople[g.key];
     const chev = g.others.length ? `<span style="font-size:11px;color:var(--text-muted);margin-left:6px">${open ? '▾' : '▸'}</span>` : '';
+    const dnsChip = `<span style="display:inline-block;border:1px solid rgba(248,113,113,.5);border-radius:999px;padding:1px 10px;color:#F87171;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle;margin-left:8px">DNS</span>`;
     const main = `
-    <div class="score-row rank-${i < 3 ? i+1 : 'n'}" ${g.others.length ? `onclick="togglePerson(${i})" style="cursor:pointer"` : ''}>
-      <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-      <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
+    <div class="score-row rank-${!s.dns && i < 3 ? i+1 : 'n'}" ${g.others.length ? `onclick="togglePerson(${i})" style="cursor:pointer"` : ''}>
+      <div class="score-rank">${s.dns ? '—' : (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1)}</div>
+      <div class="score-name"><div class="score-name-main">${s.dns ? s.name + dnsChip : (entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name)}${chev}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%;background:${entryCertified(s) ? 'var(--green)' : 'var(--red)'}"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
-      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
+      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${s.dns ? 'Did not start' : g.attempts + ' attempt' + (g.attempts === 1 ? '' : 's') + (fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : '')}</div>
     </div>`;
     const subs = open ? g.others.map((o, oi) => `
     <div class="score-row" style="opacity:.6;margin-left:44px">
@@ -6504,14 +6541,15 @@ function removeGroupedScore(gi, oi) {
 function renderFinalScoreboard() {
   const el = document.getElementById('final-scoreboard-' + currentDeck);
   if (!el) return;
-  if (!scores.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No quiz results yet.</div>'; return; }
-  el.innerHTML = groupScoresByPerson().slice(0, 5).map((g, i) => { const s = g.best; return `
-    <div class="score-row rank-${i < 3 ? i+1 : 'n'}">
-      <div class="score-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-      <div class="score-name"><div class="score-name-main">${entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name}</div><div class="score-name-dealer">${s.dealer}</div></div>
+  const finalGroups = groupScoresByPerson();
+  if (!finalGroups.length) { el.innerHTML = '<div style="color:var(--text-muted);padding:20px;text-align:center">No quiz results yet.</div>'; return; }
+  el.innerHTML = finalGroups.slice(0, 5).map((g, i) => { const s = g.best; return `
+    <div class="score-row rank-${!s.dns && i < 3 ? i+1 : 'n'}">
+      <div class="score-rank">${s.dns ? '—' : (i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1)}</div>
+      <div class="score-name"><div class="score-name-main">${s.dns ? s.name + ` <span style="display:inline-block;border:1px solid rgba(248,113,113,.5);border-radius:999px;padding:1px 10px;color:#F87171;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">DNS</span>` : (entryCertified(s) ? `<span style="display:inline-block;border:1px solid rgba(74,222,128,.55);border-radius:999px;padding:1px 12px;color:#4ADE80">${s.name}</span> \uD83C\uDFC6 <span style="color:#4ADE80;font-size:11px;font-weight:700;letter-spacing:.14em;vertical-align:middle">CERTIFIED</span>` : s.name)}</div><div class="score-name-dealer">${s.dealer}</div></div>
       <div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s.pct}%;background:${entryCertified(s) ? 'var(--green)' : 'var(--red)'}"></div></div></div>
       <div class="score-num">${s.score}<span style="font-size:14px;color:var(--text-muted)">/${entryTotal(s)}</span></div>
-      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${g.attempts} attempt${g.attempts === 1 ? '' : 's'}${fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : ''}</div>
+      <div style="font-size:11px;color:var(--text-muted);min-width:96px;text-align:right;white-space:nowrap">${s.dns ? 'Did not start' : g.attempts + ' attempt' + (g.attempts === 1 ? '' : 's') + (fmtQuizTime(s) ? '<br>' + fmtQuizTime(s) : '')}</div>
     </div>
   `;}).join('');
   renderCertSummary();
