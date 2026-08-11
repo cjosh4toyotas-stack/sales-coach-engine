@@ -683,6 +683,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="deck-select-name">Powertrain Mastery</div>
       <div class="deck-select-sub">Next-Level Component & Tundra Application</div>
     </button>
+    <button class="deck-select-btn" onclick="selectDeck('demyst')">
+      <div class="deck-select-name">Demystifying Powertrains</div>
+      <div class="deck-select-sub">Pursuit · Spotlight · Pieces · Knowledge Battle</div>
+    </button>
     <button class="deck-select-btn" onclick="selectDeck('chrmastery')">
       <div class="deck-select-name">C-HR</div>
       <div class="deck-select-sub">2026 BEV — Range, Charging & Equipment</div>
@@ -4010,6 +4014,416 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     </div><!-- /deck-ptmastery -->
 
+    <div id="deck-demyst" class="deck">
+
+    <!-- ═══ PHASE 0: POWERTRAIN PURSUIT ═══ -->
+
+    <!-- Slide 0-0: Phase Intro -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">01</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 1 of 5 &nbsp;·&nbsp; 7 Minutes</div>
+          <div class="phase-splash-title">Powertrain<br><span class="red">Pursuit</span></div>
+          <div class="phase-splash-subtitle">Stand-up Q&A straight from the official Demystifying Powertrains package. Name the lineup, match the "fuel", and stay standing only if you can defend your answer.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Name All Six</div>
+            <div class="phase-splash-item">Gas vs Plug vs Hydrogen</div>
+            <div class="phase-splash-item">Key Attributes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 0-1: The Six + Fuel -->
+    <div class="slide" data-phase="0" data-slide="1">
+      <div class="slide-eyebrow">Powertrain Pursuit · The Lineup</div>
+      <div class="slide-title fade-in fade-in-1">Six Powertrains, <span>Three Fuels</span></div>
+      <div class="fade-in fade-in-2" style="overflow-x:auto;margin-top:12px">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Powertrain</th>
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">"Fuel"</th>
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Plug?</th>
+              <th style="text-align:left;padding:10px 12px;color:var(--text-dim)">Drive</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-weight:600">Hybrid</td><td style="padding:9px 12px">Gas only</td><td style="padding:9px 12px">Never</td><td style="padding:9px 12px">Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-weight:600">Plug-in Hybrid</td><td style="padding:9px 12px">Gas & plug</td><td style="padding:9px 12px">Optional (L1/L2, extended EV range)</td><td style="padding:9px 12px">Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-weight:600">Battery EV</td><td style="padding:9px 12px">Electricity only</td><td style="padding:9px 12px">Required (L1/L2/L3 DCFC)</td><td style="padding:9px 12px">Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-weight:600">Hybrid MAX</td><td style="padding:9px 12px">Gas only</td><td style="padding:9px 12px">Never</td><td style="padding:9px 12px">Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-weight:600">i-FORCE MAX</td><td style="padding:9px 12px">Gas only</td><td style="padding:9px 12px">Never</td><td style="padding:9px 12px">4WD w/ two-speed transfer case</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:600">Fuel Cell EV <span style="font-size:10px;color:var(--text-muted)">(California only)</span></td><td style="padding:9px 12px">Hydrogen only</td><td style="padding:9px 12px">Never</td><td style="padding:9px 12px">Rear-Wheel Drive</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:14px;font-size:12px;color:var(--text-muted)">Run it live: call on one person at a time until all six are named, then repeat for fuel type. Sit down if you're not confident — honesty is the point.</div>
+    </div>
+
+    <!-- Slide 0-2: Attributes -->
+    <div class="slide" data-phase="0" data-slide="2">
+      <div class="slide-eyebrow">Powertrain Pursuit · Purpose & Character</div>
+      <div class="slide-title fade-in fade-in-1">Performance or <span>Efficiency?</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🌿</div>
+          <div class="card-label">Efficiency Side</div>
+          <div class="card-title">Hybrid · Plug-in Hybrid</div>
+          <div class="card-body">Hybrid: efficiency focused with balanced performance. Plug-in Hybrid: hybrid performance and efficiency — with full electric capability.</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-icon">🔥</div>
+          <div class="card-label" style="color:var(--red)">Performance Side</div>
+          <div class="card-title">Hybrid MAX · i-FORCE MAX</div>
+          <div class="card-body">Hybrid MAX: performance focused with a turbo gasoline engine. i-FORCE MAX: performance focused, tuned specifically for truck use.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-label">The Wildcard</div>
+          <div class="card-title">Battery EV</div>
+          <div class="card-body">Instant torque for impressive performance, available AWD, zero emissions — the one powertrain that lives on both sides of the performance/efficiency divide. (Fuel Cell EV is zero emissions too — its only output is water.)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 1: POWERTRAIN SPOTLIGHT ═══ -->
+
+    <!-- Slide 1-0: Phase Intro -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">02</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 2 of 5 &nbsp;·&nbsp; 12 Minutes</div>
+          <div class="phase-splash-title">Powertrain<br><span class="red">Spotlight</span></div>
+          <div class="phase-splash-subtitle">Five groups, five powertrain videos, five 30-second elevator pitches. Fuel Cell sits this one out — everything else gets translated into customer language.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Watch Your Video</div>
+            <div class="phase-splash-item">Build the Pitch</div>
+            <div class="phase-splash-item">Deliver in 30 Seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-1: Elevator Pitch Framework -->
+    <div class="slide" data-phase="1" data-slide="1">
+      <div class="slide-eyebrow">Powertrain Spotlight · The Assignment</div>
+      <div class="slide-title fade-in fade-in-1">The 30-Second <span>Elevator Pitch</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🎬</div>
+          <div class="card-label">Step 1 · Research</div>
+          <div class="card-title">One group, one powertrain video</div>
+          <div class="card-body">Split into five groups. Each group watches its assigned Electrified Powertrain video — do not assign Fuel Cell.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎤</div>
+          <div class="card-label">Step 2 · Report Out</div>
+          <div class="card-title">Pitch it in 30 seconds</div>
+          <div class="card-body">Each group summarizes how their powertrain works. The emphasis: a customer-friendly summary — not a spec recital.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Why It Works</div>
+          <div class="card-body">Recognizing the similarities and differences between the powertrains lets you recommend the best vehicle for a customer's lifestyle — not just the one you know best.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-2: Where the Videos Live -->
+    <div class="slide" data-phase="1" data-slide="2">
+      <div class="slide-eyebrow">Powertrain Spotlight · Resources</div>
+      <div class="slide-title fade-in fade-in-1">Where to <span>Find Them</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <div class="card-label">On Engage</div>
+          <div class="card-title">Beyond Zero page</div>
+          <div class="card-body">Main menu dropdown → Beyond Zero → scroll about halfway down the page for the Electrified Powertrain video series.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">▶️</div>
+          <div class="card-label">On YouTube</div>
+          <div class="card-title">Toyota USA channel</div>
+          <div class="card-body">Search "electrified powertrains" within the channel — same series, shareable directly with customers.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-icon">📘</div>
+          <div class="card-label">Self-Study & Customer Education</div>
+          <div class="card-body">Two resources to reveal at wrap-up: Toyota.com and the Toyota Electrified Powertrains Guide (Quick Reference, May 2025) on Engage — log in, download, and share with customers when needed. New for 2026: the Electrified AWD video on Engage covers how the electrified systems deliver all-wheel drive.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-3: AWD-e vs Electronic On-Demand AWD -->
+    <div class="slide" data-phase="1" data-slide="3">
+      <div class="slide-eyebrow">Powertrain Spotlight · Electrified AWD Deep Cut</div>
+      <div class="slide-title fade-in fade-in-1">AWD-e vs <span>Electronic On-Demand AWD</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🪶</div>
+          <div class="card-label">AWD-e</div>
+          <div class="card-title">Lightweight launch & low-speed traction</div>
+          <div class="card-body">Magnet-less rear induction motor. Engages automatically from 0–6 mph on every launch, then only when slip is detected — up to 43 mph, disengaging above that. Built to minimize weight and drag on the smaller hybrids (Prius, Corolla family).</div>
+        </div>
+        <div class="card" style="border-color:rgba(235,10,30,0.3)">
+          <div class="card-icon">⚡</div>
+          <div class="card-label" style="color:var(--red)">Electronic On-Demand AWD</div>
+          <div class="card-title">Full-speed-range rear motor generator</div>
+          <div class="card-body">More powerful rear motor generator that works across the entire speed range, actively varying front/rear torque — the system on RAV4 Hybrid, Camry, Highlander, Sienna and other larger hybrids.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)">
+          <div class="card-icon">💡</div>
+          <div class="card-label" style="color:var(--green)">What They Share — and the Floor Answer</div>
+          <div class="card-body">Both are driveshaft-free: a dedicated electric motor drives the rear wheels with no mechanical connection to the front. When a customer asks if a Prius has "real" AWD: yes — real, electric, and purpose-built for launches and slippery low-speed conditions, while Electronic On-Demand AWD carries that capability through highway speeds. And on the 4WD side, one powertrain lives in two worlds: i-FORCE MAX pairs with part-time 4WD on Tundra but FULL-TIME 4WD on Land Cruiser — a Torsen center differential absorbs front/rear speed differences, so 4WD stays engaged on any surface. Powertrain and drivetrain are separate decisions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2: POWERTRAIN PIECES ═══ -->
+
+    <!-- Slide 2-0: Phase Intro -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">03</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 3 of 5 &nbsp;·&nbsp; 8 Minutes</div>
+          <div class="phase-splash-title">Powertrain<br><span class="red">Pieces</span></div>
+          <div class="phase-splash-subtitle">Card-matching under pressure: five powertrains, a shuffled stack of component and feature cards, and one card that legitimately belongs in two places.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Match Features to Powertrains</div>
+            <div class="phase-splash-item">Same Groups as Spotlight</div>
+            <div class="phase-splash-item">Review Together</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-1: How the Activity Runs -->
+    <div class="slide" data-phase="2" data-slide="1">
+      <div class="slide-eyebrow">Powertrain Pieces · Setup & Flow</div>
+      <div class="slide-title fade-in fade-in-1">Sort the <span>Deck</span></div>
+      <div class="cards-grid cards-2 fade-in fade-in-2">
+        <div class="card">
+          <div class="card-icon">🃏</div>
+          <div class="card-label">The Cards</div>
+          <div class="card-title">One well-mixed set per group</div>
+          <div class="card-body">Powertrains carry one colored border/font, features carry another. Every set contains five powertrains and their associated features.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧩</div>
+          <div class="card-label">The Task</div>
+          <div class="card-title">Match ALL features to ALL powertrains</div>
+          <div class="card-body">Not just the one you researched in Spotlight — the whole board. This is where component fluency either holds up or falls apart.</div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:16px">
+        <div class="card" style="border-color:rgba(235,10,30,0.3);background:rgba(235,10,30,0.05)">
+          <div class="card-icon">⚠️</div>
+          <div class="card-label" style="color:var(--red)">The Trick Card</div>
+          <div class="card-body">"Turbo engine" legitimately matches Hybrid MAX or i-FORCE MAX — the one card with two homes. Several powertrains share components; some are completely different systems.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2-2: Answer Key Logic -->
+    <div class="slide" data-phase="2" data-slide="2">
+      <div class="slide-eyebrow">Powertrain Pieces · Answer Key</div>
+      <div class="slide-title fade-in fade-in-1">The <span>Answer Key</span></div>
+      <div class="fade-in fade-in-2" style="overflow-x:auto;margin-top:12px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:9px 12px;color:var(--text-dim)">Powertrain</th>
+              <th style="text-align:left;padding:9px 12px;color:var(--text-dim)">Components</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;font-weight:600">Hybrid</td><td style="padding:8px 12px">No plugging in required · Fueled by gasoline · Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;font-weight:600">Plug-in Hybrid</td><td style="padding:8px 12px">Plugging in via L1 or L2 is optional · Fueled by gasoline · Available AWD</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;font-weight:600">Hybrid MAX</td><td style="padding:8px 12px">No plugging in required · Fueled by gasoline · Available AWD · Turbo engine (may also match i-FORCE MAX)</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;font-weight:600">i-FORCE MAX</td><td style="padding:8px 12px">No plugging in required · Fueled by gasoline · Available 4WD with two-speed transfer case</td></tr>
+            <tr><td style="padding:8px 12px;font-weight:600">Battery Electric</td><td style="padding:8px 12px">Plug in via L1, L2, or DC Fast Charger · Fueled by electricity only · Available AWD · Zero emissions</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fade-in fade-in-3" style="margin-top:12px;font-size:12px;color:var(--text-muted)">Reveal only after every group commits. Then note out loud how several powertrains share components while others are completely different systems. The Quick Reference Guide on Engage mirrors this exact attribute set — same source of truth.</div>
+    </div>
+
+    <!-- ═══ PHASE 3: KNOWLEDGE BATTLE ═══ -->
+
+    <!-- Slide 3-0: Phase Intro -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">04</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 4 of 5 &nbsp;·&nbsp; 18 Minutes</div>
+          <div class="phase-splash-title">Knowledge<br><span class="red">Battle</span></div>
+          <div class="phase-splash-subtitle">30 questions, 30 seconds each, built to test abstract reasoning — must-be-true logic, elimination, and customer-scenario matching. This is not a recall quiz.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">30 Questions · 30 Seconds Each</div>
+            <div class="phase-splash-item">Systems + Abstract Reasoning</div>
+            <div class="phase-splash-item">24/30 to Certify</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3-1: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="3" data-slide="1">
+      <div class="slide-eyebrow">Knowledge Battle · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-demyst" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-demyst" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-demyst" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-demyst">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-demyst" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-2: QR Code -->
+    <div class="slide" data-phase="3" data-slide="2">
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan & <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealer code, then work through 30 questions at 30 seconds each. Think like the customer is standing in front of you.</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-demyst"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-demyst">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-demyst">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-3: Live Scoreboard (manual entry) -->
+    <div class="slide" data-phase="3" data-slide="3">
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-demyst">
+          <div class="scoreboard" id="scoreboard-list-demyst">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-demyst" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-demyst" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-demyst" class="modal-input" style="width:80px" type="number" min="0" max="30" placeholder="Score /30">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 4: ACCOUNTABILITY & SCOREBOARD ═══ -->
+
+    <!-- Slide 4-0: Phase Intro -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">05</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">Phase 5 of 5 &nbsp;·&nbsp; 3 Minutes</div>
+          <div class="phase-splash-title">Accountability &<br><span class="red">Scoreboard</span></div>
+          <div class="phase-splash-subtitle">Recognize top performers, track certification progress, and call out the Top Takeaways from the official package.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">Recognition</div>
+            <div class="phase-splash-item">Certification Progress</div>
+            <div class="phase-splash-item">Top Takeaways</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-1: Winners & Recognition -->
+    <div class="slide" data-phase="4" data-slide="1">
+      <div class="slide-eyebrow">Accountability · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-demyst" class="fade-in fade-in-2">
+        <div id="final-scoreboard-demyst"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">Demystifying Powertrains Certified</div>
+          <div class="card-body">Score 24/30 or higher to earn Demystifying Powertrains module certification.</div>
+          <div id="cert-summary-demyst"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-demyst"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-2: Wrap Up -->
+    <div class="slide" data-phase="4" data-slide="2">
+      <div class="phase-splash">
+        <div class="phase-splash-num" style="opacity:.06">✓</div>
+        <div class="phase-splash-content fade-in fade-in-1" style="text-align:center">
+          <div class="phase-splash-tag" style="color:var(--green)">Session Complete</div>
+          <div class="phase-splash-title">Pursuit → Spotlight<br><span class="red">Pieces → Battle</span></div>
+          <div class="phase-splash-subtitle" style="margin:0 auto">Top Takeaways: it's unrealistic to memorize every model/powertrain combination — resources exist to help. The Electrified Powertrain videos on Engage and YouTube go deeper for you AND your customers. And some powertrains share components while others are completely different systems.</div>
+          <div class="phase-splash-items" style="margin-top:32px;justify-content:center">
+            <div class="phase-splash-item">Toyota.com</div>
+            <div class="phase-splash-item">Electrified Powertrains Guide on Engage</div>
+            <div class="phase-splash-item">Track certification progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-demyst -->
+
     <div id="deck-chrmastery" class="deck">
 
     <!-- ═══ PHASE 0: RANGE, BATTERY & CHARGING MASTERY ═══ -->
@@ -5757,6 +6171,31 @@ const slideNotesPtmastery = [
   'Session complete. The HV battery trap and the AWD/4WD distinction are worth a quick refresher before anyone\'s next customer conversation.'
 ];
 
+const slideNotesDemyst = [
+  // Phase 0 — Powertrain Pursuit (3 slides)
+  'This deck runs the official Demystifying Powertrains package end to end — Pursuit, Spotlight, Pieces — then caps it with a Knowledge Battle built for abstract reasoning, not recall. Set that expectation up front.',
+  'Run the stand-up Q&A exactly as the discussion guide describes: everyone stands, and they sit down when they lose confidence. Call on one person at a time until all six powertrains and all six fuel types are named.',
+  'The attribute layer is what turns names into recommendations. Push past labels: ask WHY a plug-in hybrid earns its premium, and why Battery EV straddles the performance/efficiency divide.',
+  // Phase 1 — Powertrain Spotlight (3 slides)
+  'Split into five groups now and assign each a powertrain video — do not assign Fuel Cell. Phones or laptops are fine; the videos are short.',
+  'Hold every group to the 30-second limit and the customer-friendly standard. If a pitch turns into a spec sheet, stop them and ask: would a guest follow that?',
+  'Point at the actual navigation path on screen — Beyond Zero on Engage, Toyota USA channel on YouTube. Reps who know where resources live actually use them.',
+  'This slide pairs with the new Electrified AWD video on Engage. Drill the two numbers that matter: 6 mph (AWD-e always assists on launch) and 43 mph (AWD-e disengages above it). Electronic On-Demand AWD has no such ceiling — that single fact answers the "is Prius AWD real AWD?" question honestly. Then land the full-time 4WD point: Land Cruiser runs i-FORCE MAX with FULL-TIME 4WD (Torsen center diff, lockable) while Tundra runs the same powertrain with part-time 4WD — proof that powertrain and drivetrain are independent choices.',
+  // Phase 2 — Powertrain Pieces (3 slides)
+  'Keep the same groups from Spotlight. Hand out one well-mixed card set per group — cut each printed page in half so there is a single attribute per piece of paper.',
+  'The instruction that matters most: match ALL features to ALL powertrains, not just the one they researched. Warn them the turbo engine card has two legitimate homes and let them argue about it.',
+  'Reveal the answer key only after every group commits. The closing observation comes straight from the guide: several powertrains share components while others are completely different systems.',
+  // Phase 3 — Knowledge Battle (4 slides)
+  'Frame the difficulty honestly: this battle is written like a logic exam — must-be-true questions, elimination chains, scenario matching. 30 questions at 30 seconds each, 24 to certify.',
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  'Display this QR code and give the room about 18 minutes — this quiz runs twice as long as the standard product battles. The timer pressure is intentional.',
+  'As scores come in, add them manually or import the JSON. A 24/30 here means genuinely durable powertrain fluency — celebrate it accordingly.',
+  // Phase 4 — Accountability (3 slides)
+  'Final phase! Call out the top 3 by name. With a quiz this hard, acknowledge strong reasoning on missed questions too, not just raw score.',
+  'Recognize the winner, announce the 24/30 certification threshold, and preview the next session topic.',
+  'Close on the three official Top Takeaways and the two customer-shareable resources — Toyota.com and the Electrified Powertrains Guide on Engage.'
+];
+
 const slideNotesChrmastery = [
   // Phase 0
   'C-HR is Toyota\'s third BEV in the US lineup and a genuinely new nameplate reintroduction — set that context before diving into specifics.',
@@ -5950,6 +6389,7 @@ const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coac
 const DEFAULT_QUIZ_URL_PHEVTECH = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PHEVTech_Quiz.html';
 const DEFAULT_QUIZ_URL_ALLOCSYS = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/AllocationSystem_Quiz.html';
 const DEFAULT_QUIZ_URL_PTMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PowertrainMastery_Quiz.html';
+const DEFAULT_QUIZ_URL_DEMYST = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/Demystifying_Powertrains_Quiz.html';
 const DEFAULT_QUIZ_URL_CHRMASTERY = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/CHR_Quiz.html';
 const DEFAULT_QUIZ_URL_LANDCRUISER = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/LandCruiser_Quiz.html';
 const DEFAULT_QUIZ_URL_WHATSNEW = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/What_s_NEWMY27_Quiz.html';
@@ -6014,6 +6454,14 @@ const DECK_CONFIG = {
     passThreshold: 12,
     certLabel: 'Powertrain Mastery Certified'
   },
+  demyst: {
+    brand: 'DEMYSTIFYING POWERTRAINS',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_DEMYST,
+    phaseNames: ['Powertrain Pursuit', 'Powertrain Spotlight', 'Powertrain Pieces', 'Knowledge Battle', 'Scoreboard'],
+    quizTotal: 30,
+    passThreshold: 24,
+    certLabel: 'Demystifying Powertrains Certified'
+  },
   chrmastery: {
     brand: 'C-HR',
     defaultQuizUrl: DEFAULT_QUIZ_URL_CHRMASTERY,
@@ -6068,6 +6516,7 @@ function selectDeck(deckName) {
   document.getElementById('deck-phevtech').classList.toggle('active', deckName === 'phevtech');
   document.getElementById('deck-allocsys').classList.toggle('active', deckName === 'allocsys');
   document.getElementById('deck-ptmastery').classList.toggle('active', deckName === 'ptmastery');
+  document.getElementById('deck-demyst').classList.toggle('active', deckName === 'demyst');
   document.getElementById('deck-chrmastery').classList.toggle('active', deckName === 'chrmastery');
   document.getElementById('deck-landcruiser').classList.toggle('active', deckName === 'landcruiser');
   document.getElementById('deck-whatsnew').classList.toggle('active', deckName === 'whatsnew');
@@ -6147,7 +6596,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', chrmastery: 'C-HR', landcruiser: 'Land Cruiser', whatsnew: "What's New MY27" };
+  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', demyst: 'Demystifying Powertrains', chrmastery: 'C-HR', landcruiser: 'Land Cruiser', whatsnew: "What's New MY27" };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -6178,7 +6627,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser, whatsnew: slideNotesWhatsnew };
+  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, demyst: slideNotesDemyst, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser, whatsnew: slideNotesWhatsnew };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
