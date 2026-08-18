@@ -1622,23 +1622,22 @@ function copyExport() {
 }
 
 // ── SILENT AUTO-SUBMIT TO GOOGLE FORM ──────────────────────────
-// Deep Dive shares the live RAV4 Quiz Form/Sheet — the presenter tells the two quizzes
-// apart by length (total 15 = Knowledge Battle, total 20 = Deep Dive), so both leaderboards
-// stay clean. To give Deep Dive its own Form later, just swap this URL and the entry IDs.
-const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfWPrmKHSTN4E_3yhJtL-YYncchKErh2wtqR2Ew_WziOSlF6A/formResponse';
+// Deep Dive has its own Google Form ("26 RAV4 Deep Dive Quiz Results") feeding its own
+// results spreadsheet (26RAV4_DeepDive_Quiz) — fully separate from the RAV4 Knowledge Battle.
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScmRPaV2bZPG2IjGQrl3pq6-HsvkWsIKEQ8YIXCOR7YnLTbKQ/formResponse';
 const GFORM_ENTRIES = {
-  name: 'entry.1801764731',
-  dealerName: 'entry.794104824',
-  region: 'entry.1247287401',
-  state: 'entry.496855907',
-  score: 'entry.1030068566',
-  total: 'entry.476908290',
-  pct: 'entry.369912006',
-  productScore: 'entry.822194667',
-  competitiveScore: 'entry.1581056513',
-  certified: 'entry.1626493411',
-  timeSec: 'entry.700522236',
-  sessionDate: 'entry.1679497902'
+  name: 'entry.1052324883',
+  dealerName: 'entry.1625624853',
+  region: 'entry.1797253274',
+  state: 'entry.1362926249',
+  score: 'entry.1616716158',
+  total: 'entry.1881329463',
+  pct: 'entry.843940302',
+  productScore: 'entry.249917159',
+  competitiveScore: 'entry.1751715932',
+  certified: 'entry.728608702',
+  timeSec: 'entry.1949251689',
+  sessionDate: 'entry.1782503823'
 };
 
 function submitToGoogleForm(data) {
