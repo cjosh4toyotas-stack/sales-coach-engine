@@ -6951,9 +6951,9 @@ function importJSON() {
 
 // ── AUTO-IMPORT FROM GOOGLE SHEET (fed by each quiz's silent Form submits) ──
 const GSHEET_CSV_URL_MAP = {
-  // Deep Dive shares the RAV4 quiz's Form/Sheet; rows are split by quiz length below
-  // (total 15 = Knowledge Battle deck, total 20 = Deep Dive deck).
-  deepdive: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
+  // Deep Dive live results — fed by the "26 RAV4 Deep Dive Quiz Results" Google Form
+  // via the 26RAV4_DeepDive_Quiz spreadsheet (Form Responses 1 tab, published as CSV)
+  deepdive: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTkVRcf7et1zhg7PnaNv8WFRJsm3tXkbQW7ajGjEdyw2nSUOT1HmDtmeJ1Tfhcsis1ecmdDWMaiNmic/pub?gid=653087064&single=true&output=csv',
   rav4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
   delev: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSsETW4W953XE5QWnMNSvoUrgKu5dG6vUxRYeievFPmYzqAfZmX7flVu9VU28v_R3hlNaHYMKLf-JaH/pub?output=csv',
   bz: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnYu8981NbPLvCVahirQVvo8rfGZ8OkhwYtvM72TicsfPUKiewtXvcodtSWwnmE7X3AqQr-2_n9NUf/pub?output=csv',
@@ -7015,10 +7015,6 @@ async function fetchGoogleFormResults() {
       }
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
-      // rav4 + deepdive share one Form/Sheet — route each row to the right leaderboard
-      // by quiz length (Deep Dive = 20 questions; Knowledge Battle = 15 / legacy blank)
-      if (currentDeck === 'deepdive' && rowTotal !== 20) return;
-      if (currentDeck === 'rav4' && rowTotal === 20) return;
       fetched.push({
         name,
         dealer: r[idx.dealerName] || '',
