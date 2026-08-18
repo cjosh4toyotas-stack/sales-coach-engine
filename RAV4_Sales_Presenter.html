@@ -667,6 +667,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
       <div class="deck-select-name">RAV4</div>
       <div class="deck-select-sub">Sales Coach · Meeting in a Box</div>
     </button>
+    <button class="deck-select-btn" onclick="selectDeck('deepdive')">
+      <div class="deck-select-name">26 RAV4 Deep Dive</div>
+      <div class="deck-select-sub">Trim Mastery · Knowledge Battle · Live Leaderboard</div>
+    </button>
     <button class="deck-select-btn" onclick="selectDeck('bz')">
       <div class="deck-select-name">bZ Woodland</div>
       <div class="deck-select-sub">BEV Sales Coach · Meeting in a Box</div>
@@ -1409,6 +1413,137 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
     </div>
 
     </div><!-- /deck-rav4 -->
+
+    <div id="deck-deepdive" class="deck">
+
+    <!-- ═══ 26 RAV4 DEEP DIVE — standard Knowledge Battle flow ═══ -->
+
+    <!-- Slide 0-0: Briefing -->
+    <div class="slide active" data-phase="0" data-slide="0">
+      <div class="phase-splash">
+        <div class="phase-splash-num">DD</div>
+        <div class="phase-splash-content fade-in fade-in-1">
+          <div class="phase-splash-tag">26 RAV4 &nbsp;·&nbsp; Deep Dive Module</div>
+          <div class="phase-splash-title">26 RAV4<br><span class="red">Deep Dive</span></div>
+          <div class="phase-splash-subtitle">Beyond the basics — trim-by-trim mastery of the 2026 RAV4. Wireless charging pads, onboard chargers, packages, and the spec gotchas that win deals. 20 questions. Sourced straight from the Toyota Quick Reference &amp; Sales Consultant Guides.</div>
+          <div class="phase-splash-items">
+            <div class="phase-splash-item">20 Questions · 20 Seconds Each</div>
+            <div class="phase-splash-item">Trim Walk + Packages &amp; Specs</div>
+            <div class="phase-splash-item">16/20 = Deep Dive Certified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 1-0: Registration (Dealer Code auto-fill) -->
+    <div class="slide" data-phase="1" data-slide="0">
+      <div class="slide-eyebrow">Deep Dive · Register</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Quick <span>Registration</span></div>
+      <div class="fade-in fade-in-2" style="max-width:480px;margin-top:24px">
+        <div class="modal-field">
+          <label class="modal-label">Dealer Code</label>
+          <input class="modal-input" id="pres-reg-dealer-code-deepdive" type="text" placeholder="e.g. 14055" maxlength="5" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Your Name</label>
+          <input class="modal-input" id="pres-reg-name-deepdive" type="text" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Dealership Name</label>
+          <input class="modal-input" id="pres-reg-dealer-deepdive" type="text" placeholder="ABC Toyota" autocomplete="organization">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Region</label>
+          <select class="modal-input" id="pres-reg-region-deepdive">
+            <option value="">Select Region</option>
+            <option>Boston Region</option>
+            <option>New York Region</option>
+            <option>Central Atlantic Toyota (CAT)</option>
+            <option>Cincinnati Region</option>
+            <option>Chicago Region</option>
+            <option>Kansas City Region</option>
+            <option>Denver Region</option>
+            <option>Los Angeles Region</option>
+            <option>San Francisco Region</option>
+            <option>Portland Region</option>
+            <option>Southeast Toyota Distributors (SET)</option>
+            <option>Gulf States Toyota (GST)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">State</label>
+          <input class="modal-input" id="pres-reg-state-deepdive" type="text" placeholder="e.g. IA" maxlength="2" autocomplete="off">
+        </div>
+        <div class="modal-hint">This mirrors the registration screen reps see when they scan the QR code next. Use it to pre-fill or demo the flow on the shared screen.</div>
+      </div>
+    </div>
+
+    <!-- Slide 2-0: QR Code -->
+    <div class="slide" data-phase="2" data-slide="0">
+      <div class="slide-eyebrow">Deep Dive · Scan to Compete</div>
+      <div class="qr-center">
+        <div class="qr-instructions fade-in fade-in-1">
+          <div class="qr-title">Scan &amp; <span>Compete</span></div>
+          <div class="qr-sub">Scan the QR code with your phone camera. Enter your name and dealership, then race through 20 Deep Dive questions. The clock is running!</div>
+        </div>
+        <div class="qr-wrapper fade-in fade-in-2">
+          <div id="qr-code-deepdive"></div>
+        </div>
+        <div class="qr-url-display fade-in fade-in-3" id="qr-url-display-deepdive">Configure URL in Settings ⚙ (top right)</div>
+        <div class="qr-config-note fade-in fade-in-4" id="qr-config-note-deepdive">Open Settings → enter your network URL → Save to generate QR code</div>
+      </div>
+    </div>
+
+    <!-- Slide 3-0: Live Scoreboard -->
+    <div class="slide" data-phase="3" data-slide="0">
+      <div class="slide-eyebrow">Deep Dive · Live Results</div>
+      <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
+      <div class="fade-in fade-in-2">
+        <div id="live-scoreboard-deepdive">
+          <div class="scoreboard" id="scoreboard-list-deepdive">
+            <!-- Populated by JS -->
+          </div>
+          <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+            <input id="score-name-input-deepdive" class="modal-input" style="width:200px" placeholder="Name">
+            <input id="score-dealer-input-deepdive" class="modal-input" style="width:180px" placeholder="Dealership">
+            <input id="score-val-input-deepdive" class="modal-input" style="width:80px" type="number" min="0" max="20" placeholder="Score /20">
+            <button onclick="addScore()" class="btn-nav primary">+ Add Score</button>
+            <button onclick="clearScores()" class="btn-nav" style="font-size:11px">Clear All</button>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">Or paste quiz JSON: <button onclick="importJSON()" class="btn-qr">📥 Import Results</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4-0: Champions & Wrap -->
+    <div class="slide" data-phase="4" data-slide="0">
+      <div class="slide-eyebrow">Deep Dive · Recognition</div>
+      <div class="slide-title fade-in fade-in-1">Session <span>Champions</span></div>
+      <div id="final-scoreboard-wrap-deepdive" class="fade-in fade-in-2">
+        <div id="final-scoreboard-deepdive"></div>
+      </div>
+      <div class="two-col mt-24 fade-in fade-in-3">
+        <div class="card clickable-card" style="border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.05)" onclick="openCertModal()">
+          <div class="card-icon">🎯</div>
+          <div class="card-label" style="color:var(--green)">Certification Progress</div>
+          <div class="card-title">RAV4 Deep Dive Certified</div>
+          <div class="card-body">Score 16/20 or higher to earn RAV4 Deep Dive module certification.</div>
+          <div id="cert-summary-deepdive"></div>
+          <div class="card-click-hint">Click to see the full certified list →</div>
+        </div>
+        <div class="card clickable-card" onclick="openFocusModal()">
+          <div class="card-icon">📅</div>
+          <div class="card-label">Next Session</div>
+          <div class="card-title">Focus Area</div>
+          <div class="card-body">Review missed questions from today.</div>
+          <div id="focus-summary-deepdive"></div>
+          <div class="card-click-hint">Click to see the most-missed questions →</div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- /deck-deepdive -->
+
 
     <div id="deck-bz" class="deck">
 
@@ -6023,6 +6158,19 @@ const slideNotesRav4 = [
   'Session complete. Remind team to check the Dashboard for their regional ranking and certification status.'
 ];
 
+const slideNotesDeepdive = [
+  // Slide 0 — Briefing
+  'This is the DEEP DIVE — assume the room already knows the RAV4 basics from the Sales Coach module. Today tests the details that separate trims: Qi pads, onboard chargers, packages, and spec gotchas. 20 questions, 16/20 certifies.',
+  // Slide 1 — Registration
+  'Have participants enter their dealer code and name here, or let them self-register when they scan the QR code next.',
+  // Slide 2 — QR
+  'Display this QR code. Give about 3 minutes — this quiz runs 20 questions, a bit longer than the standard 15-question battles.',
+  // Slide 3 — Live results
+  'As scores come in, the leaderboard updates automatically from the Sheet. You can also add scores manually or import the JSON. Real-time leaderboard pressure adds energy!',
+  // Slide 4 — Champions
+  'Call out the top 3 by name and recognize every Deep Dive Certified rep (16/20+). Preview the next session topic.'
+];
+
 const slideNotesBz = [
   // Phase 0
   'Kick off with energy! This is Toyota\'s most rugged BEV yet. Many reps haven\'t sold a BEV before — build confidence here.',
@@ -6375,6 +6523,7 @@ function wireDealerCodeLookup(suffix){
   });
 }
 wireDealerCodeLookup('rav4');
+wireDealerCodeLookup('deepdive');
 wireDealerCodeLookup('bz');
 wireDealerCodeLookup('delev');
 wireDealerCodeLookup('phevtech');
@@ -6384,6 +6533,7 @@ let currentDeck = 'rav4';
 let allSlides = [];
 let currentSlideIdx = 0;
 const DEFAULT_QUIZ_URL_RAV4 = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_Quiz.html';
+const DEFAULT_QUIZ_URL_DEEPDIVE = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/RAV4_DeepDive_Quiz.html';
 const DEFAULT_QUIZ_URL_BZ = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/bZ_Woodland_Quiz.html';
 const DEFAULT_QUIZ_URL_DELEV = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/DelEVery_Quiz.html';
 const DEFAULT_QUIZ_URL_PHEVTECH = 'https://cjosh4toyotas-stack.github.io/sales-coach-engine/PHEVTech_Quiz.html';
@@ -6413,6 +6563,14 @@ const DECK_CONFIG = {
     quizTotal: 15,
     passThreshold: 12,
     certLabel: 'RAV4 Certified'
+  },
+  deepdive: {
+    brand: '26 RAV4 DEEP DIVE',
+    defaultQuizUrl: DEFAULT_QUIZ_URL_DEEPDIVE,
+    phaseNames: ['Briefing', 'Register', 'Scan & Compete', 'Live Results', 'Champions'],
+    quizTotal: 20,
+    passThreshold: 16,
+    certLabel: 'RAV4 Deep Dive Certified'
   },
   bz: {
     brand: 'bZ WOODLAND 2026',
@@ -6511,6 +6669,7 @@ function selectDeck(deckName) {
 
   // Show only the chosen deck's slides
   document.getElementById('deck-rav4').classList.toggle('active', deckName === 'rav4');
+  document.getElementById('deck-deepdive').classList.toggle('active', deckName === 'deepdive');
   document.getElementById('deck-bz').classList.toggle('active', deckName === 'bz');
   document.getElementById('deck-delev').classList.toggle('active', deckName === 'delev');
   document.getElementById('deck-phevtech').classList.toggle('active', deckName === 'phevtech');
@@ -6596,7 +6755,7 @@ function updateUI() {
   });
 
   // Top title
-  const deckLabelMap = { rav4: 'RAV4', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', demyst: 'Demystifying Powertrains', chrmastery: 'C-HR', landcruiser: 'Land Cruiser', whatsnew: "What's New MY27" };
+  const deckLabelMap = { rav4: 'RAV4', deepdive: '26 RAV4 Deep Dive', bz: 'bZ Woodland', delev: 'Del-EV-ery', phevtech: 'PHEV Tech', allocsys: 'Allocation System', ptmastery: 'Powertrain Mastery', demyst: 'Demystifying Powertrains', chrmastery: 'C-HR', landcruiser: 'Land Cruiser', whatsnew: "What's New MY27" };
   const deckLabel = deckLabelMap[currentDeck] || 'RAV4';
   const activePhaseName = (DECK_CONFIG[currentDeck] && DECK_CONFIG[currentDeck].phaseNames[phaseIdx]) || phases[phaseIdx].name;
   document.getElementById('top-phase-label') && (document.getElementById('top-phase-label').textContent = activePhaseName);
@@ -6627,7 +6786,7 @@ function updateUI() {
 
   // Speaker notes
   const notesEl = document.getElementById('notes-text');
-  const notesMap = { rav4: slideNotesRav4, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, demyst: slideNotesDemyst, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser, whatsnew: slideNotesWhatsnew };
+  const notesMap = { rav4: slideNotesRav4, deepdive: slideNotesDeepdive, bz: slideNotesBz, delev: slideNotesDelev, phevtech: slideNotesPhevtech, allocsys: slideNotesAllocsys, ptmastery: slideNotesPtmastery, demyst: slideNotesDemyst, chrmastery: slideNotesChrmastery, landcruiser: slideNotesLandcruiser, whatsnew: slideNotesWhatsnew };
   const activeNotes = notesMap[currentDeck] || slideNotesRav4;
   notesEl.textContent = activeNotes[currentSlideIdx] || '';
 
@@ -6792,6 +6951,9 @@ function importJSON() {
 
 // ── AUTO-IMPORT FROM GOOGLE SHEET (fed by each quiz's silent Form submits) ──
 const GSHEET_CSV_URL_MAP = {
+  // ⚙ DEEP DIVE LIVE RESULTS — paste the Deep Dive quiz's published Google Sheet CSV URL
+  // below (File → Share → Publish to web → CSV). Leaderboard auto-imports every 15s once set.
+  deepdive: '',
   rav4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
   delev: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSsETW4W953XE5QWnMNSvoUrgKu5dG6vUxRYeievFPmYzqAfZmX7flVu9VU28v_R3hlNaHYMKLf-JaH/pub?output=csv',
   bz: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnYu8981NbPLvCVahirQVvo8rfGZ8OkhwYtvM72TicsfPUKiewtXvcodtSWwnmE7X3AqQr-2_n9NUf/pub?output=csv',
