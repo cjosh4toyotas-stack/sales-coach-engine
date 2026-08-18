@@ -1480,7 +1480,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     <!-- Slide 2-0: QR Code -->
     <div class="slide" data-phase="2" data-slide="0">
-      <div class="slide-eyebrow">Deep Dive · Scan to Compete</div>
+      <div class="slide-eyebrow">Knowledge Battle · Scan to Compete</div>
       <div class="qr-center">
         <div class="qr-instructions fade-in fade-in-1">
           <div class="qr-title">Scan &amp; <span>Compete</span></div>
@@ -1496,7 +1496,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--blac
 
     <!-- Slide 3-0: Live Scoreboard -->
     <div class="slide" data-phase="3" data-slide="0">
-      <div class="slide-eyebrow">Deep Dive · Live Results</div>
+      <div class="slide-eyebrow">Knowledge Battle · Live Results</div>
       <div class="slide-title fade-in fade-in-1" style="font-size:40px">Session <span>Leaderboard</span></div>
       <div class="fade-in fade-in-2">
         <div id="live-scoreboard-deepdive">
@@ -6567,7 +6567,7 @@ const DECK_CONFIG = {
   deepdive: {
     brand: '26 RAV4 DEEP DIVE',
     defaultQuizUrl: DEFAULT_QUIZ_URL_DEEPDIVE,
-    phaseNames: ['Briefing', 'Register', 'Scan & Compete', 'Live Results', 'Champions'],
+    phaseNames: ['Briefing', 'Register', 'Knowledge Battle', 'Live Results', 'Champions'],
     quizTotal: 20,
     passThreshold: 16,
     certLabel: 'RAV4 Deep Dive Certified'
@@ -6951,9 +6951,9 @@ function importJSON() {
 
 // ── AUTO-IMPORT FROM GOOGLE SHEET (fed by each quiz's silent Form submits) ──
 const GSHEET_CSV_URL_MAP = {
-  // ⚙ DEEP DIVE LIVE RESULTS — paste the Deep Dive quiz's published Google Sheet CSV URL
-  // below (File → Share → Publish to web → CSV). Leaderboard auto-imports every 15s once set.
-  deepdive: '',
+  // Deep Dive shares the RAV4 quiz's Form/Sheet; rows are split by quiz length below
+  // (total 15 = Knowledge Battle deck, total 20 = Deep Dive deck).
+  deepdive: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
   rav4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRheCRxnuB1CtIZ71bLBUVJU5BGbRAgPQDa9XevBNKM25exDuWskZJD02QmCBHw6V1kKpGV95rlFAJn/pub?gid=1144797626&single=true&output=csv',
   delev: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSsETW4W953XE5QWnMNSvoUrgKu5dG6vUxRYeievFPmYzqAfZmX7flVu9VU28v_R3hlNaHYMKLf-JaH/pub?output=csv',
   bz: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnYu8981NbPLvCVahirQVvo8rfGZ8OkhwYtvM72TicsfPUKiewtXvcodtSWwnmE7X3AqQr-2_n9NUf/pub?output=csv',
@@ -7015,6 +7015,10 @@ async function fetchGoogleFormResults() {
       }
       const score = Number(r[idx.score]) || 0;
       const rowTotal = idx.total > -1 ? (Number(r[idx.total]) || undefined) : undefined;
+      // rav4 + deepdive share one Form/Sheet — route each row to the right leaderboard
+      // by quiz length (Deep Dive = 20 questions; Knowledge Battle = 15 / legacy blank)
+      if (currentDeck === 'deepdive' && rowTotal !== 20) return;
+      if (currentDeck === 'rav4' && rowTotal === 20) return;
       fetched.push({
         name,
         dealer: r[idx.dealerName] || '',
