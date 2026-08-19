@@ -187,6 +187,13 @@ select.form-input { cursor: pointer; }
 .anon-content {
   max-width: 620px; text-align: center; position: relative; z-index: 1;
   background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
+  display: flex; flex-direction: column;
+  max-height: calc(100dvh - 48px); max-height: calc(100vh - 48px);
+}
+.anon-scroll-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; text-align: left; }
+@media (max-height: 700px) {
+  .anon-content { padding: 20px 18px; }
+  .anon-glitch-title { font-size: 32px; }
 }
 .anon-glitch-title {
   font-size: 44px; font-weight: 700; color: var(--red); letter-spacing: 6px;
@@ -222,7 +229,7 @@ select.form-input { cursor: pointer; }
   68% { clip-path: inset(0 0 100% 0); }
 }
 .anon-topic-line { font-size: 11px; color: var(--red); letter-spacing: 3px; margin-bottom: 26px; opacity: .9; text-transform: uppercase; }
-.anon-body { font-size: 14.5px; color: var(--green); line-height: 1.85; text-align: left; white-space: pre-wrap; min-height: 240px; }
+.anon-body { font-size: 14.5px; color: var(--green); line-height: 1.85; text-align: left; white-space: pre-wrap; }
 .anon-cursor { display: inline-block; color: var(--red); animation: anonBlink 0.8s step-end infinite; font-size: 14.5px; }
 @keyframes anonBlink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
 .anon-proceed-btn {
@@ -362,7 +369,7 @@ select.form-input { cursor: pointer; }
   <div class="anon-content">
     <div class="anon-glitch-title" data-text="ATTENTION">ATTENTION</div>
     <div class="anon-topic-line">// SUBJECT: 26 RAV4 DEEP DIVE — TRIM MASTERY</div>
-    <div class="anon-body" id="anon-typed-text"></div><span class="anon-cursor" id="anon-cursor">█</span>
+    <div class="anon-scroll-body" id="anon-scroll-body"><div class="anon-body" id="anon-typed-text"></div><span class="anon-cursor" id="anon-cursor">█</span></div>
     <div><button class="anon-proceed-btn" id="anon-proceed-btn" onclick="dismissAnonWarning()">PROCEED WHEN READY →</button></div>
   </div>
 </div>
@@ -506,7 +513,8 @@ select.form-input { cursor: pointer; }
       <div class="export-code" id="export-code"></div>
       <button class="copy-btn" onclick="copyExport()">📋 Copy Result Code</button>
     </div>
-    <button class="btn-primary" style="margin-top:16px" onclick="retakeQuiz()">RETAKE QUIZ</button>
+    <a class="btn-primary" style="margin-top:16px;display:inline-block;text-decoration:none;text-align:center" href="https://cjosh4toyotas-stack.github.io/RAV4-DeepDive-Leaderboard/" target="_blank" rel="noopener">🏆 VIEW LIVE LEADERBOARD</a>
+    <button class="btn-primary" style="margin-top:10px" onclick="retakeQuiz()">RETAKE QUIZ</button>
   </div>
 
   <div class="coaching-recap" id="coaching-recap"></div>
@@ -789,6 +797,8 @@ function typeAnonWarning() {
     if (i <= ANON_WARNING_TEXT.length) {
       el.textContent = ANON_WARNING_TEXT.slice(0, i);
       i++;
+      const sb = document.getElementById('anon-scroll-body');
+      if (sb) sb.scrollTop = sb.scrollHeight;
       setTimeout(step, 14 + Math.random() * 18);
     } else {
       cursor.style.display = 'none';
@@ -1129,7 +1139,7 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'TRIM WALK',
     q: 'Which statement about Qi-compatible wireless charging pads on the 2026 RAV4 is correct?',
-    opts: ['Every grade comes with at least one charging pad', 'Limited is the only grade with two pads — LE and SE have none', 'LE has one pad and Limited has two', 'Only PHEV grades come with a charging pad'],
+    opts: ['SE has one, Woodland has one, Limited has two', 'Limited has two, XLE Premium has one, LE has none', 'LE has none, XSE has none, GR SPORT has one', 'Limited has two, GR SPORT has two, SE has none'],
     ans: 1,
     exp: 'Limited is the only grade with TWO Qi pads. XLE Premium, Woodland, XSE, and GR SPORT each get one — LE and SE have none. A perfect upsell talking point.'
   },
@@ -1150,7 +1160,7 @@ const DEFAULT_QUESTIONS = [
   {
     cat: 'TRIM WALK',
     q: 'Which PHEV grade has the LOWEST manufacturer-estimated all-electric driving range?',
-    opts: ['SE — 52 miles', 'XSE — 52 miles', 'Woodland — 49 miles', 'GR SPORT — 48 miles'],
+    opts: ['SE', 'XSE', 'Woodland', 'GR SPORT'],
     ans: 3,
     exp: 'GR SPORT comes in at 48 miles. SE and XSE lead at 52, Woodland lands at 49. All four PHEVs share the 324-hp powertrain, but range varies by grade.'
   },
