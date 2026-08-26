@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Sales Consultant Certification Board — McGrath Toyota Iowa City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141517;
+  --panel:#1e2023;
+  --panel-2:#25282c;
+  --line:#33363a;
+  --track:#3a3e43;
+  --red:#EB0A1E;
+  --red-dim:#8f0713;
+  --white:#ffffff;
+  --steel:#9aa0a6;
+  --faint:#6b7076;
+  --gold:#d8b25a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--white);
+  font-family:'Archivo',Arial,sans-serif;
+  font-variation-settings:'wdth' 100;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+header{padding:44px 0 8px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--steel);display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";display:inline-block;width:26px;height:3px;background:var(--red)}
+h1{
+  margin-top:14px;
+  font-weight:900;
+  font-variation-settings:'wdth' 78;
+  text-transform:uppercase;
+  letter-spacing:.01em;
+  font-size:clamp(30px,5.4vw,54px);
+  line-height:1.02;
+}
+h1 span{color:var(--red)}
+.sub{margin:12px 0 28px;color:var(--steel);font-size:15px;max-width:640px}
+
+/* ---------- team rail ---------- */
+.rail-block{padding:34px 0 40px;border-bottom:1px solid var(--line)}
+.rail{display:flex;align-items:flex-start}
+.station{flex:1;position:relative;text-align:center}
+.station .dot{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--track);
+  margin:0 auto;position:relative;z-index:2;
+  border:3px solid var(--ink);
+  box-shadow:0 0 0 2px var(--track);
+}
+.station.reached .dot{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.station:not(:first-child)::before{
+  content:"";position:absolute;top:7px;right:50%;width:100%;height:2px;background:var(--track);z-index:1;
+}
+.station.reached:not(:first-child)::before{background:var(--red-dim)}
+.station .lvl{
+  margin-top:14px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  font-size:clamp(11px,1.8vw,15px);
+}
+.station .count{color:var(--steel);font-size:13px;margin-top:2px}
+.station .count b{color:var(--white);font-size:16px}
+
+/* ---------- sections ---------- */
+section{padding:44px 0 8px}
+h2{
+  font-weight:900;text-transform:uppercase;
+  font-variation-settings:'wdth' 80;
+  font-size:clamp(20px,3vw,28px);letter-spacing:.02em;
+}
+.section-note{color:var(--steel);font-size:14px;margin:6px 0 24px}
+
+/* ---------- climber cards ---------- */
+.cards{display:grid;gap:16px}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-left:4px solid var(--red);
+  border-radius:10px;
+  padding:20px 22px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:6px 24px;
+  align-items:center;
+  transition:transform .15s ease, border-color .15s ease;
+}
+.card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
+.card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
+.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+.card .path b{color:var(--white)}
+.card .path .arrow{color:var(--red);margin:0 6px}
+.remain{text-align:right}
+.remain .num{
+  font-weight:900;font-size:44px;line-height:1;color:var(--red);
+  font-variation-settings:'wdth' 76;
+}
+.remain .num.one{color:var(--gold)}
+.remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
+.minirail{grid-column:1 / -1;display:flex;gap:6px;margin-top:12px}
+.minirail i{height:6px;flex:1;border-radius:3px;background:var(--track)}
+.minirail i.done{background:var(--red)}
+.card details{grid-column:1 / -1;margin-top:10px}
+.card summary{
+  cursor:pointer;list-style:none;color:var(--steel);font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;display:inline-flex;align-items:center;gap:8px;
+  padding:4px 0;
+}
+.card summary:hover{color:var(--white)}
+.card summary::after{content:"+";color:var(--red);font-size:16px;font-weight:900}
+.card details[open] summary::after{content:"–"}
+.card ul{margin:10px 0 4px;padding:0;list-style:none;columns:2;column-gap:32px}
+.card li{
+  font-size:14px;color:#d4d6d9;padding:6px 0 6px 16px;position:relative;
+  break-inside:avoid;border-bottom:1px solid var(--line);
+}
+.card li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%;background:var(--track)}
+.chip{
+  display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;
+  padding:3px 9px;border-radius:4px;background:var(--panel-2);border:1px solid var(--line);color:var(--steel);
+  margin-bottom:8px;
+}
+.chip.next{border-color:var(--gold);color:var(--gold)}
+
+/* ---------- master wall ---------- */
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:4px}
+.plaque{
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line);
+  border-top:3px solid var(--red);
+  border-radius:8px;
+  padding:16px 16px 14px;
+  transition:transform .15s ease;
+}
+.plaque:hover{transform:translateY(-2px)}
+.plaque .pname{font-weight:900;text-transform:uppercase;font-size:16px;font-variation-settings:'wdth' 84;letter-spacing:.02em}
+.plaque .badge{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+  font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--red);
+}
+.plaque .badge::before{content:"★";color:var(--red);font-size:12px}
+
+/* ---------- footer ---------- */
+footer{margin-top:56px;padding:26px 0 44px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
+footer p{margin-bottom:4px}
+
+/* ---------- animation ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .card,.plaque,.rail-block{animation:rise .5s ease both}
+  .cards .card:nth-child(2){animation-delay:.06s}
+  .cards .card:nth-child(3){animation-delay:.12s}
+  .cards .card:nth-child(4){animation-delay:.18s}
+  .cards .card:nth-child(5){animation-delay:.24s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+@media (max-width:640px){
+  .card{grid-template-columns:1fr}
+  .remain{text-align:left;margin-top:6px}
+  .card ul{columns:1}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">McGrath Toyota Iowa City &middot; Sales Team</div>
+    <h1>Certification <span>Board</span></h1>
+    <p class="sub">Toyota Sales Consultant Certification &mdash; where each of us stands on the ladder, and exactly how many classes stand between here and the next level.</p>
+  </div>
+</header>
+
+<div class="rail-block">
+  <div class="wrap">
+    <div class="rail">
+      <div class="station reached">
+        <div class="dot"></div>
+        <div class="lvl">Foundations</div>
+        <div class="count"><b>4</b> consultants</div>
+      </div>
+      <div class="station reached">
+        <div class="dot"></div>
+        <div class="lvl">Certified</div>
+        <div class="count">next stop for 4</div>
+      </div>
+      <div class="station reached">
+        <div class="dot"></div>
+        <div class="lvl">Senior</div>
+        <div class="count"><b>1</b> consultant</div>
+      </div>
+      <div class="station reached">
+        <div class="dot"></div>
+        <div class="lvl">Master</div>
+        <div class="count"><b>16</b> consultants</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>Closest to leveling up</h2>
+    <p class="section-note">Sorted by fewest classes remaining. Tap a card to see the exact courses on your list.</p>
+    <div class="cards">
+
+      <div class="card">
+        <div>
+          <span class="chip next">1 class out</span>
+          <div class="name">Eon Van Rooyen</div>
+          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+        </div>
+        <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
+        <div class="minirail"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i></i></div>
+        <details>
+          <summary>Remaining course</summary>
+          <ul><li>Toyota Sales Consultant ILT 2</li></ul>
+        </details>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="chip next">2 electives out</span>
+          <div class="name">Mario Garcia</div>
+          <div class="path">Senior <span class="arrow">&rarr;</span> <b>Master</b></div>
+        </div>
+        <div class="remain"><div class="num">2</div><div class="lbl">electives to go</div></div>
+        <div class="minirail"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i></i><i></i></div>
+        <details>
+          <summary>Remaining requirement</summary>
+          <ul><li>Complete 2 additional Career Development &amp; Growth elective courses (choose any 2)</li></ul>
+        </details>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="name">Hunter Robertson</div>
+          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+        </div>
+        <div class="remain"><div class="num">11</div><div class="lbl">classes to go</div></div>
+        <div class="minirail"><i class="done"></i><i class="done"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <details>
+          <summary>Remaining courses</summary>
+          <ul>
+            <li>TDLR-5: Needs Assessment Best Practices</li>
+            <li>TDLR-6: Vehicle Presentation Best Practices</li>
+            <li>TDLR-7: Demonstration Drive Best Practices</li>
+            <li>TDLR-9: Delivery Best Practices</li>
+            <li>TOY-2: Genuine Toyota Accessories</li>
+            <li>TOY-3: Toyota Finance and Insurance Products</li>
+            <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
+            <li>TOY-11: Introduction to CXi</li>
+            <li>TOY-19: Introduction to TLE</li>
+            <li>Toyota Sales Consultant ILT 2</li>
+            <li>TCUV 2026 &mdash; The TCUV Value Story</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="name">Nicole Elledge</div>
+          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+        </div>
+        <div class="remain"><div class="num">13</div><div class="lbl">classes to go</div></div>
+        <div class="minirail"><i class="done"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <details>
+          <summary>Remaining courses</summary>
+          <ul>
+            <li>TCUV-1: Introduction to TCUV</li>
+            <li>TCUV-4: Selling TCUV</li>
+            <li>TDLR-5: Needs Assessment Best Practices</li>
+            <li>TDLR-6: Vehicle Presentation Best Practices</li>
+            <li>TDLR-7: Demonstration Drive Best Practices</li>
+            <li>TDLR-9: Delivery Best Practices</li>
+            <li>TDLR-10: Maintaining Guest Relationships</li>
+            <li>TOY-2: Genuine Toyota Accessories</li>
+            <li>TOY-3: Toyota Finance and Insurance Products</li>
+            <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
+            <li>TOY-11: Introduction to CXi</li>
+            <li>TOY-19: Introduction to TLE</li>
+            <li>TCUV 2026 &mdash; The TCUV Value Story</li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="name">Noah Fried</div>
+          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+        </div>
+        <div class="remain"><div class="num">14</div><div class="lbl">classes to go</div></div>
+        <div class="minirail"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <details>
+          <summary>Remaining courses</summary>
+          <ul>
+            <li>TCUV-1: Introduction to TCUV</li>
+            <li>TCUV-4: Selling TCUV</li>
+            <li>TDLR-5: Needs Assessment Best Practices</li>
+            <li>TDLR-6: Vehicle Presentation Best Practices</li>
+            <li>TDLR-7: Demonstration Drive Best Practices</li>
+            <li>TDLR-9: Delivery Best Practices</li>
+            <li>TDLR-10: Maintaining Guest Relationships</li>
+            <li>TOY-2: Genuine Toyota Accessories</li>
+            <li>TOY-3: Toyota Finance and Insurance Products</li>
+            <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
+            <li>TOY-11: Introduction to CXi</li>
+            <li>TOY-19: Introduction to TLE</li>
+            <li>Toyota Sales Consultant ILT 2</li>
+            <li>TCUV 2026 &mdash; The TCUV Value Story</li>
+          </ul>
+        </details>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The Master Wall</h2>
+    <p class="section-note">Top of the ladder. No further classes required &mdash; 16 of 21 consultants on this floor hold Master.</p>
+    <div class="wall">
+      <div class="plaque"><div class="pname">Ethan Aronson</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Braden Burr</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Kaden Darby</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Curtis Dillon</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Tyler Hemphill</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Michael Huber</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Damon Koppes</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Derrius Loveless</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Jack Osland</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Hunter Schmitt</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Shawn Still</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Theron Stuelke</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Kyle Triplett</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Joseph Vogt</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Michael Wells</div><div class="badge">Master</div></div>
+      <div class="plaque"><div class="pname">Aaron Woodward</div><div class="badge">Master</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Source: Certifications by Toyota &mdash; Certification Level Summary, last updated Aug 25, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
+    <p>Log in at cbt.educecloud.com to knock out your remaining courses. Questions on your list &mdash; see Josh.</p>
+  </div>
+</footer>
+
+</body>
+</html>
