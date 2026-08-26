@@ -22,6 +22,8 @@
   --faint:#6b7076;
   --gold:#d8b25a;
   --green:#2fa24b;
+  --orange:#f28c1e;
+  --yellow:#f2d21e;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -70,6 +72,17 @@ h1 span{color:var(--red)}
   content:"";position:absolute;top:7px;right:50%;width:100%;height:2px;background:var(--track);z-index:1;
 }
 .station.reached:not(:first-child)::before{background:var(--red-dim)}
+.rail .station:nth-child(1) .dot{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.rail .station:nth-child(2) .dot{background:var(--orange);box-shadow:0 0 0 2px var(--orange)}
+.rail .station:nth-child(3) .dot{background:var(--yellow);box-shadow:0 0 0 2px var(--yellow)}
+.rail .station:nth-child(4) .dot{background:var(--green);box-shadow:0 0 0 2px var(--green)}
+.rail .station:nth-child(2)::before{background:linear-gradient(90deg,var(--red),var(--orange))}
+.rail .station:nth-child(3)::before{background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.rail .station:nth-child(4)::before{background:linear-gradient(90deg,var(--yellow),var(--green))}
+.rail .station:nth-child(1) .lvl{color:var(--red)}
+.rail .station:nth-child(2) .lvl{color:var(--orange)}
+.rail .station:nth-child(3) .lvl{color:var(--yellow)}
+.rail .station:nth-child(4) .lvl{color:var(--green)}
 .station .lvl{
   margin-top:14px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
   font-size:clamp(11px,1.8vw,15px);
@@ -92,9 +105,12 @@ h2.masters{
   text-transform:none;
   letter-spacing:.01em;
   color:var(--green);
-  font-size:clamp(30px,4.6vw,44px);
+  font-size:clamp(44px,7.5vw,72px);
   font-variation-settings:normal;
+  text-align:center;
+  line-height:1.1;
 }
+h2.masters + .section-note{text-align:center}
 
 /* ---------- climber cards ---------- */
 .cards{display:grid;gap:16px}
