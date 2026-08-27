@@ -138,9 +138,8 @@ h2.masters + .section-note{text-align:center}
 }
 .remain .num.one{color:var(--gold)}
 .remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
-.minirail{grid-column:1 / -1;display:flex;gap:6px;margin-top:12px}
-.minirail i{height:6px;flex:1;border-radius:3px;background:var(--track)}
-.minirail i.done{background:var(--red)}
+.minirail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.minirail i{width:26px;height:6px;flex:none;border-radius:3px;background:var(--red)}
 .card details{grid-column:1 / -1;margin-top:10px}
 .card summary{
   cursor:pointer;list-style:none;color:var(--steel);font-size:13px;font-weight:700;
@@ -243,7 +242,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 <section>
   <div class="wrap">
     <h2>Closest to leveling up</h2>
-    <p class="section-note">Sorted by fewest classes remaining. Tap a card to see the exact courses on your list.</p>
+    <p class="section-note">Sorted by fewest classes remaining. Each dash is one class still to take &mdash; tap a card for the exact list.</p>
     <div class="cards">
 
       <div class="card">
@@ -253,7 +252,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
-        <div class="minirail"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i></i></div>
+        <div class="minirail"></div>
         <details>
           <summary>Remaining course</summary>
           <ul><li>Toyota Sales Consultant ILT 2</li></ul>
@@ -267,7 +266,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="path">Senior <span class="arrow">&rarr;</span> <b>Master</b></div>
         </div>
         <div class="remain"><div class="num">2</div><div class="lbl">electives to go</div></div>
-        <div class="minirail"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i></i><i></i></div>
+        <div class="minirail"></div>
         <details>
           <summary>Remaining requirement</summary>
           <ul><li>Complete 2 additional Career Development &amp; Growth elective courses (choose any 2)</li></ul>
@@ -280,7 +279,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">11</div><div class="lbl">classes to go</div></div>
-        <div class="minirail"><i class="done"></i><i class="done"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="minirail"></div>
         <details>
           <summary>Remaining courses</summary>
           <ul>
@@ -305,7 +304,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">13</div><div class="lbl">classes to go</div></div>
-        <div class="minirail"><i class="done"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="minirail"></div>
         <details>
           <summary>Remaining courses</summary>
           <ul>
@@ -332,7 +331,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">14</div><div class="lbl">classes to go</div></div>
-        <div class="minirail"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="minirail"></div>
         <details>
           <summary>Remaining courses</summary>
           <ul>
@@ -390,5 +389,14 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
   </div>
 </footer>
 
+<script>
+document.querySelectorAll('.card').forEach(function(card){
+  var num = parseInt(card.querySelector('.remain .num').textContent, 10) || 0;
+  var rail = card.querySelector('.minirail');
+  if(!rail) return;
+  rail.innerHTML = '';
+  for(var i = 0; i < num; i++){ rail.appendChild(document.createElement('i')); }
+});
+</script>
 </body>
 </html>
