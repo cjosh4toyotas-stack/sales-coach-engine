@@ -128,6 +128,21 @@ h2.masters + .section-note{text-align:center}
 }
 .card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
 .card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
+.card .name.orange-name{color:var(--orange)}
+.card .name.red-name{color:var(--red)}
+.card .name.glow-name{
+  color:var(--red);
+  text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35);
+  animation:namePulse 1.6s ease-in-out infinite;
+}
+@keyframes namePulse{
+  0%,100%{text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35)}
+  50%{text-shadow:0 0 12px rgba(228,10,30,1), 0 0 28px rgba(228,10,30,.85), 0 0 48px rgba(228,10,30,.55)}
+}
+.remain .num.glow-num{
+  text-shadow:0 0 10px rgba(228,10,30,.9), 0 0 24px rgba(228,10,30,.6), 0 0 44px rgba(228,10,30,.35);
+  animation:namePulse 1.6s ease-in-out infinite;
+}
 .card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
 .card .path b{color:var(--white)}
 .card .path .arrow{color:var(--red);margin:0 6px}
@@ -275,7 +290,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">1 class out</span>
-          <div class="name">Eon Van Rooyen</div>
+          <div class="name orange-name">Eon Van Rooyen</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
@@ -288,17 +303,15 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
       <div class="card">
         <div>
-          <div class="name">Noah Fried</div>
+          <div class="name orange-name">Noah Fried</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
-        <div class="remain"><div class="num">5</div><div class="lbl">classes to go</div></div>
+        <div class="remain"><div class="num">3</div><div class="lbl">classes to go</div></div>
         <div class="maintain-warn"><i class="warn-icon">!</i> The courses listed must be completed by the due date to maintain your certification</div>
         <div class="minirail"></div>
         <details>
           <summary>Remaining courses</summary>
           <ul>
-            <li>TOY-2: Genuine Toyota Accessories</li>
-            <li>TOY-3: Toyota Finance and Insurance Products</li>
             <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
             <li>Toyota Sales Consultant ILT 2</li>
             <li>TCUV 2026 &mdash; The TCUV Value Story</li>
@@ -308,7 +321,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
       <div class="card">
         <div>
-          <div class="name">Hunter Robertson</div>
+          <div class="name red-name">Hunter Robertson</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">8</div><div class="lbl">classes to go</div></div>
@@ -331,10 +344,10 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
       <div class="card">
         <div>
-          <div class="name">Nicole Elledge</div>
+          <div class="name glow-name">Nicole Elledge</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
-        <div class="remain"><div class="num">13</div><div class="lbl">classes to go</div></div>
+        <div class="remain"><div class="num glow-num">13</div><div class="lbl">classes to go</div></div>
         <div class="maintain-warn"><i class="warn-icon">!</i> The courses listed must be completed by the due date to maintain your certification</div>
         <div class="minirail"></div>
         <details>
@@ -389,7 +402,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
 <footer>
   <div class="wrap">
-    <p>Source: Certifications by Toyota &mdash; data as of Aug 28, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
+    <p>Source: Certifications by Toyota &mdash; data as of Aug 29, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
     <p>Log in at cbt.educecloud.com to knock out your remaining courses. Questions on your list &mdash; see Josh.</p>
   </div>
 </footer>
