@@ -137,6 +137,15 @@ h2.masters + .section-note{text-align:center}
   font-variation-settings:'wdth' 76;
 }
 .remain .num.one{color:var(--gold)}
+.card .name.red-name{
+  color:var(--red);
+  text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35);
+  animation:namePulse 1.6s ease-in-out infinite;
+}
+@keyframes namePulse{
+  0%,100%{text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35)}
+  50%{text-shadow:0 0 12px rgba(228,10,30,1), 0 0 28px rgba(228,10,30,.85), 0 0 48px rgba(228,10,30,.55)}
+}
 .remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
 .minirail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .minirail i{
@@ -273,8 +282,22 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
       <div class="card">
         <div>
+          <span class="chip next">1 class out</span>
+          <div class="name">Hunter Robertson</div>
+          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+        </div>
+        <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
+        <div class="minirail"></div>
+        <details>
+          <summary>Remaining course</summary>
+          <ul><li>Toyota Sales Consultant ILT 2</li></ul>
+        </details>
+      </div>
+
+      <div class="card">
+        <div>
           <span class="chip next">3 classes out</span>
-          <div class="name">Noah Fried</div>
+          <div class="name red-name">Noah Fried</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">3</div><div class="lbl">classes to go</div></div>
@@ -292,7 +315,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">4 classes out</span>
-          <div class="name">Nicole Elledge</div>
+          <div class="name red-name">Nicole Elledge</div>
           <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
         </div>
         <div class="remain"><div class="num">4</div><div class="lbl">classes to go</div></div>
@@ -304,28 +327,6 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
             <li>TOY-3: Toyota Finance and Insurance Products</li>
             <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
             <li>GR-01: GR Foundations</li>
-          </ul>
-        </details>
-      </div>
-
-      <div class="card">
-        <div>
-          <div class="name">Hunter Robertson</div>
-          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
-        </div>
-        <div class="remain"><div class="num">8</div><div class="lbl">classes to go</div></div>
-        <div class="minirail"></div>
-        <details>
-          <summary>Remaining courses</summary>
-          <ul>
-            <li>TDLR-9: Delivery Best Practices</li>
-            <li>TOY-11: Introduction to CXi</li>
-            <li>TOY-19: Introduction to TLE</li>
-            <li>TOY-2: Genuine Toyota Accessories</li>
-            <li>TOY-3: Toyota Finance and Insurance Products</li>
-            <li>TOY-5: ToyotaCare and Prepaid Maintenance Plans</li>
-            <li>Toyota Sales Consultant ILT 2</li>
-            <li>TCUV 2026 &mdash; The TCUV Value Story</li>
           </ul>
         </details>
       </div>
@@ -362,7 +363,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
 <footer>
   <div class="wrap">
-    <p>Source: Certifications by Toyota &mdash; data as of Aug 30, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
+    <p>Source: Certifications by Toyota &mdash; data as of Aug 31, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
     <p>Log in at cbt.educecloud.com to knock out your remaining courses. Questions on your list &mdash; see Josh.</p>
   </div>
 </footer>
