@@ -145,6 +145,17 @@ h2.masters + .section-note{text-align:center}
 .card .path b.lv-ct{color:var(--orange)}
 .card .path .lv-sr{color:var(--yellow)}
 .card .path b.lv-ms{color:var(--green)}
+.sr-card{border-left-color:var(--yellowgreen)}
+.sr-card:hover{border-left-color:var(--yellowgreen)}
+.sr-card .name{
+  color:var(--yellowgreen);
+  text-shadow:0 0 8px rgba(160,194,44,.85), 0 0 18px rgba(160,194,44,.5), 0 0 32px rgba(160,194,44,.28);
+  animation:ygNamePulse 1.6s ease-in-out infinite;
+}
+@keyframes ygNamePulse{
+  0%,100%{text-shadow:0 0 8px rgba(160,194,44,.85), 0 0 18px rgba(160,194,44,.5), 0 0 32px rgba(160,194,44,.28)}
+  50%{text-shadow:0 0 12px rgba(160,194,44,1), 0 0 28px rgba(160,194,44,.75), 0 0 48px rgba(160,194,44,.45)}
+}
 .sr-card .remain .num{color:var(--yellowgreen)}
 .sr-card .minirail i{
   background:var(--yellowgreen);
@@ -342,7 +353,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card sr-card">
         <div>
           <span class="chip next">2 electives out</span>
-          <div class="name yellow-name">Nicole Elledge</div>
+          <div class="name">Nicole Elledge</div>
           <div class="path"><span class="lv-sr">Senior</span> <span class="arrow">&rarr;</span> <b class="lv-ms">Master</b></div>
         </div>
         <div class="remain"><div class="num">2</div><div class="lbl">electives to go</div></div>
