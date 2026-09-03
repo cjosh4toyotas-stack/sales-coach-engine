@@ -24,6 +24,7 @@
   --green:#2fa24b;
   --orange:#f28c1e;
   --yellow:#f2d21e;
+  --redorange:#f0561e;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -129,6 +130,20 @@ h2.masters + .section-note{text-align:center}
 .card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
 .card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
 .card .name.gold-name{color:var(--gold)}
+.card .name.yellow-name{
+  color:var(--yellow);
+  text-shadow:0 0 8px rgba(242,210,30,.85), 0 0 18px rgba(242,210,30,.5), 0 0 32px rgba(242,210,30,.28);
+  animation:yellowPulse 1.6s ease-in-out infinite;
+}
+@keyframes yellowPulse{
+  0%,100%{text-shadow:0 0 8px rgba(242,210,30,.85), 0 0 18px rgba(242,210,30,.5), 0 0 32px rgba(242,210,30,.28)}
+  50%{text-shadow:0 0 12px rgba(242,210,30,1), 0 0 28px rgba(242,210,30,.75), 0 0 48px rgba(242,210,30,.45)}
+}
+.card .name.redorange-name{color:var(--redorange)}
+.card .path .lv-fd{color:var(--red)}
+.card .path b.lv-ct{color:var(--orange)}
+.card .path .lv-sr{color:var(--yellow)}
+.card .path b.lv-ms{color:var(--green)}
 .card .name.red-name{
   color:var(--red);
   text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35);
@@ -270,8 +285,8 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">1 class out</span>
-          <div class="name gold-name">Eon Van Rooyen</div>
-          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+          <div class="name redorange-name">Eon Van Rooyen</div>
+          <div class="path"><span class="lv-fd">Foundations</span> <span class="arrow">&rarr;</span> <b class="lv-ct">Certified</b></div>
         </div>
         <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
         <div class="minirail"></div>
@@ -284,8 +299,8 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">1 class out</span>
-          <div class="name gold-name">Hunter Robertson</div>
-          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+          <div class="name redorange-name">Hunter Robertson</div>
+          <div class="path"><span class="lv-fd">Foundations</span> <span class="arrow">&rarr;</span> <b class="lv-ct">Certified</b></div>
         </div>
         <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
         <div class="minirail"></div>
@@ -298,8 +313,8 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">1 class out</span>
-          <div class="name gold-name">Noah Fried</div>
-          <div class="path">Foundations <span class="arrow">&rarr;</span> <b>Certified</b></div>
+          <div class="name redorange-name">Noah Fried</div>
+          <div class="path"><span class="lv-fd">Foundations</span> <span class="arrow">&rarr;</span> <b class="lv-ct">Certified</b></div>
         </div>
         <div class="remain"><div class="num one">1</div><div class="lbl">class to go</div></div>
         <div class="minirail"></div>
@@ -314,8 +329,8 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="card">
         <div>
           <span class="chip next">2 electives out</span>
-          <div class="name gold-name">Nicole Elledge</div>
-          <div class="path">Senior <span class="arrow">&rarr;</span> <b>Master</b></div>
+          <div class="name yellow-name">Nicole Elledge</div>
+          <div class="path"><span class="lv-sr">Senior</span> <span class="arrow">&rarr;</span> <b class="lv-ms">Master</b></div>
         </div>
         <div class="remain"><div class="num">2</div><div class="lbl">electives to go</div></div>
         <div class="minirail"></div>
