@@ -1628,6 +1628,83 @@ function clearActiveSession(){
   try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
 }
 
+// ── AUTO-LOGOUT (3 min idle) + SUSPENDED SESSIONS ─────────────
+// Idle mid-quiz → sign them out but KEEP their progress. Signing back
+// in resumes the same attempt at the same question count, with the
+// remaining questions reshuffled so the pause can't be used to scout
+// the question that was on screen.
+function suspendSession(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (saved && saved.userData) {
+      saved.suspended = true;
+      saved.savedAt = Date.now();
+      localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(saved));
+    }
+  } catch(e) {}
+}
+let idleLogoutTimer = null;
+function armIdleLogout(){
+  clearTimeout(idleLogoutTimer);
+  idleLogoutTimer = setTimeout(autoLogout, SESSION_MAX_AGE_MS);
+}
+function disarmIdleLogout(){ clearTimeout(idleLogoutTimer); }
+function autoLogout(){
+  const quizScreen = document.getElementById('screen-quiz');
+  if (!quizScreen || !quizScreen.classList.contains('active')) return;
+  clearInterval(qtInterval);
+  suspendSession();
+  showScreen('screen-reg');
+  showSuspendedNotice();
+}
+function showSuspendedNotice(){
+  let name = '';
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (saved && saved.userData && saved.userData.name) name = saved.userData.name;
+  } catch(e) {}
+  const old = document.getElementById('suspend-notice'); if (old) old.remove();
+  const esc = String(name).replace(/[<>&"]/g, '');
+  const bar = document.createElement('div');
+  bar.id = 'suspend-notice';
+  bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:7500;background:#16161c;border:1px solid rgba(235,10,30,0.45);border-radius:12px;padding:10px 14px;font-size:12.5px;color:#f0f0f4;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,0.55);max-width:92vw;flex-wrap:wrap;justify-content:center';
+  bar.innerHTML = '<span>⏸ Signed out for inactivity. ' + (esc ? '<b>' + esc + '</b>’s progress is saved — sign back in to continue.' : 'Progress is saved — sign back in to continue.') + '</span>' +
+    '<button id="suspend-dismiss-btn" style="background:none;border:none;color:rgba(240,240,244,0.45);font-size:14px;cursor:pointer;padding:4px">✕</button>';
+  document.body.appendChild(bar);
+  document.getElementById('suspend-dismiss-btn').onclick = function(){ bar.remove(); };
+}
+function readSuspendedSession(name){
+  try {
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
+    if (!saved || !saved.suspended || !saved.userData || !saved.userData.name) return null;
+    if (saved.userData.name.trim().toLowerCase() !== String(name).trim().toLowerCase()) return null;
+    return saved;
+  } catch(e){ return null; }
+}
+function resumeSuspendedSession(saved){
+  const notice = document.getElementById('suspend-notice'); if (notice) notice.remove();
+  userData = saved.userData;
+  score = saved.score || 0;
+  catScores = saved.catScores || {};
+  userAnswers = saved.userAnswers || [];
+  startTime = saved.startTime || Date.now();
+  refreshCount = (saved.refreshCount || 0) + 1;
+  let aq = (Array.isArray(saved.activeQuestions) && saved.activeQuestions.length) ? saved.activeQuestions : buildActiveQuestions(questions);
+  // Advance past anything already scored — answered questions are never re-shown.
+  let c = saved.currentQ || 0;
+  while (c < aq.length && userAnswers.some(a => a.q === c)) c++;
+  // Reshuffle ONLY the remaining questions: fresh order + rebalanced answer
+  // positions, so the pause gave away nothing about what comes next.
+  const done = aq.slice(0, c);
+  const remaining = aq.slice(c);
+  activeQuestions = remaining.length ? done.concat(buildActiveQuestions(remaining)) : aq;
+  currentQ = c;
+  saveActiveSession(); // writes without the suspended flag → session is live again
+  if (currentQ >= activeQuestions.length) { showResults(); return; }
+  showScreen('screen-quiz');
+  loadQuestion();
+}
+
 // ── ATTEMPT TRACKING (per consultant, per device) ─────────────
 const ATTEMPTS_KEY = 'tundratacoma2026_attempts';
 function attemptKey(name){ return name.trim().toLowerCase(); }
@@ -1672,6 +1749,11 @@ function startQuiz() {
       }
     }
   }
+  // Same person signing back in after an inactivity logout → resume the
+  // SAME attempt (no new attempt counted, no restart at question 1).
+  const suspended = readSuspendedSession(name);
+  if (suspended) { resumeSuspendedSession(suspended); return; }
+
   const attemptNum = bumpAttempt(name);
   userData = { name, spin, dealerCode, dealer, region, state, attemptNum, startTime: Date.now() };
   startTime = Date.now();
@@ -1712,6 +1794,7 @@ function loadQuestion() {
   `).join('');
 
   startQuestionTimer();
+  armIdleLogout();
 }
 
 function startQuestionTimer() {
@@ -1774,6 +1857,7 @@ function revealAnswer(selected) {
   document.getElementById('btn-next-q').style.display = 'block';
   document.getElementById('q-score-live').textContent = `Score: ${score}`;
   saveActiveSession();
+  armIdleLogout(); // feedback screen has no countdown — idle here still logs out
 }
 
 function nextQuestion() {
@@ -1852,6 +1936,7 @@ function renderCoachingRecap() {
 }
 
 function showResults() {
+  disarmIdleLogout();
   clearActiveSession();
   showScreen('screen-results');
   const totalTime = Math.round((Date.now() - startTime) / 1000);
@@ -2005,6 +2090,7 @@ function retakeQuiz() {
   currentQ = 0; score = 0; catScores = {};
   answered = false; userAnswers = []; refreshCount = 0;
   clearInterval(qtInterval);
+  disarmIdleLogout();
   clearActiveSession();
   showScreen('screen-reg');
 }
@@ -2038,9 +2124,13 @@ function showResumeNotice(name){
   try {
     const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
     if (!saved || !saved.userData || !saved.userData.name) return;
-    // Abandoned session: expire it instead of dropping the next person into it.
+    // Already suspended (auto-logout fired before they left) → require sign-in.
+    if (saved.suspended) { showSuspendedNotice(); return; }
+    // Stale session (closed the tab mid-quiz, came back later) → suspend it,
+    // don't delete it. Progress survives; they sign back in to continue.
     if (!saved.savedAt || (Date.now() - saved.savedAt) > SESSION_MAX_AGE_MS) {
-      clearActiveSession();
+      suspendSession();
+      showSuspendedNotice();
       return;
     }
     userData = saved.userData;
@@ -2062,6 +2152,7 @@ function showResumeNotice(name){
       showScreen('screen-quiz');
       loadQuestion();
       showResumeNotice(userData.name);
+      armIdleLogout();
     }
   } catch(e) {
     // If anything's malformed, fall back to the normal registration screen
