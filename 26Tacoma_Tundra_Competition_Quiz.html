@@ -2013,7 +2013,7 @@ function retakeQuiz() {
 // Guardrails: abandoned sessions expire, and a resumed session announces
 // whose it is with a "not you? start over" escape hatch — so the next
 // person at a shared device never inherits someone else's half-done quiz.
-const SESSION_MAX_AGE_MS = 30 * 60 * 1000;   // 30 minutes
+const SESSION_MAX_AGE_MS = 3 * 60 * 1000;   // 3 minutes
 
 function showResumeNotice(name){
   const esc = String(name).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
