@@ -1215,9 +1215,9 @@ const DEFAULT_QUESTIONS = [
     "cat": "TACOMA VS. COMPETITION",
     "q": "Which statement about towing and payload in the midsize chart is fully supported by the data?",
     "opts": [
-      "Tacoma has the highest tow rating of the four trucks",
-      "Tacoma leads the group in payload as well as ground clearance",
-      "Tacoma's 6,400 lb is standard; Frontier and Ranger need a package for their max",
+      "Tacoma carries the highest tow rating of all four trucks in the chart",
+      "Tacoma leads the group in payload capacity as well as ground clearance",
+      "Tacoma's 6,400 lb is standard; Frontier and Ranger need a package",
       "Frontier's tow package is priced higher than the Ranger's ($535 vs. $505)"
     ],
     "ans": 2,
@@ -1227,9 +1227,9 @@ const DEFAULT_QUESTIONS = [
     "cat": "TACOMA VS. COMPETITION",
     "q": "A guest who sat in the back of a Colorado says it is \"roomier\" than the Tacoma. Which comparison of rear-seat dimensions is accurate?",
     "opts": [
-      "Colorado leads in legroom by 1.0 in.; Tacoma leads in hip, shoulder and headroom",
+      "Colorado leads in legroom by 1.0 in.; Tacoma takes the other three",
       "Colorado leads in legroom and headroom; Tacoma leads in hip and shoulder room",
-      "Tacoma leads in all four rear dimensions, legroom by 1.0 in.",
+      "Tacoma leads in all four rear dimensions, with legroom ahead by 1.0 in.",
       "Colorado leads in hip room by 3.3 in.; Tacoma leads in legroom and headroom"
     ],
     "ans": 0,
@@ -1289,8 +1289,8 @@ const DEFAULT_QUESTIONS = [
     "opts": [
       "Tundra 3.4L twin-turbo V6 (479 lb-ft)",
       "F-150 3.5L EcoBoost V6 (500 lb-ft)",
-      "Ram 3.6L eTorque V6 (271 lb-ft)",
-      "Silverado 2.7L 4-cyl turbo (430 lb-ft)"
+      "Ram 3.6L eTorque mild-hybrid V6 (271 lb-ft)",
+      "Silverado 2.7L turbo four (430 lb-ft)"
     ],
     "ans": 3,
     "exp": "Silverado: 430 ÷ 2.7 ≈ 159 lb-ft per liter, ahead of the F-150 (≈143) and Tundra (≈141); the Ram's naturally aspirated V6 trails at ≈75. The Silverado's small turbo-four is efficient per liter — its limits show up in the 9,000-lb tow rating and 24-gallon tank instead."
@@ -1335,10 +1335,10 @@ const DEFAULT_QUESTIONS = [
     "cat": "TUNDRA VS. COMPETITION",
     "q": "A guest says, \"Tundra makes you pay extra for safety.\" Which reply is accurate AND balanced according to the chart?",
     "opts": [
-      "Every safety feature on Tundra SR5 is standard; the packages are comfort items",
-      "Concede the $1,510 BSM package; note TSS 2.5 is standard ($795 on Ram) and 8 airbags vs. 6",
-      "Only Ram charges for safety equipment; Ford, Chevy and Toyota include it all",
-      "Tundra and F-150 carry identical safety content, so the objection is moot"
+      "Every safety feature on the Tundra SR5 is standard; the packages are comfort items",
+      "Concede the $1,510 package; note TSS 2.5 is standard and 8 airbags vs. 6",
+      "Only Ram charges extra for safety equipment; Ford, Chevy and Toyota include it all",
+      "Tundra and the F-150 carry identical standard safety content, so the objection is moot"
     ],
     "ans": 1,
     "exp": "Concede the BSM package ($1,510 on SR5 — standard on Ram and F-150), then reframe: TSS 2.5 w/ Pedestrian Detection is standard on Tundra and a $795 option on Ram, and Tundra has 8 airbags vs. 6 for all three competitors."
@@ -1407,10 +1407,10 @@ const DEFAULT_QUESTIONS = [
     "cat": "SALES JUDGMENT",
     "q": "Judging only by the incentive rows, which midsize competitor's manufacturer appears to be pushing hardest for volume this month?",
     "opts": [
-      "Ranger — $2,000 cash plus 7.4% for 72",
-      "Frontier — $4,500 customer cash plus 0% for 60 months",
-      "Colorado — $500 to $1,000 cash plus 4.9% for 75",
-      "Tacoma — no customer cash, 3.99% for 48"
+      "Ranger — $2,000 customer cash plus 7.4% for 72 months",
+      "Frontier — $4,500 in cash plus 0% APR for 60 months",
+      "Colorado — $500 to $1,000 customer cash plus 4.9% for 75",
+      "Tacoma — no customer cash, just 3.99% APR for 48 months"
     ],
     "ans": 1,
     "exp": "Frontier stacks the largest cash in the chart with a 0% rate. The Tacoma carries no customer cash at all — the signal of a truck that sells on demand, which pairs with its segment-best resale figure."
@@ -1419,10 +1419,10 @@ const DEFAULT_QUESTIONS = [
     "cat": "SALES JUDGMENT",
     "q": "A guest points out that the F-150's 3.5L EcoBoost out-rates the Tundra's i-FORCE by 11 hp and 21 lb-ft. Which response makes the strongest use of the chart?",
     "opts": [
-      "Acknowledge it, then quantify retained value — the Tundra holds $8,710 more at 80k miles",
+      "Acknowledge the gap, then quantify retained value — Tundra holds $8,710 more at 80k",
       "Explain that the output gap compounds over time and will erase any resale difference",
-      "Position the Tundra as the more powerful truck; 11 hp is within rating tolerance",
-      "Redirect to the 10-speed transmission, since output and resale are unrelated"
+      "Position the Tundra as the more powerful truck anyway; 11 hp is within rating tolerance",
+      "Redirect the guest to the 10-speed transmission, since output and resale are unrelated"
     ],
     "ans": 0,
     "exp": "Concede the 400 / 500 vs. 389 / 479 honestly — the numbers are on the sheet. Then move to what the guest keeps: $33,850 vs. $32,930 at 40k miles and $31,780 vs. $23,070 at 80k. Output gaps that small rarely move resale; the retained-value gap is the larger dollar story."
@@ -1432,9 +1432,9 @@ const DEFAULT_QUESTIONS = [
     "q": "Why is the Ram Big Horn lease line ($470 / 42 / $4,499) NOT an apples-to-apples comparison to the Tundra SR5 lease ($379 / 36 / $4,889)?",
     "opts": [
       "It is a 4x2 configuration, while the Tundra SR5 lease is a 4x4 CrewMax",
-      "It is a 48-month term with a 12k mi/yr allowance rather than 10k",
-      "42-month term limited to current Ram lease returns — conquest guests don't qualify",
-      "It excludes Ram's 12–15% customer cash, which must be added back"
+      "It runs a 48-month term with a 12,000 mi/yr allowance instead of 10,000",
+      "It's limited to current Ram lease returns — conquests don't qualify",
+      "It excludes Ram's 12–15% customer cash, which has to be added back on top"
     ],
     "ans": 2,
     "exp": "The chart flags it \"Ram lease returns only\" on a 42-month term with $0.30/mi excess. A Tundra shopper coming from another brand would not receive that payment — never let the raw monthly figure stand alone."
@@ -1444,9 +1444,9 @@ const DEFAULT_QUESTIONS = [
     "q": "The Silverado's approach and departure angles are listed as \"TBD.\" What is the correct way to use that cell with a guest?",
     "opts": [
       "State that Tundra beats the Silverado on both angles, since a TBD counts as a Toyota win",
-      "Assume Silverado matches the Ram's 18 / 20.6 — same class, similar geometry",
-      "Skip off-road geometry entirely and redirect to towing, where the data is complete",
-      "Note the figure isn't published here and pivot to verified numbers like clearance (9.3 vs. 8.08 in.)"
+      "Assume the Silverado matches the Ram's 18 / 20.6 — same class, similar geometry",
+      "Skip off-road geometry entirely and redirect the guest to towing, where the data is complete",
+      "Say the figure isn't published and pivot to verified clearance (9.3 vs. 8.08 in.)"
     ],
     "ans": 3,
     "exp": "A TBD is not a Toyota win. Claiming a number that isn't there costs credibility the moment a guest checks; verified figures like clearance or the Tundra's 21.0 / 24.0 angles do the work instead."
@@ -1468,9 +1468,9 @@ const DEFAULT_QUESTIONS = [
     "q": "The Tacoma i-FORCE makes its peak 317 lb-ft at 1,700 rpm. Where does the i-FORCE MAX make its peak 465 lb-ft, and what does that mean for a guest who tows?",
     "opts": [
       "At 2,800 rpm — more torque, but the driver has to rev for it before a trailer moves",
-      "At 1,000 rpm — the electric motor alone carries the load below 1,700 rpm",
-      "At 4,000 rpm — the hybrid's advantage shows mainly at highway speed",
-      "Also at 1,700 rpm — about 148 lb-ft more, with maximum pull still arriving just off idle"
+      "At 1,000 rpm — the electric motor alone carries the whole load below 1,700 rpm",
+      "At 4,000 rpm — the hybrid's advantage only shows up at sustained highway speed",
+      "Also at 1,700 rpm — roughly 148 lb-ft more, with max pull still just off idle"
     ],
     "ans": 3,
     "exp": "465 − 317 = 148 lb-ft, delivered at the same 1,700 rpm. The electric motor supplies near-instant torque during low-speed, high-load driving — which is exactly where a trailer is heaviest to move."
@@ -1528,7 +1528,7 @@ const DEFAULT_QUESTIONS = [
     "q": "Which statement about the i-FORCE MAX hardware and its onboard power outlet is precise?",
     "opts": [
       "The transfer case is electrically driven, and one plug delivers a continuous 2,400 W",
-      "Geared transmission and mechanical transfer case keep low-range capability; one outlet is rated 1,500 W short-term",
+      "Geared transmission and mechanical transfer case; one outlet rated 1,500 W short-term",
       "The hybrid uses a CVT for efficiency, and the outlet is standard on every i-FORCE MAX model",
       "The geared transmission is exclusive to the TRD Performance Package, as is the outlet"
     ],
@@ -1804,6 +1804,7 @@ function startQuiz() {
   refreshCount = 0;
   activeQuestions = buildActiveQuestions(questions); // fresh random order + balanced, non-repeating answer positions for this attempt
   saveActiveSession();
+  submitInProgressPing(userData); // the board shows them as IN PROGRESS — no score — until their result lands
   showScreen('screen-quiz');
   loadQuestion();
 }
@@ -2139,6 +2140,32 @@ function submitToGoogleForm(data) {
   } catch(e) {
     // Fails silently — localStorage + manual copy/import remain as fallback
   }
+}
+
+// ── IN-PROGRESS PING ─────────────────────────────────────────
+// Fired once at the start of each NEW attempt (never on resume). Lands
+// on the sheet as a row with identity fields but a BLANK score and
+// certified = "IN_PROGRESS" — the live leaderboard renders these as a
+// no-score IN PROGRESS tab at the bottom of the board until this
+// person's real score row arrives.
+function submitInProgressPing(u) {
+  if (GFORM_ACTION.indexOf('REPLACE') !== -1) return;
+  // AUTHOR EXCLUSION: mirror of submitToGoogleForm — author never appears on the board
+  if (String(u.spin || '') === '104083046615' || String(u.name || '').trim().toLowerCase() === 'josh hicks') return;
+  try {
+    const flat = {
+      name: u.name, dealerName: u.dealer || '', region: u.region || '', state: u.state || '',
+      score: '', total: '', pct: '',
+      tacomaScore: '', tundraScore: '', powertrainScore: '', valueScore: '', judgmentScore: '',
+      certified: 'IN_PROGRESS', attempt: u.attemptNum || 1, timeSec: '',
+      sessionDate: new Date().toISOString(), missedQuestions: ''
+    };
+    const formData = new FormData();
+    Object.keys(GFORM_ENTRIES).forEach(key => {
+      formData.append(GFORM_ENTRIES[key], String(flat[key] == null ? '' : flat[key]));
+    });
+    fetch(GFORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
+  } catch(e) {}
 }
 
 function retakeQuiz() {
