@@ -789,7 +789,10 @@ These questions do not ask you to recall a number. They ask you to reason with i
 
 There is no pause button in a live comparison. There is only what you can work out, right now, with what you know.
 
-30 questions. 25 seconds each. One outcome that matters more than any of them: the guest leaves with the truth, and the truth favors the truck you sell.`;
+30 questions. 25 seconds each. One outcome that matters more than any of them: the guest leaves with the truth, and the truth favors the truck you sell.
+
+>> SECURITY PROTOCOL ACTIVE <<
+Your attempt is locked to your name. Leave, get logged out, refresh — it does not matter. You will resume exactly where you left off. Every refresh is logged. Two refreshes are tolerated. The third terminates your attempt and records a score of ZERO. The system is watching.`;
 
 function typeAnonWarning() {
   const el = document.getElementById('anon-typed-text');
@@ -1628,19 +1631,39 @@ function clearActiveSession(){
   try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
 }
 
-// ── AUTO-LOGOUT (3 min idle) + SUSPENDED SESSIONS ─────────────
-// Idle mid-quiz → sign them out but KEEP their progress. Signing back
-// in resumes the same attempt at the same question count, with the
+// ── AUTO-LOGOUT (15 min idle) + SUSPENDED SESSIONS ────────────
+// Idle mid-quiz → sign them out but KEEP their progress, labeled
+// IN PROGRESS and locked to their name. Signing back in ALWAYS
+// resumes the same attempt at the same question count, with the
 // remaining questions reshuffled so the pause can't be used to scout
-// the question that was on screen.
+// the question that was on screen. Suspended attempts live in a
+// per-name vault, so one person signing in can never erase another
+// person's in-progress attempt.
+const SUSPENDED_KEY = 'tundratacoma2026_suspended_sessions';
+function _readSuspendedMap(){
+  try { return JSON.parse(localStorage.getItem(SUSPENDED_KEY) || '{}'); } catch(e){ return {}; }
+}
+function _writeSuspendedMap(m){
+  try { localStorage.setItem(SUSPENDED_KEY, JSON.stringify(m)); } catch(e) {}
+}
 function suspendSession(){
   try {
     const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
-    if (saved && saved.userData) {
+    if (saved && saved.userData && saved.userData.name) {
       saved.suspended = true;
       saved.savedAt = Date.now();
-      localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(saved));
+      const m = _readSuspendedMap();
+      m[attemptKey(saved.userData.name)] = saved;
+      _writeSuspendedMap(m);
+      localStorage.removeItem(ACTIVE_SESSION_KEY);
     }
+  } catch(e) {}
+}
+function removeSuspendedSession(name){
+  try {
+    const m = _readSuspendedMap();
+    delete m[attemptKey(name)];
+    _writeSuspendedMap(m);
   } catch(e) {}
 }
 let idleLogoutTimer = null;
@@ -1653,42 +1676,63 @@ function autoLogout(){
   const quizScreen = document.getElementById('screen-quiz');
   if (!quizScreen || !quizScreen.classList.contains('active')) return;
   clearInterval(qtInterval);
+  const nm = (userData && userData.name) ? userData.name : '';
   suspendSession();
   showScreen('screen-reg');
-  showSuspendedNotice();
+  showSuspendedNotice(nm);
 }
-function showSuspendedNotice(){
-  let name = '';
-  try {
-    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
-    if (saved && saved.userData && saved.userData.name) name = saved.userData.name;
-  } catch(e) {}
+function showSuspendedNotice(name){
   const old = document.getElementById('suspend-notice'); if (old) old.remove();
-  const esc = String(name).replace(/[<>&"]/g, '');
+  const esc = String(name || '').replace(/[<>&"]/g, '');
   const bar = document.createElement('div');
   bar.id = 'suspend-notice';
   bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:7500;background:#16161c;border:1px solid rgba(235,10,30,0.45);border-radius:12px;padding:10px 14px;font-size:12.5px;color:#f0f0f4;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,0.55);max-width:92vw;flex-wrap:wrap;justify-content:center';
-  bar.innerHTML = '<span>⏸ Signed out for inactivity. ' + (esc ? '<b>' + esc + '</b>’s progress is saved — sign back in to continue.' : 'Progress is saved — sign back in to continue.') + '</span>' +
+  bar.innerHTML = '<span>⏳ ' + (esc ? '<b>' + esc + '</b>’s attempt is locked <b style="color:#f7b955">IN PROGRESS</b> — it resumes exactly where it left off the moment ' + esc.split(' ')[0] + ' signs back in.' : 'Attempt locked <b style="color:#f7b955">IN PROGRESS</b> — signing back in resumes it exactly where it left off.') + '</span>' +
     '<button id="suspend-dismiss-btn" style="background:none;border:none;color:rgba(240,240,244,0.45);font-size:14px;cursor:pointer;padding:4px">✕</button>';
   document.body.appendChild(bar);
   document.getElementById('suspend-dismiss-btn').onclick = function(){ bar.remove(); };
 }
+// ── IN PROGRESS ROSTER (registration screen) ─────────────────
+// Every suspended attempt is publicly labeled IN PROGRESS on the
+// sign-in screen, so nobody can quietly abandon one.
+function renderInProgressList(){
+  const host = document.getElementById('screen-reg');
+  if (!host) return;
+  const old = document.getElementById('inprogress-panel'); if (old) old.remove();
+  const m = _readSuspendedMap();
+  const names = Object.keys(m);
+  if (!names.length) return;
+  const panel = document.createElement('div');
+  panel.id = 'inprogress-panel';
+  panel.style.cssText = 'max-width:480px;margin:18px auto 0;background:rgba(247,185,85,0.06);border:1px solid rgba(247,185,85,0.4);border-radius:12px;padding:12px 16px;position:relative;z-index:2';
+  let rows = '<div style="font-size:10px;letter-spacing:2px;color:#f7b955;font-weight:700;margin-bottom:8px">⏳ ATTEMPTS IN PROGRESS — SIGN IN TO RESUME</div>';
+  names.forEach(k => {
+    const s = m[k];
+    if (!s || !s.userData) return;
+    const nm = String(s.userData.name || '').replace(/[<>&"]/g, '');
+    const total = (Array.isArray(s.activeQuestions) && s.activeQuestions.length) ? s.activeQuestions.length : 30;
+    const done = Array.isArray(s.userAnswers) ? s.userAnswers.length : (s.currentQ || 0);
+    rows += '<div style="font-size:12px;color:#f0f0f4;padding:3px 0"><b>' + nm + '</b> · Question ' + Math.min(done + 1, total) + ' of ' + total + ' · <span style="color:#f7b955">IN PROGRESS</span></div>';
+  });
+  panel.innerHTML = rows;
+  host.appendChild(panel);
+}
 function readSuspendedSession(name){
   try {
-    const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
-    if (!saved || !saved.suspended || !saved.userData || !saved.userData.name) return null;
-    if (saved.userData.name.trim().toLowerCase() !== String(name).trim().toLowerCase()) return null;
+    const saved = _readSuspendedMap()[attemptKey(String(name || ''))];
+    if (!saved || !saved.userData || !saved.userData.name) return null;
     return saved;
   } catch(e){ return null; }
 }
 function resumeSuspendedSession(saved){
   const notice = document.getElementById('suspend-notice'); if (notice) notice.remove();
+  removeSuspendedSession(saved.userData.name);
   userData = saved.userData;
   score = saved.score || 0;
   catScores = saved.catScores || {};
   userAnswers = saved.userAnswers || [];
   startTime = saved.startTime || Date.now();
-  refreshCount = (saved.refreshCount || 0) + 1;
+  refreshCount = saved.refreshCount || 0; // sign-back-in is not a refresh — the refresh ledger carries over untouched
   let aq = (Array.isArray(saved.activeQuestions) && saved.activeQuestions.length) ? saved.activeQuestions : buildActiveQuestions(questions);
   // Advance past anything already scored — answered questions are never re-shown.
   let c = saved.currentQ || 0;
@@ -1768,7 +1812,7 @@ function startQuiz() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'screen-reg') { startRegMatrix(); } else { stopRegMatrix(); }
+  if (id === 'screen-reg') { startRegMatrix(); renderInProgressList(); } else { stopRegMatrix(); }
   window.scrollTo(0, 0);
 }
 
@@ -1938,6 +1982,7 @@ function renderCoachingRecap() {
 function showResults() {
   disarmIdleLogout();
   clearActiveSession();
+  if (userData && userData.name) removeSuspendedSession(userData.name); // attempt is over — no longer IN PROGRESS
   showScreen('screen-results');
   const totalTime = Math.round((Date.now() - startTime) / 1000);
   const pct = Math.round(score / activeQuestions.length * 100);
@@ -1973,9 +2018,18 @@ function showResults() {
   renderCoachingRecap();
 
   const certEl = document.getElementById('res-cert');
+  if (userData.refreshViolation) {
+    document.getElementById('res-cert-icon').textContent = '⛔';
+    document.getElementById('res-cert-text').textContent = 'ATTEMPT TERMINATED — REFRESH LIMIT EXCEEDED · SCORE OF ZERO RECORDED';
+    certEl.className = 'cert-badge fail';
+    const recapEl = document.getElementById('coaching-recap');
+    if (recapEl) recapEl.innerHTML = '<div class="recap-header">⛔ Security Violation</div>' +
+      '<div class="recap-body">This attempt was refreshed a third time after two logged warnings. Per protocol, it was terminated and a score of zero was recorded. See your manager to discuss a retake.</div>';
+  } else {
   document.getElementById('res-cert-icon').textContent = pass ? '🏆' : '📚';
   document.getElementById('res-cert-text').textContent = pass ? 'CERTIFIED — Tundra & Tacoma Competitive Module' : 'Score 24+ to Certify';
   certEl.className = 'cert-badge ' + (pass ? 'pass' : 'fail');
+  }
 
   // Export JSON
   const missedQuestions = userAnswers.filter(a => !a.correct).map(a => activeQuestions[a.q].q);
@@ -1994,6 +2048,7 @@ function showResults() {
     attempt: userData.attemptNum || getAttempts(userData.name) || 1,
     timeSec: totalTime,
     refreshCount,
+    refreshViolation: !!userData.refreshViolation,
     missedQuestions,
     sessionDate: new Date().toISOString()
   };
@@ -2096,10 +2151,12 @@ function retakeQuiz() {
 }
 
 // ── RESUME ON REFRESH (closes the "refresh to reroll" loophole) ──
-// Guardrails: abandoned sessions expire, and a resumed session announces
-// whose it is with a "not you? start over" escape hatch — so the next
-// person at a shared device never inherits someone else's half-done quiz.
-const SESSION_MAX_AGE_MS = 3 * 60 * 1000;   // 3 minutes
+// There is NO path that discards an in-progress attempt. "Not you?"
+// suspends it — locked to its owner, labeled IN PROGRESS — and it
+// resumes the instant that person signs back in. Refreshes are
+// logged: two are tolerated, the third terminates with a ZERO.
+const SESSION_MAX_AGE_MS = 15 * 60 * 1000;  // 15 minutes
+const MAX_FREE_REFRESHES = 2;               // refresh #3 = score of zero
 
 function showResumeNotice(name){
   const esc = String(name).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -2107,30 +2164,109 @@ function showResumeNotice(name){
   const bar = document.createElement('div');
   bar.id = 'resume-notice';
   bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:7500;background:#16161c;border:1px solid rgba(235,10,30,0.45);border-radius:12px;padding:10px 14px;font-size:12.5px;color:#f0f0f4;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,0.55);max-width:92vw;flex-wrap:wrap;justify-content:center';
-  bar.innerHTML = '<span>Resumed <b>' + esc + '</b>’s attempt in progress.</span>' +
-    '<button id="resume-restart-btn" style="background:rgba(235,10,30,0.14);border:1px solid rgba(235,10,30,0.5);color:#EB0A1E;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer">Not ' + first + '? Start over</button>' +
+  bar.innerHTML = '<span>Resumed <b>' + esc + '</b>’s attempt in progress · refresh ' + refreshCount + ' of ' + MAX_FREE_REFRESHES + ' logged.</span>' +
+    '<button id="resume-notme-btn" style="background:rgba(235,10,30,0.14);border:1px solid rgba(235,10,30,0.5);color:#EB0A1E;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer">Not ' + first + '? Sign in</button>' +
     '<button id="resume-dismiss-btn" style="background:none;border:none;color:rgba(240,240,244,0.45);font-size:14px;cursor:pointer;padding:4px">✕</button>';
   document.body.appendChild(bar);
-  document.getElementById('resume-restart-btn').onclick = function(){
-    if (confirm('Discard this in-progress attempt and return to sign-in?')) {
-      clearActiveSession();
-      location.reload();
-    }
+  document.getElementById('resume-notme-btn').onclick = function(){
+    // Never discards. The attempt is suspended — locked to its owner,
+    // labeled IN PROGRESS — and the sign-in screen comes up for the
+    // next person. The owner resumes exactly where they left off.
+    clearInterval(qtInterval);
+    disarmIdleLogout();
+    const nm = (userData && userData.name) ? userData.name : '';
+    suspendSession();
+    bar.remove();
+    const warn = document.getElementById('refresh-warning-overlay'); if (warn) warn.remove();
+    showScreen('screen-reg');
+    showSuspendedNotice(nm);
   };
   document.getElementById('resume-dismiss-btn').onclick = function(){ bar.remove(); };
+}
+
+// ── MATRIX REFRESH WARNING + TERMINATION ─────────────────────
+function showRefreshWarning(count){
+  const old = document.getElementById('refresh-warning-overlay'); if (old) old.remove();
+  const first = String((userData && userData.name) || '').split(' ')[0].replace(/[<>&"]/g, '').toUpperCase();
+  const ov = document.createElement('div');
+  ov.id = 'refresh-warning-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9600;background:rgba(0,0,0,0.94);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto';
+  ov.innerHTML = '<canvas id="refresh-warn-canvas" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.35"></canvas>' +
+    '<div class="anon-scanlines"></div>' +
+    '<div class="anon-content" style="max-width:560px">' +
+      '<div class="anon-glitch-title" data-text="TRACE DETECTED" style="font-size:32px">TRACE DETECTED</div>' +
+      '<div class="anon-topic-line">SESSION INTEGRITY MONITOR · REFRESH ' + count + ' OF ' + MAX_FREE_REFRESHES + '</div>' +
+      '<div class="anon-body" id="refresh-warn-text" style="min-height:120px"></div><span class="anon-cursor" id="refresh-warn-cursor">█</span>' +
+      '<div style="margin-top:22px"><button id="refresh-warn-ack" style="background:rgba(235,10,30,0.16);border:1px solid rgba(235,10,30,0.6);color:#EB0A1E;border-radius:8px;padding:12px 26px;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer">I UNDERSTAND — CONTINUE</button></div>' +
+    '</div>';
+  document.body.appendChild(ov);
+  // Local matrix rain, self-contained so it never collides with the shared rain timers.
+  let rainTimer = null;
+  try {
+    const c = document.getElementById('refresh-warn-canvas');
+    const ctx = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    const fs = 15, cols = Math.floor(c.width / fs);
+    const drops = Array(cols).fill(1);
+    const chars = 'アイウエオカキクケコ0123456789ABCDEF';
+    rainTimer = setInterval(function(){
+      ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = '#00e5a0'; ctx.font = fs + 'px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, drops[i] * fs);
+        if (drops[i] * fs > c.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }, 50);
+  } catch(e) {}
+  const msg = 'A page refresh has been logged against this attempt.\n\n' +
+    'This is refresh ' + count + ' of ' + MAX_FREE_REFRESHES + ' the system will tolerate.\n\n' +
+    'A third refresh terminates this attempt immediately and records a score of ZERO.\n\n' +
+    'There is no second chance' + (first ? ', ' + first : '') + '. The system is watching.';
+  const el = document.getElementById('refresh-warn-text');
+  let i = 0;
+  (function type(){
+    if (!document.getElementById('refresh-warn-text')) return;
+    if (i <= msg.length) { el.textContent = msg.slice(0, i); i++; setTimeout(type, 10); }
+    else { const cur = document.getElementById('refresh-warn-cursor'); if (cur) cur.style.display = 'none'; }
+  })();
+  document.getElementById('refresh-warn-ack').onclick = function(){
+    if (rainTimer) clearInterval(rainTimer);
+    ov.remove();
+  };
+}
+
+function terminateForRefreshAbuse(){
+  // Third refresh: the attempt ends here with a zero on the record.
+  score = 0;
+  catScores = {};
+  userAnswers = (userAnswers || []).map(a => ({ ...a, correct: false }));
+  userData.refreshViolation = true;
+  currentQ = activeQuestions.length;
+  showResults();
 }
 
 (function resumeSessionIfActive(){
   try {
     const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || 'null');
-    if (!saved || !saved.userData || !saved.userData.name) return;
-    // Already suspended (auto-logout fired before they left) → require sign-in.
-    if (saved.suspended) { showSuspendedNotice(); return; }
+    if (!saved || !saved.userData || !saved.userData.name) { renderInProgressList(); return; }
+    // Legacy suspended session parked in the active slot → migrate it to the
+    // per-name vault and require sign-in. Progress survives, labeled IN PROGRESS.
+    if (saved.suspended) {
+      const m = _readSuspendedMap();
+      m[attemptKey(saved.userData.name)] = saved;
+      _writeSuspendedMap(m);
+      localStorage.removeItem(ACTIVE_SESSION_KEY);
+      showSuspendedNotice(saved.userData.name);
+      renderInProgressList();
+      return;
+    }
     // Stale session (closed the tab mid-quiz, came back later) → suspend it,
-    // don't delete it. Progress survives; they sign back in to continue.
+    // never delete it. Progress survives; they sign back in and resume.
     if (!saved.savedAt || (Date.now() - saved.savedAt) > SESSION_MAX_AGE_MS) {
       suspendSession();
-      showSuspendedNotice();
+      showSuspendedNotice(saved.userData.name);
+      renderInProgressList();
       return;
     }
     userData = saved.userData;
@@ -2145,6 +2281,11 @@ function showResumeNotice(name){
     // question is already scored — skip past it so it can't be answered twice.
     while (currentQ < activeQuestions.length && userAnswers.some(a => a.q === currentQ)) currentQ++;
     saveActiveSession(); // persist the incremented refresh count immediately
+    // ── THE THIRD REFRESH ── attempt terminates, score of zero goes on record.
+    if (refreshCount > MAX_FREE_REFRESHES) {
+      terminateForRefreshAbuse();
+      return;
+    }
     if (currentQ >= activeQuestions.length) {
       // Edge case: they refreshed exactly on the results transition
       showResults();
@@ -2152,6 +2293,7 @@ function showResumeNotice(name){
       showScreen('screen-quiz');
       loadQuestion();
       showResumeNotice(userData.name);
+      showRefreshWarning(refreshCount);
       armIdleLogout();
     }
   } catch(e) {
