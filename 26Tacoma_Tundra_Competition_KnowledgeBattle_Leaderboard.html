@@ -91,6 +91,12 @@ h1 span{color:var(--red)}
 }
 .badge.ok{color:#4ADE80;border:1px solid rgba(74,222,128,.5)}
 .badge.no{color:#F87171;border:1px solid rgba(248,113,113,.4)}
+.badge.prog{color:#F7B955;border:1px solid rgba(247,185,85,.5);animation:progPulse 1.6s ease-in-out infinite}
+@keyframes progPulse{0%,100%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.badge.prog{animation:none}}
+.row.inprog{background:rgba(247,185,85,.05);border-color:rgba(247,185,85,.30)}
+.row.inprog .rank,.row.inprog .score{color:#F7B955;opacity:.75}
+.row.inprog .meter i{background:#F7B955;box-shadow:0 0 10px rgba(247,185,85,.45)}
 .req{
   display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   background:var(--panel);border:1px solid var(--line);border-left:4px solid #22C55E;
@@ -190,9 +196,34 @@ h1 span{color:var(--red)}
   var REFRESH_MS = 15000;
 
   var sheetRows = [];
+  var inProgressRows = [];   // consultants who started but have no score yet — pinned at the bottom
   var lastFetch = null;
   var fetchError = false;
   var loadedOnce = false;
+
+  // Same-device attempts (the quiz's active session + suspended IN PROGRESS
+  // vault in localStorage) also show as IN PROGRESS rows — so the tab appears
+  // instantly when the board runs on the quiz device, even before the sheet
+  // ping round-trips.
+  function localInProgress(scoredNames){
+    var out = [];
+    function push(s){
+      if(!s || !s.userData || !s.userData.name) return;
+      var name = String(s.userData.name).trim();
+      var k = name.toLowerCase();
+      if(k === "josh hicks" || k.indexOf("test") === 0) return;
+      if(scoredNames[k]) return;
+      var total = (s.activeQuestions && s.activeQuestions.length) || 30;
+      var done = (s.userAnswers && s.userAnswers.length) || 0;
+      out.push({name: name, dealer: (s.userData.dealer || ""), inprog: true, qdone: done, qtotal: total});
+    }
+    try { push(JSON.parse(localStorage.getItem("tundratacoma2026_active_quiz_session") || "null")); } catch(e){}
+    try {
+      var vault = JSON.parse(localStorage.getItem("tundratacoma2026_suspended_sessions") || "{}");
+      Object.keys(vault).forEach(function(k){ push(vault[k]); });
+    } catch(e){}
+    return out;
+  }
 
 
   // gviz datetime cells arrive as "Date(y,m,d,h,mi,s)" (month is 0-based).
@@ -239,6 +270,7 @@ h1 span{color:var(--red)}
                   val: idx(["valuescore","value"]), jud: idx(["judgmentscore","judgment","sales judgment"])};
       var HIDDEN = ["josh hicks"];   // never displayed on the board
       var ALIASES = { "mike wells": "Michael Wells", "joseph vogt": "Joe Vogt" };   // same person, merged
+      var progMarks = [];   // blank-score IN_PROGRESS pings from the quiz's start-of-attempt submit
       var raw = (json.table.rows || []).map(function(r){
         function v(i){ return (i >= 0 && r.c && r.c[i]) ? r.c[i].v : null; }
         var score = parseInt(v(iScore), 10);
@@ -252,14 +284,30 @@ h1 span{color:var(--red)}
           cats: {tac: v(iCat.tac), tun: v(iCat.tun), pwr: v(iCat.pwr), val: v(iCat.val), jud: v(iCat.jud)}
         };
       }).filter(function(r){
-        if(!r.name || r.score == null) return false;
+        if(!r.name) return false;
         var n = r.name.trim().toLowerCase();
         if(ALIASES[n]){ r.name = ALIASES[n]; n = r.name.toLowerCase(); }
         if(n.indexOf("test") === 0) return false;
         if(HIDDEN.indexOf(n) !== -1) return false;
+        if(r.score == null){
+          // Start-of-attempt ping: consultant is on the board as IN PROGRESS
+          // (no score) until their real result row lands.
+          progMarks.push({name: r.name.trim(), dealer: r.dealer, stamp: r.stamp});
+          return false;
+        }
         return true;
       });
       sheetRows = aggregate(raw);
+      // IN PROGRESS = pinged a start but has NO scored row anywhere on the sheet.
+      var scoredNames = {};
+      sheetRows.forEach(function(r){ scoredNames[r.name.trim().toLowerCase()] = true; });
+      var seen = {};
+      inProgressRows = progMarks.filter(function(p){
+        var k = p.name.toLowerCase();
+        if(scoredNames[k] || seen[k]) return false;
+        seen[k] = true;
+        return true;
+      }).map(function(p){ return {name: p.name, dealer: p.dealer, inprog: true, stamp: p.stamp}; });
       lastFetch = new Date();
       fetchError = false;
       loadedOnce = true;
@@ -288,13 +336,25 @@ h1 span{color:var(--red)}
   }
 
   function sorted(){
-    return sheetRows.slice().sort(function(a,b){
+    var ranked = sheetRows.slice().sort(function(a,b){
       if(b.score !== a.score) return b.score - a.score;
       var at = a.secs == null ? Infinity : a.secs;
       var bt = b.secs == null ? Infinity : b.secs;
       if(at !== bt) return at - bt;
       return (a.attempts||99) - (b.attempts||99);
     });
+    // IN PROGRESS tabs go at the BOTTOM of the board — no score, no rank —
+    // and vanish the moment that consultant's score row arrives.
+    var scoredNames = {};
+    ranked.forEach(function(r){ scoredNames[r.name.trim().toLowerCase()] = true; });
+    var seen = {};
+    var prog = inProgressRows.concat(localInProgress(scoredNames)).filter(function(p){
+      var k = p.name.toLowerCase();
+      if(scoredNames[k] || seen[k]) return false;
+      seen[k] = true;
+      return true;
+    }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+    return ranked.concat(prog);
   }
 
   var medals = ["\uD83E\uDD47","\uD83E\uDD48","\uD83E\uDD49"];
@@ -325,6 +385,18 @@ h1 span{color:var(--red)}
       return;
     }
     board.innerHTML = list.map(function(r, i){
+      // ── IN PROGRESS tab: no rank, no score, amber pulse — until a score lands ──
+      if(r.inprog){
+        var progPct = (r.qdone != null && r.qtotal) ? Math.max(3, Math.round((r.qdone / r.qtotal) * 100)) : 3;
+        var progMeta = (r.qdone != null && r.qtotal) ? ("Question " + Math.min(r.qdone + 1, r.qtotal) + " of " + r.qtotal) : "Attempt underway";
+        return '<div class="row inprog">' +
+          '<div class="rank">&mdash;</div>' +
+          '<div class="who"><div class="name">' + esc(r.name) + '<span class="badge prog">In Progress</span></div><div class="dealer">' + esc(r.dealer||"") + '</div></div>' +
+          '<div class="meter"><i style="width:' + progPct + '%"></i></div>' +
+          '<div class="score">&mdash;<small>/' + MAX + '</small></div>' +
+          '<div class="meta">' + progMeta + '<br>No score yet</div>' +
+        '</div>';
+      }
       var pos = i + 1;
       var certified = r.score >= THRESH;
       var cls = certified ? "certified" : "";
