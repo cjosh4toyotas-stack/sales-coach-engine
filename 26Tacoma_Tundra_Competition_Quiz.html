@@ -183,18 +183,36 @@ select.form-input { cursor: pointer; }
 #reg-matrix-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: none; opacity: 0.28; z-index: 0; pointer-events: none; }
 .anon-scanlines {
   position: fixed; inset: -50% 0; pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgba(235,10,30,0.05) 0px, transparent 1px, transparent 3px);
+  background: repeating-linear-gradient(0deg, rgba(0,168,255,0.05) 0px, transparent 1px, transparent 3px);
   animation: anonScanMove 9s linear infinite;
 }
 @keyframes anonScanMove { 0% { transform: translateY(0); } 100% { transform: translateY(100px); } }
+/* ── COMPUTER-BLUE CENTER GLOW ── blooms mid-screen like the rabbit
+   glow, then seeks the PROCEED button and locks on as a halo. */
+#anon-center-glow {
+  position: fixed; left: 50vw; top: 46vh; width: 560px; height: 560px;
+  transform: translate(-50%,-50%); pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(150,220,255,0.55) 0%, rgba(0,150,255,0.30) 32%, rgba(0,110,230,0.12) 55%, transparent 72%);
+  filter: blur(5px); mix-blend-mode: screen; opacity: 0;
+  animation: anonGlowBloom 3.2s ease forwards, anonGlowBreathe 3.4s 3.2s ease-in-out infinite;
+}
+#anon-center-glow::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 170%; height: 26px;
+  transform: translate(-50%,-50%); filter: blur(4px);
+  background: linear-gradient(90deg, transparent, rgba(140,215,255,0.45) 30%, rgba(210,240,255,0.7) 50%, rgba(140,215,255,0.45) 70%, transparent);
+}
+#anon-center-glow.focus { width: 340px; height: 340px; filter: blur(3px); animation: anonGlowBreathe 1.8s ease-in-out infinite; }
+@keyframes anonGlowBloom { from { opacity: 0; transform: translate(-50%,-50%) scale(0.4); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+@keyframes anonGlowBreathe { 0%,100% { opacity: 0.92; } 50% { opacity: 0.62; } }
 .anon-content {
   max-width: 620px; text-align: center; position: relative; z-index: 1;
   background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
   margin: auto; /* centers when short, remains fully scrollable when tall */
 }
 .anon-glitch-title {
-  font-size: 44px; font-weight: 700; color: var(--red); letter-spacing: 6px;
+  font-size: 44px; font-weight: 700; color: #37b6ff; letter-spacing: 6px;
   position: relative; margin-bottom: 10px; display: inline-block;
+  text-shadow: 0 0 22px rgba(0,168,255,0.55);
   animation: anonTitleShake 0.15s infinite;
 }
 @keyframes anonTitleShake {
@@ -205,9 +223,9 @@ select.form-input { cursor: pointer; }
   80% { transform: translate(1px, 2px) skewX(-0.5deg); }
 }
 .anon-glitch-title::before, .anon-glitch-title::after {
-  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; color: var(--red);
+  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; color: #37b6ff;
 }
-.anon-glitch-title::before { text-shadow: -3px 0 #EB0A1E; clip-path: inset(0 0 100% 0); animation: anonGlitch1 1.4s infinite linear; }
+.anon-glitch-title::before { text-shadow: -3px 0 #0080ff; clip-path: inset(0 0 100% 0); animation: anonGlitch1 1.4s infinite linear; }
 .anon-glitch-title::after { text-shadow: 3px 0 #00e5a0; clip-path: inset(0 0 100% 0); animation: anonGlitch2 1.1s infinite linear; }
 @keyframes anonGlitch1 {
   0%,60%,100% { clip-path: inset(0 0 100% 0); transform: translate(0,0); }
@@ -225,21 +243,54 @@ select.form-input { cursor: pointer; }
   65% { clip-path: inset(10% 0 70% 0); transform: translate(-3px,0); }
   68% { clip-path: inset(0 0 100% 0); }
 }
-.anon-topic-line { font-size: 11px; color: var(--red); letter-spacing: 3px; margin-bottom: 26px; opacity: .9; text-transform: uppercase; }
+.anon-topic-line { font-size: 11px; color: #37b6ff; letter-spacing: 3px; margin-bottom: 26px; opacity: .9; text-transform: uppercase; }
 .anon-body { font-size: 14.5px; color: var(--green); line-height: 1.85; text-align: left; white-space: pre-wrap; min-height: 240px; }
-.anon-cursor { display: inline-block; color: var(--red); animation: anonBlink 0.8s step-end infinite; font-size: 14.5px; }
+.anon-cursor { display: inline-block; color: #37b6ff; animation: anonBlink 0.8s step-end infinite; font-size: 14.5px; }
 @keyframes anonBlink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
 .anon-proceed-btn {
-  margin-top: 26px; padding: 13px 34px; background: transparent; border: 1px solid var(--red); color: var(--red);
+  margin-top: 26px; padding: 13px 34px; background: rgba(0,60,110,0.25); border: 1px solid #37b6ff; color: #7fd4ff;
   font-family: 'JetBrains Mono', monospace; font-size: 12.5px; letter-spacing: 2.5px; cursor: pointer;
-  transition: all .2s; opacity: 0;
+  transition: all .2s; opacity: 0; position: relative; z-index: 2;
 }
-.anon-proceed-btn.shown { animation: anonFadeIn .6s ease forwards; }
-.anon-proceed-btn:hover { background: var(--red); color: #fff; box-shadow: 0 0 24px rgba(235,10,30,0.5); }
+.anon-proceed-btn.shown { animation: anonFadeIn .6s ease forwards, anonBtnGlow 2.6s 0.6s ease-in-out infinite; }
+.anon-proceed-btn.locked { animation: anonFadeIn .1s ease forwards, anonBtnGlow 1.2s ease-in-out infinite; border-color: #7fd4ff; color: #fff; }
+@keyframes anonBtnGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(0,168,255,0.35), inset 0 0 8px rgba(0,168,255,0.12); }
+  50% { box-shadow: 0 0 34px rgba(0,168,255,0.75), inset 0 0 14px rgba(0,168,255,0.3); }
+}
+.anon-proceed-btn:hover { background: #0090e8; color: #fff; box-shadow: 0 0 28px rgba(0,168,255,0.7); }
 @keyframes anonFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 #sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
 #sec-overlay.fade-out{opacity:0;pointer-events:none}
+/* ── MELT & PART ── the screen swells into white heat in place, then the
+   two halves peel outward from the center, softening and blowing out as
+   they go. First ~55% of the timeline both halves are stationary, so it
+   reads as one solid screen going molten before it lets go. */
+.melt-part-left{animation:meltPartL 2.7s cubic-bezier(.5,0,.55,1) forwards!important;clip-path:inset(0 50% 0 0);pointer-events:none!important}
+.melt-part-right{animation:meltPartR 2.7s cubic-bezier(.5,0,.55,1) forwards!important;clip-path:inset(0 0 0 50%);pointer-events:none!important}
+@keyframes meltPartL{
+  0%{transform:none;filter:brightness(1);opacity:1}
+  38%{filter:brightness(1.9) saturate(.65) blur(1.5px)}
+  55%{transform:translateX(0) scale(1.025);filter:brightness(3.2) saturate(.35) blur(5px)}
+  100%{transform:translateX(-62vw) perspective(900px) rotateY(16deg) scale(1.07);filter:brightness(4) saturate(.2) blur(13px);opacity:0}
+}
+@keyframes meltPartR{
+  0%{transform:none;filter:brightness(1);opacity:1}
+  38%{filter:brightness(1.9) saturate(.65) blur(1.5px)}
+  55%{transform:translateX(0) scale(1.025);filter:brightness(3.2) saturate(.35) blur(5px)}
+  100%{transform:translateX(62vw) perspective(900px) rotateY(-16deg) scale(1.07);filter:brightness(4) saturate(.2) blur(13px);opacity:0}
+}
+#melt-veil{position:fixed;inset:0;z-index:10001;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(ellipse 75% 65% at 50% 50%, rgba(255,255,252,0.95) 0%, rgba(240,255,244,0.75) 38%, rgba(215,240,255,0.32) 68%, rgba(230,200,255,0.10) 100%);
+  opacity:0;animation:meltVeil 2.7s cubic-bezier(.5,0,.55,1) forwards}
+@keyframes meltVeil{
+  0%{opacity:0}
+  40%{opacity:.45}
+  55%{opacity:.95}
+  78%{opacity:.4}
+  100%{opacity:0}
+}
 #pin-entry{display:flex;flex-direction:column;align-items:center}
 .sec-brand{font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:4px;color:rgba(240,240,244,0.28);margin-bottom:16px}
 .sec-heading{font-family:'Rajdhani',sans-serif;font-size:30px;font-weight:700;color:#f0f0f4;margin-bottom:4px;text-align:center}
@@ -362,6 +413,7 @@ select.form-input { cursor: pointer; }
 
 <div id="anon-warning-overlay">
   <canvas id="matrix-rain-canvas"></canvas>
+  <div id="anon-center-glow"></div>
   <div class="anon-scanlines"></div>
   <div class="anon-content">
     <div class="anon-glitch-title" data-text="ATTENTION">ATTENTION</div>
@@ -401,7 +453,7 @@ select.form-input { cursor: pointer; }
     </div>
     <div class="quiz-brand">TOYOTA · TUNDRA &amp; TACOMA VS. COMPETITION</div>
     <div class="quiz-title">Knowledge<br><span class="red">Battle</span></div>
-    <div class="quiz-sub">30 questions · 25 seconds each · Fastest wins</div>
+    <div class="quiz-sub">30 questions · 30 seconds each · Fastest wins</div>
   </div>
 
   <div class="form-card">
@@ -631,8 +683,12 @@ function _secCheck(){
   if(_secCfg.locked&&level!=='master')level=null;
   if(level){
     _secLevel=level;sessionStorage.setItem('tundratacoma2026_sec_level',level);
-    const ov=document.getElementById('sec-overlay');ov.classList.add('fade-out');
-    setTimeout(()=>{ov.style.display='none'},400);
+    // ── CODE ACCEPTED → THE HALLWAY ── The PIN screen bends into the left
+    // wall while its reflection folds into the right, both draining to green;
+    // the code corridor pushes forward, the old screen's colors linger on
+    // the walls and fade, and the dark center opens onto ATTENTION.
+    const ov=document.getElementById('sec-overlay');
+    pinHallwayTransition(ov);
     if(level==='master'){document.getElementById('admin-fab').style.display='flex';if(_secCfg.locked){_secCfg.locked=false;_saveSecCfg(_secCfg)}}
   }else{
     const dots=document.getElementById('sec-pin-dots');dots.classList.add('pin-shake');
@@ -789,7 +845,7 @@ These questions do not ask you to recall a number. They ask you to reason with i
 
 There is no pause button in a live comparison. There is only what you can work out, right now, with what you know.
 
-30 questions. 25 seconds each. One outcome that matters more than any of them: the guest leaves with the truth, and the truth favors the truck you sell.
+30 questions. 30 seconds each. One outcome that matters more than any of them: the guest leaves with the truth, and the truth favors the truck you sell.
 
 >> SECURITY PROTOCOL ACTIVE <<
 Your attempt is locked to your name. Leave, get logged out, refresh — it does not matter. You will resume exactly where you left off. Every refresh is logged. Two refreshes are tolerated. The third terminates your attempt and records a score of ZERO. The system is watching.`;
@@ -829,6 +885,39 @@ function typeAnonWarning() {
     }
   }
   step();
+
+  // ── CENTER GLOW → PROCEED ── The blue glow blooms mid-screen (the
+  // rabbit-glow moment), holds long enough to be the focal point, then
+  // drifts down and locks onto the PROCEED button as a tight halo —
+  // steering the eye exactly where the rep needs to go. Runs on rAF and
+  // tracks the button's live rect, so typing growth, scrolling, and
+  // resizes never break the pursuit.
+  const glow = document.getElementById('anon-center-glow');
+  if (glow) {
+    let gx = window.innerWidth / 2, gy = window.innerHeight * 0.46;
+    let seeking = false, locked = false, raf = null;
+    setTimeout(() => { seeking = true; }, 4500);
+    function tick() {
+      const ov = document.getElementById('anon-warning-overlay');
+      if (!ov || ov.style.display === 'none') { if (raf) cancelAnimationFrame(raf); return; }
+      if (seeking) {
+        const r = btn.getBoundingClientRect();
+        const tx = r.left + r.width / 2;
+        const ty = r.top + r.height / 2;
+        gx += (tx - gx) * 0.045;
+        gy += (ty - gy) * 0.045;
+        glow.style.left = gx + 'px';
+        glow.style.top = gy + 'px';
+        if (!locked && Math.abs(tx - gx) < 14 && Math.abs(ty - gy) < 14) {
+          locked = true;
+          glow.classList.add('focus');
+          btn.classList.add('locked');
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+  }
 }
 
 let matrixRainTimer = null;
@@ -845,27 +934,62 @@ function startMatrixRain(canvasId) {
   window.addEventListener('resize', resize);
 
   const glyphs = 'アイウエオカキクケコサシスセソ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const fontSize = 16;
-  let columns = Math.floor(canvas.width / fontSize);
-  let drops = new Array(columns).fill(1);
+  // ── THREE DEPTH LAYERS ── far: small, dim, slow, dense · mid: classic ·
+  // near: large, bright, fast, sparse with glowing white-green lead glyphs.
+  // Different sizes + speeds + brightness = the parallax that reads as 3D.
+  // Speeds are deliberately unhurried — the film's rain drifts, it doesn't race —
+  // and every column carries its own velocity (0.55×–1.45× of its layer) so no
+  // two streams ever fall in step.
+  const LAYERS = [
+    { fs: 10, speed: 0.30, color: 'rgba(0,140,90,0.55)',  head: null,                 glow: 0,  reset: 0.985 },
+    { fs: 16, speed: 0.55, color: 'rgba(0,229,160,0.85)', head: null,                 glow: 0,  reset: 0.975 },
+    { fs: 26, speed: 0.95, color: '#3dffb8',              head: 'rgba(220,255,240,0.95)', glow: 10, reset: 0.965 }
+  ];
+  let layerState = null;
+  function buildState() {
+    layerState = LAYERS.map(L => {
+      const cols = Math.floor(canvas.width / L.fs);
+      return {
+        cols,
+        drops: Array.from({ length: cols }, () => Math.random() * (canvas.height / L.fs)),
+        vel:   Array.from({ length: cols }, () => L.speed * (0.55 + Math.random() * 0.9))
+      };
+    });
+  }
+  buildState();
 
   function draw() {
-    if (columns !== Math.floor(canvas.width / fontSize)) {
-      columns = Math.floor(canvas.width / fontSize);
-      drops = new Array(columns).fill(1);
-    }
+    if (!layerState || layerState[1].cols !== Math.floor(canvas.width / LAYERS[1].fs)) buildState();
+    ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(0,0,0,0.09)'; // low alpha creates the classic fading-trail look
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#00e5a0';
-    ctx.font = fontSize + 'px monospace';
-    for (let i = 0; i < drops.length; i++) {
-      const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
-      ctx.fillText(glyph, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-      drops[i]++;
-    }
+    LAYERS.forEach((L, li) => {
+      const S = layerState[li];
+      ctx.font = L.fs + 'px monospace';
+      for (let i = 0; i < S.cols; i++) {
+        const x = i * L.fs;
+        const y = S.drops[i] * L.fs;
+        const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+        if (L.head) {
+          // trailing glyph one step behind in layer color, lead glyph hot with glow
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = L.color;
+          ctx.fillText(glyphs[Math.floor(Math.random() * glyphs.length)], x, y - L.fs);
+          ctx.shadowColor = '#66ffcc';
+          ctx.shadowBlur = L.glow;
+          ctx.fillStyle = L.head;
+          ctx.fillText(glyph, x, y);
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.fillStyle = L.color;
+          ctx.fillText(glyph, x, y);
+        }
+        if (y > canvas.height && Math.random() > L.reset) S.drops[i] = 0;
+        S.drops[i] += S.vel[i];
+      }
+    });
   }
-  const timer = setInterval(draw, 45);
+  const timer = setInterval(draw, 60); // slower cadence — the rain drifts
   if ((canvasId || 'matrix-rain-canvas') === 'matrix-rain-canvas') matrixRainTimer = timer;
   else regMatrixTimer = timer;
 }
@@ -894,8 +1018,309 @@ function stopRegMatrix() {
 // with an accelerating camera roll, then whites out and dissolves
 // to reveal the login screen beneath. Glyph glows are pre-rendered
 // to sprites so the loop stays at 60fps even on modest hardware.
-function matrixTunnelTransition() {
+// ── HALLWAY TRANSITION (PIN → ATTENTION) ─────────────────────
+// The corridor shot: dense vertical code walls left and right converging
+// on a dark center, camera pushing forward. The previous screen's colors
+// (white / red / grey of the PIN gate) linger as soft light patches on the
+// walls, then drain away until only matrix green is left — and the dark
+// center opens onto the ATTENTION screen.
+function hallwayTransition(onReveal) {
+  const canvas = document.getElementById('matrix-tunnel-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = window.innerWidth, H = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas.style.opacity = '1';
+  canvas.style.display = 'block';
+
+  const cx = W / 2, cy = H / 2;
+  const Z_NEAR = 90, Z_FAR = 2400;
+  const DURATION = 8800;
+  const T_DIGIT = DURATION * 0.24;
+  const T_COLOR = DURATION * 0.62;
+  const T_REVEAL = DURATION * 0.66;
+  const T_FADE = DURATION * 0.80;
+
+  // ── NESTED RINGS OF VERTICAL SLATS ── the film's true structure, and the
+  // union of everything that worked: every band is VERTICAL, and bands live
+  // on elliptical rings receding in depth. A ring's SIDE slats are tall —
+  // as rings flow past the camera those become the walls, which is the
+  // hallway. A ring's TOP and BOTTOM slats are short and sit above/below
+  // center — deep rings' top/bottom slats are what fill the space around
+  // the dark oval. Angles are distributed uniformly, so slats naturally
+  // crowd at the sides (dense bright walls) and thin over the top and
+  // bottom (the lighter fill of the frames). No planes, no corners — the
+  // "floor" and "ceiling" are just the near and far of the same rings.
+  const RA = W * 68, RB = H * 88, HK = H * 74;  // walls pulled in and grown tall — the corridor owns the full frame
+  const slats = [];
+  // ── SYMMETRIC WALL PAIRS ── every wall bar has a mirror twin at the same
+  // depth on the opposite side, so the two walls line up perfectly and
+  // converge together toward the dark end. Bars run the full height of the
+  // screen; recession shows as convergence, thinning and dimming — exactly
+  // the reference frame.
+  for (let i = 0; i < 36; i++) {
+    const z = Z_NEAR + Math.pow(i / 36 + (Math.random() - 0.5) * 0.012, 0.92) * (Z_FAR - Z_NEAR);
+    const wob = 0.5 + Math.random() * 0.9;
+    const hot = Math.random() < 0.14;
+    for (const sd of [0, Math.PI]) {
+      slats.push({ th: sd, z: z, wall: true,
+                   crawl: Math.random() * 1000, crawlV: 0.25 + Math.random() * 1.1,
+                   wob: wob, hot: hot,
+                   seed: Math.floor(Math.random() * 9999) });
+    }
+  }
+  const RESIDUAL = ['rgba(255,240,225,ALPHA)', 'rgba(255,215,215,ALPHA)', 'rgba(240,240,244,ALPHA)', 'rgba(255,228,200,ALPHA)'];
+  const blobs = [];
+  for (let i = 0; i < 9; i++) {
+    blobs.push({ th: (Math.random() < 0.5 ? 0 : Math.PI) + (Math.random() - 0.5) * 0.7, z: 300 + Math.random() * 1400,
+                 r: 60 + Math.random() * 130, c: RESIDUAL[i % RESIDUAL.length],
+                 drift: (Math.random() - 0.5) * 0.0004 });
+  }
+  const bolts = [];
+  function spawnBolt() {
+    bolts.push({ th: (Math.random() < 0.5 ? 0 : Math.PI) + (Math.random() - 0.5) * 0.7,
+                 z: 240 + Math.random() * 1500,
+                 yOff: (Math.random() - 0.5) * H * 0.4,
+                 len: H * (0.10 + Math.random() * 0.16),
+                 rise: 0.16 + Math.random() * 0.30,
+                 life: 0, ttl: 480 + Math.random() * 560 });
+  }
+
+  const easeOut = x => 1 - Math.pow(1 - x, 3);
+  let revealed = false, fading = false;
+  let prevNow = performance.now();
+  const start = prevNow;
+
+  function frame() {
+    const now = performance.now();
+    const t = now - start, dt = Math.min(50, now - prevNow);
+    prevNow = now;
+    const push = 0.11 + 0.62 * Math.pow(Math.min(1, t / DURATION), 2);
+    const spread = easeOut(Math.min(1, t / T_DIGIT));   // pinched digit-mouth → open tunnel
+    const ringScale = 0.14 + 0.86 * spread;
+    const ccx = cx + Math.sin(t * 0.00055) * W * 0.028 * spread;
+    const ccy = cy + Math.cos(t * 0.00042) * H * 0.018 * spread;
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(1,10,5,0.33)'; // firmer wipe — striations stay crisply defined, no smear
+    ctx.fillRect(0, 0, W, H);
+
+    // far slats first so near ones layer over them
+    slats.sort((a, b) => b.z - a.z);
+    for (const st of slats) {
+      st.z -= push * dt * 0.85;
+      if (st.z < Z_NEAR) { st.z += (Z_FAR - Z_NEAR); st.seed = Math.floor(Math.random() * 9999);  } // walls cycle by a fixed span so mirrored pairs stay in lockstep
+      st.crawl += st.crawlV * dt * 0.06;
+      const ra = RA * ringScale / st.z, rb = RB * ringScale / st.z;
+      const x0 = ccx + Math.cos(st.th) * ra;
+      const yC = ccy;
+      if (x0 < -120 || x0 > W + 120) continue;
+      const depth = 1 - (st.z - Z_NEAR) / (Z_FAR - Z_NEAR);
+      const fs = Math.max(4, Math.min(22, 3400 / st.z));
+      const sideness = 1; // every bar is a wall bar now — pure mirrored colonnade
+      const halfH = H * (0.55 + 0.80 * depth) * (0.4 + 0.6 * ringScale); // near bars overrun the frame (full height on screen); deep bars are short defined pods
+      if (halfH < 3 || yC + halfH < -20 || yC - halfH > H + 20) continue;
+      const bright = Math.min(1, 0.36 + 0.58 * depth * depth + 0.14 * sideness);
+      const bandW = (10 + 58 * depth) * (0.7 + 0.45 * sideness);
+      const stepY = Math.max(2.6, fs * 0.5);
+      const off = (st.crawl % stepY);
+      const near = depth > 0.78 && sideness > 0.6;
+      if (st.hot && depth > 0.3) {
+        const bloomR = bandW * 1.5 + 80 * depth;
+        const bg = ctx.createRadialGradient(x0, yC, 0, x0, yC, bloomR);
+        bg.addColorStop(0, 'rgba(235,255,240,' + (0.44 * depth) + ')');
+        bg.addColorStop(0.5, 'rgba(140,255,180,' + (0.26 * depth) + ')');
+        bg.addColorStop(1, 'rgba(120,255,170,0)');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = bg;
+        ctx.fillRect(x0 - bloomR, yC - bloomR, bloomR * 2, bloomR * 2);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+      const yTop = Math.max(-15, yC - halfH), yBot = Math.min(H + 15, yC + halfH);
+      for (let y = yTop + off; y < yBot; y += stepY) {
+        const vv = (y - yC) / halfH;               // -1 … 1 along the slat
+        const idx = st.seed + Math.floor((y - off) / stepY);
+        const wig = st.wob * bandW * 0.22 * Math.sin(idx * 1.7 + st.crawl * 0.05) * (1 - 0.4 * vv * vv);
+        const dw = bandW * (0.62 + ((idx * 7919) % 100) / 260);
+        const tipThin = 0.55 + 0.45 * Math.sqrt(Math.max(0, 1 - vv * vv)); // every bar tapers into a clean pod — near bars taper offscreen
+        const glint = (idx % 9) === 0; // denser bright striations — the crisp ripple rhythm of the frame
+        if (near) {
+          ctx.fillStyle = 'rgba(20,120,80,' + (bright * 0.45) + ')';
+          ctx.fillRect(x0 + wig + (Math.cos(st.th) < 0 ? -2 : 2) - (dw * tipThin) / 2, y + 1, dw * tipThin, Math.max(2.0, fs * 0.28));
+          if (glint) { ctx.shadowColor = 'rgba(140,255,200,0.9)'; ctx.shadowBlur = 9; }
+        }
+        if (st.hot) {
+          ctx.fillStyle = glint ? 'rgba(250,255,250,' + Math.min(1, bright + 0.35) + ')'
+                                : 'rgba(190,255,205,' + Math.min(1, bright + 0.18) + ')';
+        } else {
+          ctx.fillStyle = glint ? 'rgba(205,255,225,' + Math.min(1, bright + 0.20) + ')'
+                                : 'rgba(35,235,115,' + bright + ')';
+        }
+        ctx.fillRect(x0 + wig - (dw * tipThin) / 2, y, dw * tipThin, Math.max(2.2, fs * 0.30));
+        if (near && glint) ctx.shadowBlur = 0;
+      }
+    }
+
+    // residual warmth on the rings, draining away
+    const residualA = Math.max(0, 1 - t / T_COLOR) * spread;
+    if (residualA > 0.01) {
+      ctx.globalCompositeOperation = 'screen';
+      for (const b of blobs) {
+        b.z -= push * dt * 0.5;
+        if (b.z < 200) b.z = 1600;
+        b.th += b.drift * dt;
+        const bx = ccx + Math.cos(b.th) * (RA * ringScale / b.z) * 0.92;
+        const by = ccy + Math.sin(b.th) * (RB * ringScale / b.z) * 0.92;
+        const rr = b.r * (900 / b.z);
+        const gr = ctx.createRadialGradient(bx, by, 0, bx, by, rr);
+        gr.addColorStop(0, b.c.replace('ALPHA', (0.27 * residualA).toFixed(3)));
+        gr.addColorStop(1, b.c.replace('ALPHA', '0'));
+        ctx.fillStyle = gr;
+        ctx.fillRect(bx - rr, by - rr, rr * 2, rr * 2);
+      }
+    }
+
+    // electricity climbing the side walls
+    if (spread > 0.5 && Math.random() < 0.11 && bolts.length < 5) spawnBolt();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+    for (let i = bolts.length - 1; i >= 0; i--) {
+      const b = bolts[i];
+      b.life += dt;
+      b.z -= push * dt * 0.85;
+      b.yOff -= b.rise * dt;
+      if (b.life > b.ttl || b.z < Z_NEAR + 30) { bolts.splice(i, 1); continue; }
+      const bx = ccx + Math.cos(b.th) * (RA * ringScale / b.z);
+      if (bx < -30 || bx > W + 30) continue;
+      const depth = 1 - (b.z - Z_NEAR) / (Z_FAR - Z_NEAR);
+      const a = Math.sin(Math.PI * (b.life / b.ttl)) * (0.35 + 0.65 * depth);
+      const jit = (2.5 + 6 * depth), seg = 9 + 5 * depth;
+      const len = b.len * (0.5 + 0.8 * depth);
+      const yb = ccy + b.yOff;
+      const pts = [];
+      for (let y = yb, k = 0; y > yb - len; y -= seg, k++) {
+        pts.push([bx + (Math.random() - 0.5) * jit * 2, y]);
+      }
+      if (pts.length < 2) continue;
+      ctx.strokeStyle = 'rgba(70,170,255,' + (a * 0.35).toFixed(3) + ')';
+      ctx.lineWidth = 2.6 + 3.4 * depth;
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (const p2 of pts) ctx.lineTo(p2[0], p2[1]);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(230,245,255,' + a.toFixed(3) + ')';
+      ctx.lineWidth = 0.9 + 1.1 * depth;
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (const p2 of pts) ctx.lineTo(p2[0], p2[1]);
+      ctx.stroke();
+    }
+
+    // the flood — overexposure of the dive, purple fringe, receding
+    ctx.globalCompositeOperation = 'source-over';
+    const floodT = t / T_DIGIT;
+    let flood = 0;
+    if (floodT < 1.7) {
+      flood = floodT < 0.55 ? Math.pow(floodT / 0.55, 2) : Math.max(0, 1 - (floodT - 0.55) / 1.15);
+    }
+    if (flood > 0.01) {
+      ctx.globalCompositeOperation = 'lighter';
+      const fg = ctx.createRadialGradient(ccx, ccy, 0, ccx, ccy, Math.max(W, H) * 0.85);
+      fg.addColorStop(0, 'rgba(240,255,242,' + (0.85 * flood).toFixed(3) + ')');
+      fg.addColorStop(0.45, 'rgba(205,255,205,' + (0.60 * flood).toFixed(3) + ')');
+      fg.addColorStop(0.78, 'rgba(215,190,255,' + (0.24 * flood).toFixed(3) + ')');
+      fg.addColorStop(1, 'rgba(255,180,235,' + (0.11 * flood).toFixed(3) + ')');
+      ctx.fillStyle = fg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // the end of the hall — formless darkness the rings converge on
+    const journey = Math.min(1, t / DURATION);
+    const approach = 0.50 + 0.66 * journey * journey;
+    const openP = Math.max(0, (t - T_COLOR) / (DURATION - T_COLOR));
+    const rx = W * 0.19 * approach * (1 + 6.5 * openP * openP);
+    const ry = H * 0.34 * approach * (1 + 5.2 * openP * openP);
+    ctx.save();
+    ctx.translate(ccx, ccy);
+    ctx.scale(rx / ry, 1);
+    const oval = ctx.createRadialGradient(0, 0, 0, 0, 0, ry * 1.9);
+    oval.addColorStop(0, 'rgba(0,0,0,' + Math.min(0.97, 0.62 + 0.34 * (0.4 * journey + 0.6 * openP) + 0.30 * flood).toFixed(3) + ')');
+    oval.addColorStop(0.35, 'rgba(0,0,0,' + (0.40 + 0.30 * openP) + ')');
+    oval.addColorStop(0.7, 'rgba(0,0,0,' + (0.16 + 0.14 * openP) + ')');
+    oval.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = oval;
+    ctx.fillRect(-ry * 2.0, -ry * 2.0, ry * 4.0, ry * 4.0);
+    ctx.restore();
+
+    if (!revealed && t >= T_REVEAL) { revealed = true; if (onReveal) onReveal(); }
+    if (!fading && t >= T_FADE) {
+      fading = true;
+      canvas.style.transition = 'opacity 1200ms ease';
+      canvas.style.opacity = '0';
+    }
+    if (t < DURATION + 1250) requestAnimationFrame(frame);
+    else {
+      canvas.style.display = 'none';
+      canvas.style.transition = '';
+      canvas.style.opacity = '1';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// PIN → ATTENTION orchestration: the screen bends into the walls (with its
+// mirror as the right-hand reflection), the corridor takes over, colors
+// drain to green, and the dark center opens onto the briefing.
+function meltPartPin(ov) {
+  // ── MELT & PART ── The screen swells into white heat, then pulls open
+  // from the CENTER — both halves are identical clones inserted in the same
+  // DOM operation with their animations pre-assigned, so the left and right
+  // pull is perfectly mirrored, frame for frame.
+  const left = ov.cloneNode(true);
+  const right = ov.cloneNode(true);
+  left.removeAttribute('id'); right.removeAttribute('id');
+  for (const el of [left, right]) {
+    el.style.zIndex = '10000';
+    el.style.pointerEvents = 'none';
+    el.style.display = '';
+  }
+  left.className = 'melt-part-left';
+  right.className = 'melt-part-right';
+  // Re-apply the overlay's base look the id selector used to provide.
+  for (const el of [left, right]) {
+    el.style.position = 'fixed'; el.style.inset = '0'; el.style.background = '#060608';
+    el.style.display = 'flex'; el.style.flexDirection = 'column';
+    el.style.alignItems = 'center'; el.style.justifyContent = 'center';
+    el.style.fontFamily = "'Inter',sans-serif";
+  }
+  const frag = document.createDocumentFragment();
+  frag.appendChild(left); frag.appendChild(right);
+  const veil = document.createElement('div');
+  veil.id = 'melt-veil';
+  frag.appendChild(veil);
+  ov.style.display = 'none';        // the live overlay steps out as its twins take over
+  document.body.appendChild(frag);  // one insertion → one animation start for both halves
+  setTimeout(() => { left.remove(); right.remove(); veil.remove(); }, 2800);
+}
+
+function pinHallwayTransition(ov) {
+  hallwayTransition(null);   // the corridor is already moving behind the heat…
+  meltPartPin(ov);           // …as the screen melts white-hot and pulls open
+}
+
+function matrixTunnelTransition(onReveal) {
   const overlay = document.getElementById('anon-warning-overlay');
+  // Default reveal: the PROCEED → registration path. A custom onReveal lets
+  // the same dive-through-the-digit warp land on any screen (e.g. the
+  // PIN-gate → ATTENTION reveal).
+  const reveal = onReveal || function () {
+    overlay.style.display = 'none';
+    stopMatrixRain();
+  };
   const canvas = document.getElementById('matrix-tunnel-canvas');
   const ctx = canvas.getContext('2d');
 
@@ -1013,6 +1438,41 @@ function matrixTunnelTransition() {
     }
     ctx.globalAlpha = 1;
 
+    // ── VIRTUAL SIDE-WALL REFLECTIONS ── green illumination bouncing off
+    // the edges of the screen, brightening with warp speed and shimmering
+    // like light on glass walls either side of the tunnel.
+    ctx.globalCompositeOperation = 'lighter';
+    const edgeI = 0.08 + 0.26 * Math.min(1, warp / 3.3) + 0.05 * Math.sin(t * 0.004);
+    const edgeW = W * 0.15;
+    let egL = ctx.createLinearGradient(0, 0, edgeW, 0);
+    egL.addColorStop(0, 'rgba(90,255,170,' + edgeI + ')');
+    egL.addColorStop(0.5, 'rgba(0,255,140,' + (edgeI * 0.4) + ')');
+    egL.addColorStop(1, 'rgba(0,255,140,0)');
+    ctx.fillStyle = egL;
+    ctx.fillRect(0, 0, edgeW, H);
+    let egR = ctx.createLinearGradient(W, 0, W - edgeW, 0);
+    egR.addColorStop(0, 'rgba(90,255,170,' + edgeI + ')');
+    egR.addColorStop(0.5, 'rgba(0,255,140,' + (edgeI * 0.4) + ')');
+    egR.addColorStop(1, 'rgba(0,255,140,0)');
+    ctx.fillStyle = egR;
+    ctx.fillRect(W - edgeW, 0, edgeW, H);
+    // Flickering vertical light streaks along each wall — passing glyphs
+    // catching on the glass.
+    for (let k = 0; k < 5; k++) {
+      if (Math.random() < 0.35) continue;
+      const side = k % 2 === 0 ? 0 : 1;
+      const sx = side === 0 ? Math.random() * edgeW * 0.7 : W - Math.random() * edgeW * 0.7;
+      const sh = H * (0.2 + Math.random() * 0.6);
+      const sy = Math.random() * (H - sh);
+      const sa = edgeI * (0.5 + Math.random() * 0.9);
+      const sg = ctx.createLinearGradient(0, sy, 0, sy + sh);
+      sg.addColorStop(0, 'rgba(150,255,200,0)');
+      sg.addColorStop(0.5, 'rgba(150,255,200,' + sa + ')');
+      sg.addColorStop(1, 'rgba(150,255,200,0)');
+      ctx.fillStyle = sg;
+      ctx.fillRect(sx - 1.2, sy, 2.4, sh);
+    }
+
     // Hyperspace core light at the end of the tunnel.
     const coreR = 50 + 480 * easeIn(Math.min(1, t / (DURATION * 0.8)));
     const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
@@ -1033,8 +1493,7 @@ function matrixTunnelTransition() {
     // Swap the screens behind the flash, then dissolve the canvas away.
     if (!revealed && t >= T_REVEAL) {
       revealed = true;
-      overlay.style.display = 'none';
-      stopMatrixRain();
+      reveal();
     }
     if (!fading && t >= T_FADE) {
       fading = true;
@@ -1177,15 +1636,15 @@ const DEALER_LOOKUP = {
 const DEFAULT_QUESTIONS = [
   {
     "cat": "TACOMA VS. COMPETITION",
-    "q": "A guest insists \"the Colorado Z71 makes more power than any Tacoma.\" Which rebuttal is both factually precise and complete according to the chart?",
+    "q": "The hybrid i-FORCE MAX is the Tacoma's output ceiling: 326 hp / 465 lb-ft. Work the chart truck by truck — by how much does it out-power AND out-torque each competitor? Only one set of differences is correct across the board.",
     "opts": [
-      "Standard Tacoma matches the Z71 at 310 hp, so the claim is simply false",
-      "i-FORCE MAX Tacoma: 326 hp / 465 lb-ft — above the Z71's 310 / 430 on both",
-      "Non-hybrid Tacoma out-torques the Z71 (317 vs. 310) even if it trails on hp",
-      "The Z71 is a V6 and the Tacoma a turbo-four, so the numbers aren't comparable"
+      "Colorado +16 hp / +35 lb-ft · Frontier +16 hp / +184 lb-ft · Ranger +56 hp / +155 lb-ft",
+      "Colorado +16 hp / +35 lb-ft · Frontier +16 hp / +155 lb-ft · Ranger +56 hp / +184 lb-ft",
+      "Colorado +35 hp / +16 lb-ft · Frontier +16 hp / +184 lb-ft · Ranger +56 hp / +155 lb-ft",
+      "Colorado +16 hp / +35 lb-ft · Frontier +16 hp / +184 lb-ft · Ranger +46 hp / +148 lb-ft"
     ],
-    "ans": 1,
-    "exp": "The non-hybrid Tacoma (278 hp / 317 lb-ft) does trail the Colorado, so the honest counter is the i-FORCE MAX: 326 hp and 465 lb-ft beat the Colorado on both numbers. The Colorado is a 4-cylinder, not a V6."
+    "ans": 0,
+    "exp": "Straight subtraction from 326/465: Colorado (310/430) trails by 16 hp and 35 lb-ft; Frontier (310/281) by 16 hp and 184 lb-ft — the widest torque spread on the sheet, because its V6 is the torque-weakest engine in the segment; Ranger (270/310) by 56 hp and 155 lb-ft. Each wrong set hides exactly one flawed truck: B swaps the Frontier and Ranger torque gaps, C transposes hp and torque on the Colorado, and D recycles the Tacoma's own hybrid-vs-gas delta (148 lb-ft) with a slipped 46 hp as the Ranger gap. The perspective to keep: the hybrid beats every truck in the class on BOTH numbers at once — no competitor can say that about anything."
   },
   {
     "cat": "TACOMA VS. COMPETITION",
@@ -1552,7 +2011,7 @@ let score = 0;
 let catScores = {}; // keyed by question category, generalized N-category scoring
 let answered = false;
 let qtInterval = null;
-let qtSeconds = 25;
+let qtSeconds = 30;
 let startTime = null;
 let userAnswers = [];
 let userData = {};
@@ -1844,7 +2303,7 @@ function loadQuestion() {
 
 function startQuestionTimer() {
   clearInterval(qtInterval);
-  qtSeconds = 25;
+  qtSeconds = 30;
   updateQTimer();
   qtInterval = setInterval(() => {
     qtSeconds--;
