@@ -252,6 +252,8 @@ select.form-input { cursor: pointer; }
   font-family: 'JetBrains Mono', monospace; font-size: 12.5px; letter-spacing: 2.5px; cursor: pointer;
   transition: all .2s; opacity: 0; position: relative; z-index: 2;
 }
+.anon-proceed-btn { animation: anonFailsafe 0.4s ease 2.8s forwards; } /* CSS-only: even with ALL JavaScript dead, PROCEED appears by ~3s */
+@keyframes anonFailsafe { to { opacity: 1; } }
 .anon-proceed-btn.shown { animation: anonFadeIn .6s ease forwards, anonBtnGlow 2.6s 0.6s ease-in-out infinite; }
 .anon-proceed-btn.locked { animation: anonFadeIn .1s ease forwards, anonBtnGlow 1.2s ease-in-out infinite; border-color: #7fd4ff; color: #fff; }
 @keyframes anonBtnGlow {
@@ -259,36 +261,27 @@ select.form-input { cursor: pointer; }
   50% { box-shadow: 0 0 34px rgba(0,168,255,0.75), inset 0 0 14px rgba(0,168,255,0.3); }
 }
 .anon-proceed-btn:hover { background: #0090e8; color: #fff; box-shadow: 0 0 28px rgba(0,168,255,0.7); }
-/* ── PHONE: PROCEED stays visible ── on small screens the button pins to
-   the bottom of the viewport (sticky within the scrolling overlay), riding
-   above the typing text with a solid backing, so it can never be pushed
-   below the fold. Safe-area padding keeps it clear of home-bar gestures,
-   and the content reserves scroll room beneath the text. */
+/* ── PHONE: PROCEED cannot be buried ── position:fixed to the visual
+   viewport, full-width bar above the browser chrome. No sticky (flaky in
+   iOS Safari inside flex scroll containers), no transform centering (the
+   fade-in animation animates transform and would fight it): edge-anchored
+   left/right, safe-area padded, always on screen from the moment the
+   ATTENTION screen appears. Content reserves room to scroll clear of it. */
 @media (max-width: 700px) {
   #anon-warning-overlay { padding: 14px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
-  .anon-content { padding: 24px 14px 30px; }
+  .anon-content { padding: 24px 14px 128px; }
   .anon-proceed-btn {
-    position: sticky;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    display: block;
-    margin: 26px auto 0;
-    z-index: 3;
-    background: rgba(4, 22, 38, 0.94);
-    box-shadow: 0 0 20px rgba(0,168,255,0.5), 0 -16px 30px rgba(0,0,0,0.7);
+    position: fixed;
+    left: 14px;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+    z-index: 6;
+    padding: 15px 20px;
+    background: rgba(4, 22, 38, 0.96);
+    box-shadow: 0 0 22px rgba(0,168,255,0.55), 0 -16px 32px rgba(0,0,0,0.78);
+    opacity: 1 !important; /* phones: visible unconditionally — no class, no script, no animation required */
   }
-}
-@keyframes anonFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-#sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
-#sec-overlay.fade-out{opacity:0;pointer-events:none}
-/* ── ZERO DIVE ── bend, zoom on the 0, stretch, fine melt. No flash. */
-.zero-dive{animation:zeroDive 3.0s cubic-bezier(.55,0,.62,.4) forwards!important;pointer-events:none!important}
-@keyframes zeroDive{
-  0%{transform:none;filter:none;opacity:1}
-  30%{transform:perspective(800px) rotateX(5deg) rotateY(-6deg) scale(1.7);opacity:1}
-  55%{transform:perspective(800px) rotateX(9deg) rotateY(-13deg) scale(4.4) skewY(3deg);filter:blur(1px);opacity:1}
-  76%{transform:perspective(800px) rotateX(12deg) rotateY(-18deg) scaleX(7) scaleY(12) skewY(8deg);filter:blur(3px) saturate(1.25);opacity:.68}
-  100%{transform:perspective(800px) rotateX(14deg) rotateY(-22deg) scaleX(11) scaleY(24) skewX(-7deg);filter:blur(9px) saturate(1.4);opacity:0}
 }
 /* ── MELT & PART ── the screen swells into white heat in place, then the
    two halves peel outward from the center, softening and blowing out as
