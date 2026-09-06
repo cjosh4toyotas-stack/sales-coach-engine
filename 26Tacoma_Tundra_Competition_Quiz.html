@@ -283,6 +283,8 @@ select.form-input { cursor: pointer; }
     opacity: 1 !important; /* phones: visible unconditionally — no class, no script, no animation required */
   }
 }
+#sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s;overflow-y:auto}
+#sec-overlay.fade-out{opacity:0;pointer-events:none}
 /* ── MELT & PART ── the screen swells into white heat in place, then the
    two halves peel outward from the center, softening and blowing out as
    they go. First ~55% of the timeline both halves are stationary, so it
