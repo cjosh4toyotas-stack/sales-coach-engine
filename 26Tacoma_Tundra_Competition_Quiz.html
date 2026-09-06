@@ -206,7 +206,7 @@ select.form-input { cursor: pointer; }
 @keyframes anonGlowBreathe { 0%,100% { opacity: 0.92; } 50% { opacity: 0.62; } }
 .anon-content {
   max-width: 620px; text-align: center; position: relative; z-index: 1;
-  background: rgba(0,0,0,0.55); padding: 32px 28px; border-radius: 8px;
+  background: rgba(0,0,0,0.55); padding: 32px 28px 132px; border-radius: 8px;
   margin: auto; /* centers when short, remains fully scrollable when tall */
 }
 .anon-glitch-title {
@@ -244,44 +244,39 @@ select.form-input { cursor: pointer; }
   68% { clip-path: inset(0 0 100% 0); }
 }
 .anon-topic-line { font-size: 11px; color: #37b6ff; letter-spacing: 3px; margin-bottom: 26px; opacity: .9; text-transform: uppercase; }
-.anon-body { font-size: 14.5px; color: var(--green); line-height: 1.85; text-align: left; white-space: pre-wrap; min-height: 240px; }
+.anon-body { font-size: 14.5px; color: var(--green); line-height: 1.85; text-align: center; white-space: pre-wrap; min-height: 240px; }
 .anon-cursor { display: inline-block; color: #37b6ff; animation: anonBlink 0.8s step-end infinite; font-size: 14.5px; }
 @keyframes anonBlink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
 .anon-proceed-btn {
-  margin-top: 26px; padding: 13px 34px; background: rgba(0,60,110,0.25); border: 1px solid #37b6ff; color: #7fd4ff;
+  /* UNIVERSAL: fixed to the viewport bottom on every screen size, centered
+     with auto margins (no transforms — the fade animation animates
+     transform), visible unconditionally. No script, class, media query, or
+     animation is required for this button to exist on screen. */
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  margin: 0 auto;
+  width: min(560px, calc(100% - 28px));
+  z-index: 6;
+  opacity: 1 !important;
+  padding: 15px 28px;
+  background: rgba(4, 22, 38, 0.96);
+  border: 1px solid #37b6ff; color: #7fd4ff;
   font-family: 'JetBrains Mono', monospace; font-size: 12.5px; letter-spacing: 2.5px; cursor: pointer;
-  transition: all .2s; opacity: 0; position: relative; z-index: 2;
+  transition: background .2s, color .2s, box-shadow .2s;
+  animation: anonBtnGlow 2.6s ease-in-out infinite;
+  box-shadow: 0 0 22px rgba(0,168,255,0.5), 0 -16px 32px rgba(0,0,0,0.75);
 }
-.anon-proceed-btn { animation: anonFailsafe 0.4s ease 2.8s forwards; } /* CSS-only: even with ALL JavaScript dead, PROCEED appears by ~3s */
-@keyframes anonFailsafe { to { opacity: 1; } }
-.anon-proceed-btn.shown { animation: anonFadeIn .6s ease forwards, anonBtnGlow 2.6s 0.6s ease-in-out infinite; }
-.anon-proceed-btn.locked { animation: anonFadeIn .1s ease forwards, anonBtnGlow 1.2s ease-in-out infinite; border-color: #7fd4ff; color: #fff; }
+.anon-proceed-btn.shown { animation: anonBtnGlow 2.6s ease-in-out infinite; }
+.anon-proceed-btn.locked { animation: anonBtnGlow 1.2s ease-in-out infinite; border-color: #7fd4ff; color: #fff; }
 @keyframes anonBtnGlow {
   0%, 100% { box-shadow: 0 0 12px rgba(0,168,255,0.35), inset 0 0 8px rgba(0,168,255,0.12); }
   50% { box-shadow: 0 0 34px rgba(0,168,255,0.75), inset 0 0 14px rgba(0,168,255,0.3); }
 }
 .anon-proceed-btn:hover { background: #0090e8; color: #fff; box-shadow: 0 0 28px rgba(0,168,255,0.7); }
-/* ── PHONE: PROCEED cannot be buried ── position:fixed to the visual
-   viewport, full-width bar above the browser chrome. No sticky (flaky in
-   iOS Safari inside flex scroll containers), no transform centering (the
-   fade-in animation animates transform and would fight it): edge-anchored
-   left/right, safe-area padded, always on screen from the moment the
-   ATTENTION screen appears. Content reserves room to scroll clear of it. */
 @media (max-width: 700px) {
   #anon-warning-overlay { padding: 14px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
-  .anon-content { padding: 24px 14px 128px; }
-  .anon-proceed-btn {
-    position: fixed;
-    left: 14px;
-    right: 14px;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-    margin: 0;
-    z-index: 6;
-    padding: 15px 20px;
-    background: rgba(4, 22, 38, 0.96);
-    box-shadow: 0 0 22px rgba(0,168,255,0.55), 0 -16px 32px rgba(0,0,0,0.78);
-    opacity: 1 !important; /* phones: visible unconditionally — no class, no script, no animation required */
-  }
+  .anon-content { padding: 24px 14px 132px; }
 }
 #sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s;overflow-y:auto}
 #sec-overlay.fade-out{opacity:0;pointer-events:none}
@@ -1068,7 +1063,7 @@ function hallwayTransition(onReveal) {
   //             turning white → green, blue electricity arcing as they do —
   //             they BECOME the hallway bands in place
   //   3900+     only now: motion toward the blackness, rain, everything else
-  const HANDOFF = 950, ZOOM2_END = 2100, EVOLVE_END = 4400;
+  const HANDOFF = 1250, PIX_END = 3500, EVOLVE_END = 4400; // hallway timing (EVOLVE_END on) untouched
   const M = DURATION - EVOLVE_END;
   const T_COLOR = EVOLVE_END + M * 0.55;
   const T_REVEAL = EVOLVE_END + M * 0.62;
@@ -1174,7 +1169,7 @@ function hallwayTransition(onReveal) {
   // shatters into fine motes: each born WHITE, turning GREEN as it drifts
   // down and fades — the white becoming the world's color.
   const motes = [];
-  const PB_START = ZOOM2_END + 300, PB_END = EVOLVE_END + 300;
+  const PB_START = PIX_END - 400, PB_END = EVOLVE_END + 300; // white→green motes ride the pixelation's completion
 
   const easeOut = x => 1 - Math.pow(1 - x, 3);
   let revealed = false, fading = false;
@@ -1186,10 +1181,8 @@ function hallwayTransition(onReveal) {
     const t = now - start, dt = Math.min(50, now - prevNow);
     prevNow = now;
     const smoothF = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
-    const evoP = smoothF((t - HANDOFF) / (EVOLVE_END - HANDOFF));          // 0..1 across zoom-into-pixels + evolution
-    const zoomP = smoothF((t - HANDOFF) / (ZOOM2_END - HANDOFF));         // the pixel-zoom sub-phase
-    const stretchP = smoothF((t - ZOOM2_END) / (EVOLVE_END - ZOOM2_END)); // the pixels stretching into bands
-    const bandsIn = smoothF((stretchP - 0.78) / 0.22);                    // real band texture only as the stretch completes
+    const pixP = smoothF((t - HANDOFF) / (PIX_END - HANDOFF));            // the SLOW phosphor pixelation
+    const bandsIn = smoothF((t - PIX_END) / (EVOLVE_END - PIX_END));      // completed pixels crossfade into the bands
     const tm = Math.max(0, t - EVOLVE_END);                               // MOTION TIME — zero until evolution is done
     const motionIn = smoothF(tm / 1100);                                  // then the ride toward the blackness eases in
     const push = (0.10 + 0.92 * Math.pow(Math.min(1, tm / M), 2.4)) * motionIn;
@@ -1218,6 +1211,71 @@ function hallwayTransition(onReveal) {
     ctx.fillStyle = bwR;
     ctx.fillRect(W * 0.66, 0, W * 0.34, H);
     ctx.globalCompositeOperation = 'source-over';
+
+    // ── THE ZERO: PIXELATE → MOLTEN → STRETCH TO THE SIDES ──
+    // Working WITH the digit's space and shape: its tall counter stays the
+    // hole; the ring material around it pixelates ORGANICALLY (varied cell
+    // shapes and sizes, jittered — nothing gridlike), then heats molten
+    // white-hot, and then the cells stretch — hardest at the screen edges —
+    // elongating into the vertical lines that the hallway's walls fade in
+    // through. The hallway itself is untouched; this phase only hands off.
+    if (t > HANDOFF && bandsIn < 0.999) {
+      const appearP = smoothF((t - HANDOFF) / (2500 - HANDOFF));  // slow organic pixelation
+      const moltP  = smoothF((t - 2450) / 700);                    // molten white-hot
+      const strP   = smoothF((t - 3000) / (EVOLVE_END - 3000));    // the stretch to the sides
+      const fieldA = (1 - bandsIn);
+      const CS = Math.max(9, Math.round(Math.min(W, H) / 46));
+      const NX = Math.ceil(W / CS) + 2, NY = Math.ceil(H / CS) + 2;
+      // molten bloom: a soft white heat rising over the ring at its hottest
+      if (moltP > 0.02 && strP < 0.9) {
+        const mg = ctx.createRadialGradient(ccx, ccy, H * 0.16, ccx, ccy, Math.max(W, H) * 0.72);
+        mg.addColorStop(0, 'rgba(255,252,240,0)');
+        mg.addColorStop(0.35, 'rgba(255,250,235,' + (0.22 * moltP * (1 - strP) * fieldA).toFixed(3) + ')');
+        mg.addColorStop(1, 'rgba(255,245,225,' + (0.10 * moltP * (1 - strP) * fieldA).toFixed(3) + ')');
+        ctx.globalCompositeOperation = 'screen';
+        ctx.fillStyle = mg;
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+      for (let iy = 0; iy < NY; iy++) {
+        for (let ix = 0; ix < NX; ix++) {
+          let h1 = ((ix * 73856093) ^ (iy * 19349663)) >>> 0;
+          h1 = (((h1 ^ (h1 >>> 13)) * 1274126177) >>> 0);
+          const r01 = (h1 % 1000) / 1000;
+          const appear = smoothF((appearP - r01 * 0.88) / 0.14);
+          if (appear <= 0) continue;
+          // organic cell: jittered position, independent width/height
+          const jx = (((h1 >> 3) % 100) / 100 - 0.5) * CS * 0.7;
+          const jy = (((h1 >> 9) % 100) / 100 - 0.5) * CS * 0.7;
+          const px3 = ix * CS + jx, py3 = iy * CS + jy;
+          const dx = px3 - ccx, dy = py3 - ccy;
+          // the ZERO's counter: a tall oval hole, ragged-edged — its shape
+          const holeN = Math.sqrt(Math.pow(dx / (W * 0.215), 2) + Math.pow(dy / (H * 0.36), 2));
+          if (holeN < 0.92 + 0.22 * (((h1 >> 15) % 100) / 100)) continue;
+          const edgeF = Math.pow(Math.min(1, Math.abs(dx) / (W * 0.5)), 1.25); // strongest at the sides
+          let cw = CS * (0.55 + 1.05 * (((h1 >> 5) % 100) / 100));
+          let chh = CS * (0.45 + 0.95 * (((h1 >> 11) % 100) / 100));
+          // THE STRETCH: cells elongate into vertical lines, hardest at the
+          // screen edges, narrowing as they draw out, drifting outward
+          chh *= 1 + 30 * strP * (0.25 + 0.75 * edgeF);
+          cw *= 1 - 0.58 * strP * (0.3 + 0.7 * edgeF);
+          const drift = dx * 0.55 * strP;
+          // color: phosphor green → molten white → cooling toward the wall green
+          const heat = moltP * (1 - 0.55 * strP);
+          const rr2 = Math.round(64 + 191 * heat);
+          const gg2 = Math.round(250 + 5 * heat);
+          const bb2 = Math.round(96 + 142 * heat);
+          const lum = 0.30 + 0.55 * (((h1 >> 8) % 100) / 100);
+          const a3 = fieldA * appear * lum;
+          const brightCell = ((h1 >> 12) % 15) === 0;
+          ctx.fillStyle = brightCell
+            ? 'rgba(' + Math.min(255, rr2 + 60) + ',255,' + Math.min(255, bb2 + 60) + ',' + a3.toFixed(3) + ')'
+            : 'rgba(' + rr2 + ',' + gg2 + ',' + bb2 + ',' + (a3 * 0.9).toFixed(3) + ')';
+          const settle = 1.3 - 0.35 * appear;
+          ctx.fillRect(px3 + drift - (cw * settle) / 2, py3 - (chh * settle) / 2, cw * settle, chh * settle);
+        }
+      }
+    }
 
     // draw inner (fine) first so the thick outer slabs layer over them
     bands.sort((a, b) => a.x - b.x);
@@ -1481,7 +1539,7 @@ function hallwayTransition(onReveal) {
     // the black — small, growing on you, consuming the fine inner threads
     // first and the solid outer slabs only at the very end
     const journey = Math.min(1, tm / M);
-    const ovalIn = smoothF((t - (EVOLVE_END - 750)) / 600); // the blackness inherits from the digit's counter as the streaks melt
+    const ovalIn = smoothF((t - HANDOFF) / 450); // the blackness IS the digit's counter — center-screen from the handoff
     const approach = 0.28 + 0.95 * Math.pow(journey, 1.9); // frozen until motion time, then it comes to meet you
     const openP = Math.max(0, (t - T_COLOR) / (DURATION - T_COLOR));
     // (journey and openP are both zero throughout the evolution — no movement toward the blackness until it completes)
@@ -1521,13 +1579,11 @@ function hallwayTransition(onReveal) {
 // mirror as the right-hand reflection), the corridor takes over, colors
 // drain to green, and the dark center opens onto the briefing.
 function pinZeroDive(ov) {
-  // ── THE REAL ZERO EVOLVES ── no second zero, no projection of what comes
-  // next. The camera arrives fast, then SLOWS RIGHT DOWN and dwells on the
-  // actual digit — which begins to bend: continuous perspective flex with a
-  // slow organic wobble, then a vertical stretch that grows until the real
-  // pixels of the real screen are drawn out into unrecognizable streaks,
-  // and only then does it finely melt away. Under stress, tiny electric
-  // purple and blue arcs crackle off it.
+  // ── STRAIGHT INTO THE BLACK OF THE ZERO ── one continuous accelerating
+  // zoom, never slowing, aimed at the digit's counter: it ends with the
+  // black center filling the middle of the screen and the whitened ring
+  // surrounding it at the edges. Only then does the DOM step aside — and
+  // the slow phosphor pixelation begins on the canvas.
   let ox = 50, oy = 55;
   try {
     const zero = Array.from(ov.querySelectorAll('button, div, span'))
@@ -1544,110 +1600,23 @@ function pinZeroDive(ov) {
   ov.style.zIndex = '10000';
   ov.style.pointerEvents = 'none';
   ov.style.willChange = 'transform, filter, opacity';
-  // stress layer: tiny purple/blue arcs over the bending digit
-  const sc = document.createElement('canvas');
-  sc.style.cssText = 'position:fixed;inset:0;z-index:10002;pointer-events:none';
-  const sw2 = window.innerWidth, sh2 = window.innerHeight;
-  sc.width = sw2; sc.height = sh2;
-  document.body.appendChild(sc);
-  const sctx = sc.getContext('2d');
-  const arcs = [];
-  const originX = sw2 * ox / 100, originY = sh2 * oy / 100;
-
-  const T = 4400, T_FAST = 950;
+  const T = 1400;
   const start = performance.now();
   const smooth = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
   function step() {
-    const now = performance.now();
-    const tt = now - start;
-    const p = Math.min(1, tt / T);
-    // fast approach, then the dwell: zoom nearly stops
-    const fastP = Math.min(1, tt / T_FAST);
-    const q = smooth(Math.max(0, (tt - T_FAST) / (T - T_FAST)));   // the slow evolution 0..1
-    const zoom = (1 + 15 * Math.pow(fastP, 2.1)) * (1 + 0.4 * q);
-    // the bend: continuous flex with a slow organic wobble
-    const wob = Math.sin(tt * 0.0035) * 1.6 * q;
-    const rx2 = 9 * Math.pow(q, 1.3) + wob;
-    const ry2 = -13 * Math.pow(q, 1.2) + wob * 0.7;
-    // the stretch: grows out of the bend, drawing the digit into streaks
-    const st = smooth(Math.max(0, (q - 0.40) / 0.60));
-    const sy = 1 + 72 * Math.pow(st, 2.3);                       // lengthwise…
-    const lat = smooth(Math.max(0, (q - 0.32) / 0.68));
-    const sxm = 1 + 9.5 * Math.pow(lat, 2);                      // …and laterally — the digit visibly expands
-    // color under stress: mild whitening only — it stays the same screen
-    const wht = 1 + 1.1 * q;
-    const hue = (10 + 14 * Math.sin(tt * 0.006)) * st;           // tiny violet/blue shimmer — the material under stress
-    const op = q < 0.86 ? 1 : 1 - smooth((q - 0.86) / 0.14);  // the fine melt, last of all
-    ov.style.transform = 'perspective(820px) rotateX(' + rx2.toFixed(2) + 'deg) rotateY(' + ry2.toFixed(2) + 'deg) scale(' + (zoom * sxm).toFixed(3) + ', ' + (zoom * sy).toFixed(2) + ')';
-    ov.style.filter = 'brightness(' + wht.toFixed(3) + ') hue-rotate(' + hue.toFixed(1) + 'deg) saturate(' + (1 + 0.35 * st).toFixed(3) + ')';
+    const p = Math.min(1, (performance.now() - start) / T);
+    const zoom = 1 + 55 * Math.pow(p, 2.0);              // deep — the counter fills the center
+    const wht = 1 + 6.0 * Math.pow(p, 1.6);              // the ring whitens to surround the screen
+    const sat = Math.max(0.12, 1 - 1.2 * p);
+    const op = p < 0.82 ? 1 : 1 - smooth((p - 0.82) / 0.18);
+    ov.style.transform = 'perspective(820px) scale(' + zoom.toFixed(3) + ')';
+    ov.style.filter = 'brightness(' + wht.toFixed(3) + ') saturate(' + sat.toFixed(3) + ')';
     ov.style.opacity = op.toFixed(3);
-
-    // ── STRESS ── tiny purple & blue arcs, sparse and brief
-    sctx.clearRect(0, 0, sw2, sh2);
-    if (q > 0.22 && q < 0.97 && arcs.length < 3 && Math.random() < 0.10) {
-      const ang = Math.random() * Math.PI * 2;
-      const rad = Math.min(sw2, sh2) * (0.16 + Math.random() * 0.20);
-      arcs.push({ x: originX + Math.cos(ang) * rad, y: originY + Math.sin(ang) * rad * (1 + st * 2),
-                  len: 16 + Math.random() * 42, dir: Math.random() * Math.PI * 2,
-                  purple: Math.random() < 0.5, life: 0, ttl: 160 + Math.random() * 220 });
-    }
-    for (let i = arcs.length - 1; i >= 0; i--) {
-      const a2 = arcs[i];
-      a2.life += 16.7;
-      if (a2.life > a2.ttl) { arcs.splice(i, 1); continue; }
-      const al = Math.sin(Math.PI * a2.life / a2.ttl) * (0.34 + 0.28 * Math.random());
-      const col = a2.purple ? '190,90,255' : '95,150,255';
-      sctx.lineCap = 'round';
-      let px2 = a2.x, py2 = a2.y;
-      sctx.strokeStyle = 'rgba(' + col + ',' + (al * 0.4).toFixed(3) + ')';
-      sctx.lineWidth = 2.4;
-      sctx.beginPath(); sctx.moveTo(px2, py2);
-      for (let k = 0; k < 5; k++) {
-        px2 += Math.cos(a2.dir) * a2.len / 5 + (Math.random() - 0.5) * 5;
-        py2 += Math.sin(a2.dir) * a2.len / 5 + (Math.random() - 0.5) * 5;
-        sctx.lineTo(px2, py2);
-      }
-      sctx.stroke();
-      sctx.strokeStyle = 'rgba(235,230,255,' + al.toFixed(3) + ')';
-      sctx.lineWidth = 0.9;
-      sctx.stroke();
-    }
-
-    // ── PIXELATION UNDER STRESS ── as the stretch takes hold, the digit's
-    // surface grains into shimmering flecks across its expanding footprint:
-    // green and white mostly, stress purple and blue in small doses, and
-    // TINY amounts of pure black — pinprick voids opening in the material
-    // as it is drawn out laterally and lengthwise.
-    if (st > 0.22) {
-      const rxp = sw2 * (0.14 + 0.62 * lat);
-      const ryp = sh2 * (0.18 + 0.70 * st);
-      const N = Math.floor(30 + 260 * st);
-      for (let k = 0; k < N; k++) {
-        const ang2 = Math.random() * Math.PI * 2;
-        const rad2 = Math.pow(Math.random(), 0.72);
-        const fx = originX + Math.cos(ang2) * rxp * rad2;
-        const fy = originY + Math.sin(ang2) * ryp * rad2;
-        if (fx < 0 || fx > sw2 || fy < 0 || fy > sh2) continue;
-        const roll = Math.random();
-        const fa = (0.22 + 0.45 * Math.random()) * st;
-        let fill;
-        if (roll < 0.055) fill = 'rgba(0,0,0,' + (0.45 + 0.4 * Math.random()).toFixed(3) + ')';        // tiny black voids
-        else if (roll < 0.125) fill = 'rgba(190,90,255,' + (fa * 0.8).toFixed(3) + ')';                 // stress purple
-        else if (roll < 0.20) fill = 'rgba(95,150,255,' + (fa * 0.8).toFixed(3) + ')';                  // stress blue
-        else if (roll < 0.52) fill = 'rgba(215,255,225,' + fa.toFixed(3) + ')';
-        else fill = 'rgba(120,235,85,' + fa.toFixed(3) + ')';
-        sctx.fillStyle = fill;
-        const fs2 = 1.4 + Math.random() * 2.4;
-        sctx.fillRect(fx, fy, fs2, fs2);
-      }
-    }
-
     if (p < 1) requestAnimationFrame(step);
     else {
       ov.style.display = 'none';
       ov.style.transform = ''; ov.style.filter = ''; ov.style.opacity = '';
       ov.style.zIndex = ''; ov.style.transformOrigin = ''; ov.style.willChange = '';
-      sc.remove();
     }
   }
   requestAnimationFrame(step);
@@ -2042,15 +2011,15 @@ const DEFAULT_QUESTIONS = [
   },
   {
     "cat": "TACOMA VS. COMPETITION",
-    "q": "Which claim is NOT supported by the midsize chart?",
+    "q": "Hidden money: using the chart's KBB 40k-mile trade-in values, compute the Tacoma's retained-value edge over each competitor. Only one set is right across the board.",
     "opts": [
-      "All four trucks have standard Pre-Collision with Pedestrian Detection",
-      "The Frontier charges extra for Blind Spot Monitor",
-      "The Tacoma has the most airbags of the four trucks",
-      "The Tacoma has more airbags than the Colorado and the Ranger"
+      "Colorado +$3,770 · Frontier +$5,580 · Ranger +$6,167",
+      "Colorado +$3,770 · Frontier +$6,167 · Ranger +$5,580",
+      "Colorado +$4,770 · Frontier +$5,580 · Ranger +$6,167",
+      "Colorado +$3,770 · Frontier +$5,580 · Ranger +$5,167"
     ],
-    "ans": 2,
-    "exp": "The Frontier lists 10 airbags — more than the Tacoma's 8. Tacoma does beat the Colorado and Ranger (6 each), all four standardize Pre-Collision w/ Ped Detection, and the Frontier's BSM is a $990 option."
+    "ans": 0,
+    "exp": "From the Tacoma's $34,200: Colorado $30,430 (+$3,770), Frontier $28,620 (+$5,580), Ranger $28,033 (+$6,167). The insight most consultants never compute: this quietly beats the incentive war — the Frontier's $4,500 customer cash costs the guest $5,580 back at trade-in, and the Ranger's $2,000 costs $6,167. Retained value is the chart's biggest Toyota win, hiding in plain sight. B swaps the Frontier and Ranger gaps, C slips the Colorado math by $1,000, and D transposes the Ranger's digits."
   },
   {
     "cat": "TACOMA VS. COMPETITION",
@@ -2688,19 +2657,12 @@ function revealAnswer(selected) {
     else if (i === selected) btn.classList.add('wrong');
   });
 
-  const feedback = document.getElementById('q-feedback');
-  feedback.style.display = 'block';
+  // Coaching is saved for the end-of-quiz recap: no inline explanation box.
+  // The choice colors (green correct / red wrong) are the only mid-quiz
+  // feedback, and NEXT appears immediately beside the choices.
   if (isCorrect) {
     score++;
     catScores[q.cat] = (catScores[q.cat] || 0) + 1;
-    feedback.className = 'feedback-box correct';
-    feedback.innerHTML = `✓ Correct! ${q.exp}`;
-  } else if (selected === -1) {
-    feedback.className = 'feedback-box wrong';
-    feedback.innerHTML = `⏱ Time's up! The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
-  } else {
-    feedback.className = 'feedback-box wrong';
-    feedback.innerHTML = `✗ Incorrect. The answer was: <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
   }
 
   userAnswers.push({ q: currentQ, selected, correct: isCorrect });
@@ -2768,7 +2730,7 @@ function renderCoachingRecap() {
     : `Solid overall performance — your one area to sharpen is <strong>${weakest.label}</strong> (${weakest.score}/${weakest.total}).`;
 
   const focusHtml = focusQuestions.map(q => `
-    <div class="recap-focus-item"><strong>${q.q}</strong><br>${q.exp}</div>
+    <div class="recap-focus-item"><strong>${q.q}</strong><br><span class="recap-mastery">✔ ${q.opts[q.ans]}</span><br>${q.exp}</div>
   `).join('');
 
   const otherMissedCount = missed.length - focusQuestions.length;
