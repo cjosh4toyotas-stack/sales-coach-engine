@@ -259,10 +259,37 @@ select.form-input { cursor: pointer; }
   50% { box-shadow: 0 0 34px rgba(0,168,255,0.75), inset 0 0 14px rgba(0,168,255,0.3); }
 }
 .anon-proceed-btn:hover { background: #0090e8; color: #fff; box-shadow: 0 0 28px rgba(0,168,255,0.7); }
+/* ── PHONE: PROCEED stays visible ── on small screens the button pins to
+   the bottom of the viewport (sticky within the scrolling overlay), riding
+   above the typing text with a solid backing, so it can never be pushed
+   below the fold. Safe-area padding keeps it clear of home-bar gestures,
+   and the content reserves scroll room beneath the text. */
+@media (max-width: 700px) {
+  #anon-warning-overlay { padding: 14px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .anon-content { padding: 24px 14px 30px; }
+  .anon-proceed-btn {
+    position: sticky;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    display: block;
+    margin: 26px auto 0;
+    z-index: 3;
+    background: rgba(4, 22, 38, 0.94);
+    box-shadow: 0 0 20px rgba(0,168,255,0.5), 0 -16px 30px rgba(0,0,0,0.7);
+  }
+}
 @keyframes anonFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 #sec-overlay{position:fixed;inset:0;z-index:9999;background:#060608;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:opacity .4s}
 #sec-overlay.fade-out{opacity:0;pointer-events:none}
+/* ── ZERO DIVE ── bend, zoom on the 0, stretch, fine melt. No flash. */
+.zero-dive{animation:zeroDive 3.0s cubic-bezier(.55,0,.62,.4) forwards!important;pointer-events:none!important}
+@keyframes zeroDive{
+  0%{transform:none;filter:none;opacity:1}
+  30%{transform:perspective(800px) rotateX(5deg) rotateY(-6deg) scale(1.7);opacity:1}
+  55%{transform:perspective(800px) rotateX(9deg) rotateY(-13deg) scale(4.4) skewY(3deg);filter:blur(1px);opacity:1}
+  76%{transform:perspective(800px) rotateX(12deg) rotateY(-18deg) scaleX(7) scaleY(12) skewY(8deg);filter:blur(3px) saturate(1.25);opacity:.68}
+  100%{transform:perspective(800px) rotateX(14deg) rotateY(-22deg) scaleX(11) scaleY(24) skewX(-7deg);filter:blur(9px) saturate(1.4);opacity:0}
+}
 /* ── MELT & PART ── the screen swells into white heat in place, then the
    two halves peel outward from the center, softening and blowing out as
    they go. First ~55% of the timeline both halves are stationary, so it
@@ -941,6 +968,7 @@ function startMatrixRain(canvasId) {
   // and every column carries its own velocity (0.55×–1.45× of its layer) so no
   // two streams ever fall in step.
   const LAYERS = [
+    { fs: 6,  speed: 0.18, color: 'rgba(0,110,70,0.45)',  head: null,                 glow: 0,  reset: 0.99  },
     { fs: 10, speed: 0.30, color: 'rgba(0,140,90,0.55)',  head: null,                 glow: 0,  reset: 0.985 },
     { fs: 16, speed: 0.55, color: 'rgba(0,229,160,0.85)', head: null,                 glow: 0,  reset: 0.975 },
     { fs: 26, speed: 0.95, color: '#3dffb8',              head: 'rgba(220,255,240,0.95)', glow: 10, reset: 0.965 }
@@ -1036,57 +1064,122 @@ function hallwayTransition(onReveal) {
   canvas.style.display = 'block';
 
   const cx = W / 2, cy = H / 2;
-  const Z_NEAR = 90, Z_FAR = 2400;
-  const DURATION = 8800;
-  const T_DIGIT = DURATION * 0.24;
-  const T_COLOR = DURATION * 0.62;
-  const T_REVEAL = DURATION * 0.66;
-  const T_FADE = DURATION * 0.80;
+  const DURATION = 11400;
+  // ── STRICT PHASES ── each completes before the next begins:
+  //   0–950ms   the DOM zoom onto the 0 (canvas dark, nothing projected)
+  //   950–2050  ZOOM INTO THE PIXELS: the 0 as a coarse pixel ring, camera
+  //             still diving — its dark counter is already the blackness
+  //   2050–3900 THE EVOLUTION: the pixels themselves STRETCH to full height,
+  //             turning white → green, blue electricity arcing as they do —
+  //             they BECOME the hallway bands in place
+  //   3900+     only now: motion toward the blackness, rain, everything else
+  const HANDOFF = 950, ZOOM2_END = 2100, EVOLVE_END = 4400;
+  const M = DURATION - EVOLVE_END;
+  const T_COLOR = EVOLVE_END + M * 0.55;
+  const T_REVEAL = EVOLVE_END + M * 0.62;
+  const T_FADE = EVOLVE_END + M * 0.90;
 
-  // ── NESTED RINGS OF VERTICAL SLATS ── the film's true structure, and the
-  // union of everything that worked: every band is VERTICAL, and bands live
-  // on elliptical rings receding in depth. A ring's SIDE slats are tall —
-  // as rings flow past the camera those become the walls, which is the
-  // hallway. A ring's TOP and BOTTOM slats are short and sit above/below
-  // center — deep rings' top/bottom slats are what fill the space around
-  // the dark oval. Angles are distributed uniformly, so slats naturally
-  // crowd at the sides (dense bright walls) and thin over the top and
-  // bottom (the lighter fill of the frames). No planes, no corners — the
-  // "floor" and "ceiling" are just the near and far of the same rings.
-  const RA = W * 68, RB = H * 88, HK = H * 74;  // walls pulled in and grown tall — the corridor owns the full frame
-  const slats = [];
-  // ── SYMMETRIC WALL PAIRS ── every wall bar has a mirror twin at the same
-  // depth on the opposite side, so the two walls line up perfectly and
-  // converge together toward the dark end. Bars run the full height of the
-  // screen; recession shows as convergence, thinning and dimming — exactly
-  // the reference frame.
-  for (let i = 0; i < 36; i++) {
-    const z = Z_NEAR + Math.pow(i / 36 + (Math.random() - 0.5) * 0.012, 0.92) * (Z_FAR - Z_NEAR);
-    const wob = 0.5 + Math.random() * 0.9;
-    const hot = Math.random() < 0.14;
-    for (const sd of [0, Math.PI]) {
-      slats.push({ th: sd, z: z, wall: true,
+  // ── THE FLOW INTO THE BLACK ── bands live in screen-x and drift INWARD:
+  // born as thick, solid, bright slabs at the frame edges, they thin, dim
+  // and refine as they travel toward the center, until the black oval
+  // consumes them. The heaviest material is always FURTHEST from the black;
+  // everything gets finer on its way in — and the viewer rides the flow.
+  const X_OUT = W * 0.475, X_IN = 6;
+  const NPAIR = 30;
+  const bands = [];
+  for (let i = 0; i < NPAIR; i++) {
+    // dense at the outer edge, opening up toward center
+    const x = X_OUT - (X_OUT - X_IN) * Math.pow(i / (NPAIR - 1), 1.55);
+    for (const sd of [-1, 1]) {
+      bands.push({ side: sd, x: x * (1 + (Math.random() - 0.5) * 0.05),
                    crawl: Math.random() * 1000, crawlV: 0.25 + Math.random() * 1.1,
-                   wob: wob, hot: hot,
+                   wob: 0.5 + Math.random() * 0.9,
+                   hot: Math.random() < 0.44,
                    seed: Math.floor(Math.random() * 9999) });
     }
   }
   const RESIDUAL = ['rgba(255,240,225,ALPHA)', 'rgba(255,215,215,ALPHA)', 'rgba(240,240,244,ALPHA)', 'rgba(255,228,200,ALPHA)'];
   const blobs = [];
   for (let i = 0; i < 9; i++) {
-    blobs.push({ th: (Math.random() < 0.5 ? 0 : Math.PI) + (Math.random() - 0.5) * 0.7, z: 300 + Math.random() * 1400,
-                 r: 60 + Math.random() * 130, c: RESIDUAL[i % RESIDUAL.length],
-                 drift: (Math.random() - 0.5) * 0.0004 });
+    blobs.push({ side: Math.random() < 0.5 ? -1 : 1, x: X_OUT * (0.45 + Math.random() * 0.5),
+                 y: cy + (Math.random() - 0.5) * H * 0.7,
+                 r: 60 + Math.random() * 130, c: RESIDUAL[i % RESIDUAL.length] });
   }
   const bolts = [];
-  function spawnBolt() {
-    bolts.push({ th: (Math.random() < 0.5 ? 0 : Math.PI) + (Math.random() - 0.5) * 0.7,
-                 z: 240 + Math.random() * 1500,
-                 yOff: (Math.random() - 0.5) * H * 0.4,
-                 len: H * (0.10 + Math.random() * 0.16),
-                 rise: 0.16 + Math.random() * 0.30,
-                 life: 0, ttl: 480 + Math.random() * 560 });
+  function _boltPath(len, jitter) {
+    let pts = [[0, 0], [0, -len]];
+    for (let pass = 0; pass < 5; pass++) {
+      const next = [pts[0]];
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i];
+        next.push([(a[0] + b[0]) / 2 + (Math.random() - 0.5) * jitter,
+                   (a[1] + b[1]) / 2 + (Math.random() - 0.5) * jitter * 0.35], b);
+      }
+      pts = next;
+      jitter *= 0.52;
+    }
+    return pts;
   }
+  function spawnBolt() {
+    const len = H * (0.10 + Math.random() * 0.16);
+    const main = _boltPath(len, len * 0.34);
+    const branches = [];
+    const nBr = 2 + Math.floor(Math.random() * 3);
+    for (let b = 0; b < nBr; b++) {
+      const at = main[4 + Math.floor(Math.random() * (main.length - 8))];
+      const bl = len * (0.18 + Math.random() * 0.25);
+      const dir = Math.random() < 0.5 ? -1 : 1;
+      branches.push(_boltPath(bl, bl * 0.5).map(pt => [at[0] + pt[0] * 0.4 + dir * -pt[1] * 0.55, at[1] + pt[1] * 0.75]));
+    }
+    bolts.push({ side: Math.random() < 0.5 ? -1 : 1, x: X_OUT * (0.45 + Math.random() * 0.5),
+                 yOff: (Math.random() - 0.5) * H * 0.4,
+                 main: main, branches: branches,
+                 rise: 0.10 + Math.random() * 0.22,
+                 life: 0, ttl: 420 + Math.random() * 480, restrike: 0 });
+  }
+
+  // ── THE RAIN THAT INTEGRATES ── no scaling, no mask, no shape that could
+  // ever read as a rectangle. Every column of the waterfall is born
+  // INDIVIDUALLY: edge columns first — camouflaged inside the busy band
+  // walls — then progressively inward, each with its own multi-second fade
+  // and heavy random jitter, so no front line and no origin point ever
+  // exists. Distractor twinkles flash all over the frame while it happens,
+  // stealing the eye from anywhere the rain might be beginning. It is
+  // simply not there, and then — without an event — it is.
+  const WF_GLYPHS = 'アイウエオカキクケコサシスセソ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const WF_LAYERS = [
+    { fs: 6,  speed: 0.18, rgb: '0,110,70',   a: 0.45, head: null,          headA: 0,    glow: 0,  reset: 0.99  },
+    { fs: 10, speed: 0.30, rgb: '0,140,90',   a: 0.55, head: null,          headA: 0,    glow: 0,  reset: 0.985 },
+    { fs: 16, speed: 0.55, rgb: '0,229,160',  a: 0.85, head: null,          headA: 0,    glow: 0,  reset: 0.975 },
+    { fs: 26, speed: 0.95, rgb: '61,255,184', a: 1.0,  head: '220,255,240', headA: 0.95, glow: 10, reset: 0.965 }
+  ];
+  const wfCanvas = document.createElement('canvas');
+  wfCanvas.width = W; wfCanvas.height = H;
+  const wfx = wfCanvas.getContext('2d');
+  const WF_START = EVOLVE_END + M * 0.06;   // rain only after the evolution completes
+  const WF_SPREAD = M * 0.38;               // edges → center over this window
+  const wfState = WF_LAYERS.map(L => {
+    const cols = Math.floor(W / L.fs);
+    const drops = [], vel = [], born = [];
+    for (let i = 0; i < cols; i++) {
+      drops.push(Math.random() * (H / L.fs));
+      vel.push(L.speed * (0.55 + Math.random() * 0.9));
+      const colX = (i + 0.5) * L.fs;
+      const centerFrac = 1 - Math.min(1, Math.abs(colX - W / 2) / (W / 2)); // 0 at edges, 1 at center
+      born.push(WF_START + Math.pow(centerFrac, 1.15) * WF_SPREAD + Math.random() * 2200);
+    }
+    return { cols, drops, vel, born };
+  });
+  let wfAcc = 0;
+  // distractor twinkles: soft single glyphs flashing anywhere, so the eye
+  // never localizes where the rain begins
+  const twinkles = [];
+
+  // ── PIXEL BREAK ── as the whited-out screen is passed through, it
+  // shatters into fine motes: each born WHITE, turning GREEN as it drifts
+  // down and fades — the white becoming the world's color.
+  const motes = [];
+  const PB_START = ZOOM2_END + 300, PB_END = EVOLVE_END + 300;
 
   const easeOut = x => 1 - Math.pow(1 - x, 3);
   let revealed = false, fading = false;
@@ -1097,132 +1190,218 @@ function hallwayTransition(onReveal) {
     const now = performance.now();
     const t = now - start, dt = Math.min(50, now - prevNow);
     prevNow = now;
-    const push = 0.11 + 0.62 * Math.pow(Math.min(1, t / DURATION), 2);
-    const spread = easeOut(Math.min(1, t / T_DIGIT));   // pinched digit-mouth → open tunnel
-    const ringScale = 0.14 + 0.86 * spread;
-    const ccx = cx + Math.sin(t * 0.00055) * W * 0.028 * spread;
-    const ccy = cy + Math.cos(t * 0.00042) * H * 0.018 * spread;
+    const smoothF = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+    const evoP = smoothF((t - HANDOFF) / (EVOLVE_END - HANDOFF));          // 0..1 across zoom-into-pixels + evolution
+    const zoomP = smoothF((t - HANDOFF) / (ZOOM2_END - HANDOFF));         // the pixel-zoom sub-phase
+    const stretchP = smoothF((t - ZOOM2_END) / (EVOLVE_END - ZOOM2_END)); // the pixels stretching into bands
+    const bandsIn = smoothF((stretchP - 0.78) / 0.22);                    // real band texture only as the stretch completes
+    const tm = Math.max(0, t - EVOLVE_END);                               // MOTION TIME — zero until evolution is done
+    const motionIn = smoothF(tm / 1100);                                  // then the ride toward the blackness eases in
+    const push = (0.10 + 0.92 * Math.pow(Math.min(1, tm / M), 2.4)) * motionIn;
+    const ringScale = 1;
+    const ccx = cx + Math.sin(tm * 0.00055) * W * 0.028 * motionIn;
+    const ccy = cy + Math.cos(tm * 0.00042) * H * 0.018 * motionIn;
 
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
-    ctx.fillStyle = 'rgba(1,10,5,0.33)'; // firmer wipe — striations stay crisply defined, no smear
+    ctx.fillStyle = 'rgba(2,12,6,0.42)';
     ctx.fillRect(0, 0, W, H);
+    // ── SIDE BACKWASH ── a broad pale glow behind each outer wall, so the
+    // whole side region is lit from behind, not just individual bands.
+    ctx.globalCompositeOperation = 'screen';
+    const bwA = 0.11 * bandsIn;
+    let bwL = ctx.createLinearGradient(0, 0, W * 0.34, 0);
+    bwL.addColorStop(0, 'rgba(215,235,200,' + bwA.toFixed(3) + ')');
+    bwL.addColorStop(0.6, 'rgba(180,220,170,' + (bwA * 0.5).toFixed(3) + ')');
+    bwL.addColorStop(1, 'rgba(150,210,150,0)');
+    ctx.fillStyle = bwL;
+    ctx.fillRect(0, 0, W * 0.34, H);
+    let bwR = ctx.createLinearGradient(W, 0, W * 0.66, 0);
+    bwR.addColorStop(0, 'rgba(215,235,200,' + bwA.toFixed(3) + ')');
+    bwR.addColorStop(0.6, 'rgba(180,220,170,' + (bwA * 0.5).toFixed(3) + ')');
+    bwR.addColorStop(1, 'rgba(150,210,150,0)');
+    ctx.fillStyle = bwR;
+    ctx.fillRect(W * 0.66, 0, W * 0.34, H);
+    ctx.globalCompositeOperation = 'source-over';
 
-    // far slats first so near ones layer over them
-    slats.sort((a, b) => b.z - a.z);
-    for (const st of slats) {
-      st.z -= push * dt * 0.85;
-      if (st.z < Z_NEAR) { st.z += (Z_FAR - Z_NEAR); st.seed = Math.floor(Math.random() * 9999);  } // walls cycle by a fixed span so mirrored pairs stay in lockstep
-      st.crawl += st.crawlV * dt * 0.06;
-      const ra = RA * ringScale / st.z, rb = RB * ringScale / st.z;
-      const x0 = ccx + Math.cos(st.th) * ra;
-      const yC = ccy;
-      if (x0 < -120 || x0 > W + 120) continue;
-      const depth = 1 - (st.z - Z_NEAR) / (Z_FAR - Z_NEAR);
-      const fs = Math.max(4, Math.min(22, 3400 / st.z));
-      const sideness = 1; // every bar is a wall bar now — pure mirrored colonnade
-      const halfH = H * (0.55 + 0.80 * depth) * (0.4 + 0.6 * ringScale); // near bars overrun the frame (full height on screen); deep bars are short defined pods
-      if (halfH < 3 || yC + halfH < -20 || yC - halfH > H + 20) continue;
-      const bright = Math.min(1, 0.36 + 0.58 * depth * depth + 0.14 * sideness);
-      const bandW = (10 + 58 * depth) * (0.7 + 0.45 * sideness);
-      const stepY = Math.max(2.6, fs * 0.5);
-      const off = (st.crawl % stepY);
-      const near = depth > 0.78 && sideness > 0.6;
-      if (st.hot && depth > 0.3) {
-        const bloomR = bandW * 1.5 + 80 * depth;
-        const bg = ctx.createRadialGradient(x0, yC, 0, x0, yC, bloomR);
-        bg.addColorStop(0, 'rgba(235,255,240,' + (0.44 * depth) + ')');
-        bg.addColorStop(0.5, 'rgba(140,255,180,' + (0.26 * depth) + ')');
-        bg.addColorStop(1, 'rgba(120,255,170,0)');
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.fillStyle = bg;
-        ctx.fillRect(x0 - bloomR, yC - bloomR, bloomR * 2, bloomR * 2);
+    // draw inner (fine) first so the thick outer slabs layer over them
+    bands.sort((a, b) => a.x - b.x);
+    if (bandsIn > 0.001) for (const bd of bands) {
+      // OUTWARD flow — the perspective of moving INTO the black: bands are
+      // born as fine threads around the darkness ahead, crawl toward you,
+      // and sweep past as thick slabs at the frame edges. The world flows
+      // outward while the black grows — one coherent sense of motion.
+      bd.x += push * dt * (0.016 + 0.042 * Math.pow(bd.x / X_OUT, 1.3)) * X_OUT * 0.01;
+      if (bd.x > X_OUT * 1.04) { bd.x = X_IN + Math.random() * X_OUT * 0.06; bd.seed = Math.floor(Math.random() * 9999); bd.hot = Math.random() < 0.44; }
+      bd.crawl += bd.crawlV * dt * 0.06;
+      const prox = Math.min(1, bd.x / X_OUT);        // 1 at the frame edge, 0 at the black
+      const x0 = ccx + bd.side * bd.x * ringScale;
+      if (x0 < -80 || x0 > W + 80) continue;
+      // ── ORGANIC STRIPES ── each ripple is a wavy worm, not a rectangle:
+      // drawn as overlapping segments with varying thickness and a per-stripe
+      // meander. The band's silhouette breathes along its height, the whole
+      // column leans in a slow arc, and toward the black the stripes
+      // dissolve into chains of dots — the film's exact texture.
+      const bandW = 4 + 62 * Math.pow(prox, 1.2);
+      const dashH = 2.6 + 7.5 * prox;                 // chunky ripples outside, fine inside
+      const pitch = dashH * (2.3 + 0.35 * Math.sin(bd.seed)); // coarse, slightly irregular — the gap carries the rhythm
+      const off = (bd.crawl % pitch);
+      const bright = Math.min(1, 0.13 + 0.70 * prox) * bandsIn;
+      // green atmosphere between the bands — the gaps hold haze, not void
+      ctx.fillStyle = 'rgba(60,150,50,' + (0.075 * prox).toFixed(3) + ')';
+      ctx.fillRect(x0 - bandW * 1.9, 0, bandW * 3.8, H);
+      if (bd.hot && prox > 0.30) {
+        // ── BENDING BACKLIGHT ── a cream-white column glowing BEHIND the
+        // stripes, following the band's lean, so the gaps inside this band
+        // glow pale instead of black — the lit-from-behind look.
+        ctx.globalCompositeOperation = 'screen';
+        for (let by = -10; by < H + 10; by += 18) {
+          const bl = bd.wob * bandW * 0.30 * Math.sin(by * 0.0012 + bd.seed * 0.9);
+          const bw2 = bandW * (0.80 + 0.20 * Math.sin(by * 0.0047 + bd.seed * 1.7 + bd.crawl * 0.02));
+          ctx.fillStyle = 'rgba(255,244,228,' + (0.23 * prox).toFixed(3) + ')';
+          ctx.fillRect(x0 + bl - bw2 * 0.62, by, bw2 * 1.24, 19);
+          ctx.fillStyle = 'rgba(255,250,240,' + (0.18 * prox).toFixed(3) + ')';
+          ctx.fillRect(x0 + bl - bw2 * 0.34, by, bw2 * 0.68, 19);
+        }
         ctx.globalCompositeOperation = 'source-over';
       }
-      const yTop = Math.max(-15, yC - halfH), yBot = Math.min(H + 15, yC + halfH);
-      for (let y = yTop + off; y < yBot; y += stepY) {
-        const vv = (y - yC) / halfH;               // -1 … 1 along the slat
-        const idx = st.seed + Math.floor((y - off) / stepY);
-        const wig = st.wob * bandW * 0.22 * Math.sin(idx * 1.7 + st.crawl * 0.05) * (1 - 0.4 * vv * vv);
-        const dw = bandW * (0.62 + ((idx * 7919) % 100) / 260);
-        const tipThin = 0.55 + 0.45 * Math.sqrt(Math.max(0, 1 - vv * vv)); // every bar tapers into a clean pod — near bars taper offscreen
-        const glint = (idx % 9) === 0; // denser bright striations — the crisp ripple rhythm of the frame
-        if (near) {
-          ctx.fillStyle = 'rgba(20,120,80,' + (bright * 0.45) + ')';
-          ctx.fillRect(x0 + wig + (Math.cos(st.th) < 0 ? -2 : 2) - (dw * tipThin) / 2, y + 1, dw * tipThin, Math.max(2.0, fs * 0.28));
-          if (glint) { ctx.shadowColor = 'rgba(140,255,200,0.9)'; ctx.shadowBlur = 9; }
+      const dotty = prox < 0.34;                       // near the black, stripes become dot chains
+      const SEGS = dotty ? 4 : 6;
+      for (let y = -14 + off; y < H + 14; y += pitch) {
+        const idx = bd.seed + Math.floor((y - off) / pitch);
+        // the column leans: a slow arc along its height
+        const lean = bd.wob * bandW * 0.30 * Math.sin(y * 0.0012 + bd.seed * 0.9);
+        // the silhouette breathes: band width varies slowly with height
+        const breathe = 0.80 + 0.20 * Math.sin(y * 0.0047 + bd.seed * 1.7 + bd.crawl * 0.02);
+        const sw = bandW * breathe * (0.9 + ((idx * 7919) % 100) / 500);
+        const glint = (idx % 13) === 0;
+        let col;
+        if (bd.hot) col = glint ? 'rgba(240,250,215,' + Math.min(1, bright + 0.22) + ')'
+                                : 'rgba(190,238,150,' + Math.min(1, bright + 0.08) + ')';
+        else col = glint ? 'rgba(190,245,140,' + Math.min(1, bright + 0.10) + ')'
+                         : 'rgba(110,230,60,' + bright + ')';
+        ctx.fillStyle = col;
+        // one stripe = several overlapping segments meandering across the band
+        const segW = sw / SEGS;
+        for (let k = 0; k < SEGS; k++) {
+          if (dotty && (k + idx) % 2 === 0) continue; // dot chains near the black
+          const sx = x0 + lean - sw / 2 + k * segW;
+          const sy = y + dashH * 0.18 * Math.sin(idx * 1.3 + k * 1.15 + bd.seed);
+          const sh = dashH * (0.62 + 0.38 * (((idx * 31 + k * 17) % 10) / 10));
+          ctx.fillRect(sx, sy, segW * 1.08, sh);
         }
-        if (st.hot) {
-          ctx.fillStyle = glint ? 'rgba(250,255,250,' + Math.min(1, bright + 0.35) + ')'
-                                : 'rgba(190,255,205,' + Math.min(1, bright + 0.18) + ')';
-        } else {
-          ctx.fillStyle = glint ? 'rgba(205,255,225,' + Math.min(1, bright + 0.20) + ')'
-                                : 'rgba(35,235,115,' + bright + ')';
+        // ── LATERAL DEFINITION ── a fine curvy BLACK line carved through the
+        // band between this stripe and the next: each one uniquely waved,
+        // drawn over the backlight so the band reads as combed, defined
+        // ripples instead of washed glow.
+        if (!dotty && prox > 0.22) {
+          const ly = y + dashH * 1.15;
+          ctx.strokeStyle = 'rgba(3,12,5,' + (0.34 + 0.44 * prox).toFixed(3) + ')';
+          ctx.lineWidth = 0.9 + 1.3 * prox;
+          ctx.beginPath();
+          const LPTS = 6;
+          for (let k2 = 0; k2 <= LPTS; k2++) {
+            const lx = x0 + lean - sw * 0.55 + (sw * 1.1) * (k2 / LPTS);
+            const lyy = ly + dashH * 0.38 * Math.sin(k2 * 1.45 + idx * 2.3 + bd.seed * 1.3)
+                          + dashH * 0.16 * Math.sin(k2 * 3.1 + idx * 0.7);
+            if (k2 === 0) ctx.moveTo(lx, lyy); else ctx.lineTo(lx, lyy);
+          }
+          ctx.stroke();
         }
-        ctx.fillRect(x0 + wig - (dw * tipThin) / 2, y, dw * tipThin, Math.max(2.2, fs * 0.30));
-        if (near && glint) ctx.shadowBlur = 0;
       }
     }
 
-    // residual warmth on the rings, draining away
-    const residualA = Math.max(0, 1 - t / T_COLOR) * spread;
+    // residual warmth, riding the outer walls
+    const residualA = Math.max(0, 1 - tm / (T_COLOR - EVOLVE_END)) * bandsIn;
     if (residualA > 0.01) {
       ctx.globalCompositeOperation = 'screen';
       for (const b of blobs) {
-        b.z -= push * dt * 0.5;
-        if (b.z < 200) b.z = 1600;
-        b.th += b.drift * dt;
-        const bx = ccx + Math.cos(b.th) * (RA * ringScale / b.z) * 0.92;
-        const by = ccy + Math.sin(b.th) * (RB * ringScale / b.z) * 0.92;
-        const rr = b.r * (900 / b.z);
-        const gr = ctx.createRadialGradient(bx, by, 0, bx, by, rr);
-        gr.addColorStop(0, b.c.replace('ALPHA', (0.27 * residualA).toFixed(3)));
+        b.x += push * dt * 0.10;
+        if (b.x > X_OUT * 0.98) b.x = X_OUT * 0.35;
+        const bx = ccx + b.side * b.x * ringScale;
+        const rr = b.r;
+        const gr = ctx.createRadialGradient(bx, b.y, 0, bx, b.y, rr);
+        gr.addColorStop(0, b.c.replace('ALPHA', (0.26 * residualA * (b.x / X_OUT)).toFixed(3)));
         gr.addColorStop(1, b.c.replace('ALPHA', '0'));
         ctx.fillStyle = gr;
-        ctx.fillRect(bx - rr, by - rr, rr * 2, rr * 2);
+        ctx.fillRect(bx - rr, b.y - rr, rr * 2, rr * 2);
       }
     }
 
-    // electricity climbing the side walls
-    if (spread > 0.5 && Math.random() < 0.11 && bolts.length < 5) spawnBolt();
+    // electricity on the solid outer walls
+    if (motionIn > 0.4 && Math.random() < 0.09 && bolts.length < 4) spawnBolt();
     ctx.globalCompositeOperation = 'lighter';
     ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     for (let i = bolts.length - 1; i >= 0; i--) {
       const b = bolts[i];
       b.life += dt;
-      b.z -= push * dt * 0.85;
+      b.x += push * dt * 0.06;
       b.yOff -= b.rise * dt;
-      if (b.life > b.ttl || b.z < Z_NEAR + 30) { bolts.splice(i, 1); continue; }
-      const bx = ccx + Math.cos(b.th) * (RA * ringScale / b.z);
+      if (b.life > b.ttl || b.x > X_OUT * 1.02) { bolts.splice(i, 1); continue; }
+      const bx = ccx + b.side * b.x * ringScale;
       if (bx < -30 || bx > W + 30) continue;
-      const depth = 1 - (b.z - Z_NEAR) / (Z_FAR - Z_NEAR);
-      const a = Math.sin(Math.PI * (b.life / b.ttl)) * (0.35 + 0.65 * depth);
-      const jit = (2.5 + 6 * depth), seg = 9 + 5 * depth;
-      const len = b.len * (0.5 + 0.8 * depth);
+      const prox = b.x / X_OUT;
+      const lp = b.life / b.ttl;
+      let a = (lp < 0.06 ? lp / 0.06 : Math.exp(-3.1 * (lp - 0.06))) * (0.35 + 0.65 * prox);
+      if (b.restrike > 0) { b.restrike -= dt; a = Math.min(1, a + 0.5); }
+      else if (Math.random() < 0.035) b.restrike = 40 + Math.random() * 60;
+      a *= 0.62 + 0.38 * Math.random();
+      if (a < 0.015) continue;
       const yb = ccy + b.yOff;
-      const pts = [];
-      for (let y = yb, k = 0; y > yb - len; y -= seg, k++) {
-        pts.push([bx + (Math.random() - 0.5) * jit * 2, y]);
+      const scaleD = 0.55 + 0.65 * prox;
+      function strokePath(pts, wid, col) {
+        ctx.strokeStyle = col;
+        ctx.lineWidth = wid;
+        ctx.beginPath();
+        ctx.moveTo(bx + pts[0][0] * scaleD, yb + pts[0][1] * scaleD);
+        for (let k = 1; k < pts.length; k++) ctx.lineTo(bx + pts[k][0] * scaleD, yb + pts[k][1] * scaleD);
+        ctx.stroke();
       }
-      if (pts.length < 2) continue;
-      ctx.strokeStyle = 'rgba(70,170,255,' + (a * 0.35).toFixed(3) + ')';
-      ctx.lineWidth = 2.6 + 3.4 * depth;
-      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-      for (const p2 of pts) ctx.lineTo(p2[0], p2[1]);
-      ctx.stroke();
-      ctx.strokeStyle = 'rgba(230,245,255,' + a.toFixed(3) + ')';
-      ctx.lineWidth = 0.9 + 1.1 * depth;
-      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-      for (const p2 of pts) ctx.lineTo(p2[0], p2[1]);
-      ctx.stroke();
+      strokePath(b.main, 7.5 * scaleD, 'rgba(60,140,255,' + (a * 0.16).toFixed(3) + ')');
+      strokePath(b.main, 3.0 * scaleD, 'rgba(120,190,255,' + (a * 0.42).toFixed(3) + ')');
+      strokePath(b.main, 1.1 * scaleD, 'rgba(245,250,255,' + a.toFixed(3) + ')');
+      for (const br of b.branches) {
+        strokePath(br, 1.8 * scaleD, 'rgba(120,190,255,' + (a * 0.26).toFixed(3) + ')');
+        strokePath(br, 0.8 * scaleD, 'rgba(235,245,255,' + (a * 0.55).toFixed(3) + ')');
+      }
     }
 
-    // the flood — overexposure of the dive, purple fringe, receding
+    // the flood — the dive's overexposure, receding
     ctx.globalCompositeOperation = 'source-over';
-    const floodT = t / T_DIGIT;
+    // fine pixels breaking from white into green
+    if (t > PB_START && t < PB_END && motes.length < 520 && Math.random() < 0.95) {
+      for (let k = 0; k < 14; k++) {
+        motes.push({ x: Math.random() * W, y: Math.random() * H,
+                     sz: 1.5 + Math.random() * 3.2,
+                     vy: 0.02 + Math.random() * 0.06,
+                     life: 0, ttl: 700 + Math.random() * 900 });
+      }
+    }
+    if (motes.length) {
+      ctx.globalCompositeOperation = 'screen';
+      for (let i = motes.length - 1; i >= 0; i--) {
+        const m2 = motes[i];
+        m2.life += dt;
+        m2.y += m2.vy * dt;
+        if (m2.life > m2.ttl) { motes.splice(i, 1); continue; }
+        const lp = m2.life / m2.ttl;
+        const a = Math.sin(Math.PI * lp) * 0.65;
+        // white → green, continuously
+        const r2 = Math.round(240 - 180 * lp);
+        const b2 = Math.round(240 - 110 * lp);
+        ctx.fillStyle = 'rgba(' + r2 + ',245,' + b2 + ',' + a.toFixed(3) + ')';
+        ctx.fillRect(m2.x, m2.y, m2.sz, m2.sz);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // punch-through glow only — timed to the melt exposing the hallway,
+    // mild, never a white flash
+    const floodT = (t - HANDOFF + 120) / 700;
     let flood = 0;
-    if (floodT < 1.7) {
-      flood = floodT < 0.55 ? Math.pow(floodT / 0.55, 2) : Math.max(0, 1 - (floodT - 0.55) / 1.15);
+    if (floodT > 0 && floodT < 1.9) {
+      flood = (floodT < 0.5 ? Math.pow(floodT / 0.5, 2) : Math.max(0, 1 - (floodT - 0.5) / 1.4)) * 0.42;
     }
     if (flood > 0.01) {
       ctx.globalCompositeOperation = 'lighter';
@@ -1236,19 +1415,90 @@ function hallwayTransition(onReveal) {
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    // the end of the hall — formless darkness the rings converge on
-    const journey = Math.min(1, t / DURATION);
-    const approach = 0.50 + 0.66 * journey * journey;
+    // ── THE RAIN, INTEGRATING ── full-screen simulation; every column
+    // applies its own birth fade, so appearance is column-by-column from
+    // the edges inward with no boundary of any kind. Layered beneath the
+    // black, whose core thins as coverage grows.
+    let wfP = 0;
+    if (t > WF_START - 1400) {
+      wfP = Math.max(0, Math.min(1, (t - WF_START) / (WF_SPREAD + 2400)));
+      wfAcc += dt;
+      while (wfAcc >= 60) {                     // the attention engine's exact 60ms tick
+        wfAcc -= 60;
+        wfx.fillStyle = 'rgba(0,0,0,0.055)';    // long luminous burn streaks trailing every glyph
+        wfx.fillRect(0, 0, W, H);
+        WF_LAYERS.forEach((L, li) => {
+          const S = wfState[li];
+          wfx.font = L.fs + 'px monospace';
+          for (let i = 0; i < S.cols; i++) {
+            const colA = Math.max(0, Math.min(1, (t - S.born[i]) / 2800));      // each column's private, slow birth
+            if (colA <= 0) continue;
+            const gx = i * L.fs; // straight down — no lateral drift
+            const gy = S.drops[i] * L.fs;
+            const g = WF_GLYPHS[Math.floor(Math.random() * WF_GLYPHS.length)];
+            if (L.head) {
+              wfx.fillStyle = 'rgba(' + L.rgb + ',' + (L.a * colA).toFixed(3) + ')';
+              wfx.fillText(WF_GLYPHS[Math.floor(Math.random() * WF_GLYPHS.length)], gx, gy - L.fs);
+              wfx.shadowColor = '#66ffcc';
+              wfx.shadowBlur = L.glow * colA;
+              wfx.fillStyle = 'rgba(' + L.head + ',' + (L.headA * colA).toFixed(3) + ')';
+              wfx.fillText(g, gx, gy);
+              wfx.shadowBlur = 0;
+            } else {
+              wfx.fillStyle = 'rgba(' + L.rgb + ',' + (L.a * colA).toFixed(3) + ')';
+              wfx.fillText(g, gx, gy);
+            }
+            if (gy > H && Math.random() > L.reset) S.drops[i] = 0;
+            S.drops[i] += S.vel[i];
+          }
+        });
+      }
+      const wfA = Math.min(1, Math.max(0, (t - WF_START) / 2600)) * 0.62;
+      if (wfA > 0.005) {
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = wfA;
+        ctx.drawImage(wfCanvas, 0, 0);
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+      }
+      // ── DISTRACTORS ── soft glyph twinkles scattered over the whole
+      // frame: brief, gentle, everywhere — the eye chases these while the
+      // rain quietly integrates behind them.
+      if (Math.random() < 0.14 && twinkles.length < 8) {
+        twinkles.push({ x: Math.random() * W, y: Math.random() * H,
+                        fs: 8 + Math.random() * 20,
+                        g: WF_GLYPHS[Math.floor(Math.random() * WF_GLYPHS.length)],
+                        life: 0, ttl: 320 + Math.random() * 480 });
+      }
+      ctx.globalCompositeOperation = 'screen';
+      for (let i = twinkles.length - 1; i >= 0; i--) {
+        const tw = twinkles[i];
+        tw.life += dt;
+        if (tw.life > tw.ttl) { twinkles.splice(i, 1); continue; }
+        const ta = Math.sin(Math.PI * tw.life / tw.ttl) * 0.30;
+        ctx.font = tw.fs + 'px monospace';
+        ctx.fillStyle = 'rgba(190,255,220,' + ta.toFixed(3) + ')';
+        ctx.fillText(tw.g, tw.x, tw.y);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // the black — small, growing on you, consuming the fine inner threads
+    // first and the solid outer slabs only at the very end
+    const journey = Math.min(1, tm / M);
+    const ovalIn = smoothF((t - (EVOLVE_END - 750)) / 600); // the blackness inherits from the digit's counter as the streaks melt
+    const approach = 0.28 + 0.95 * Math.pow(journey, 1.9); // frozen until motion time, then it comes to meet you
     const openP = Math.max(0, (t - T_COLOR) / (DURATION - T_COLOR));
-    const rx = W * 0.19 * approach * (1 + 6.5 * openP * openP);
-    const ry = H * 0.34 * approach * (1 + 5.2 * openP * openP);
+    // (journey and openP are both zero throughout the evolution — no movement toward the blackness until it completes)
+    const rx = W * 0.22 * approach * (1 + 2.3 * openP * openP);
+    const ry = H * 0.38 * approach * (1 + 2.0 * openP * openP);
     ctx.save();
     ctx.translate(ccx, ccy);
     ctx.scale(rx / ry, 1);
-    const oval = ctx.createRadialGradient(0, 0, 0, 0, 0, ry * 1.9);
-    oval.addColorStop(0, 'rgba(0,0,0,' + Math.min(0.97, 0.62 + 0.34 * (0.4 * journey + 0.6 * openP) + 0.30 * flood).toFixed(3) + ')');
-    oval.addColorStop(0.35, 'rgba(0,0,0,' + (0.40 + 0.30 * openP) + ')');
-    oval.addColorStop(0.7, 'rgba(0,0,0,' + (0.16 + 0.14 * openP) + ')');
+    const oval = ctx.createRadialGradient(0, 0, 0, 0, 0, ry * 1.25);
+    oval.addColorStop(0, 'rgba(0,0,0,' + ((0.99 - 0.52 * wfP) * ovalIn).toFixed(3) + ')'); // the core thins as the rain grows — darkness revealed as code
+    oval.addColorStop(0.55, 'rgba(0,0,0,' + (Math.max(0.2, Math.min(0.97, 0.88 + 0.09 * openP + 0.10 * flood) - 0.40 * wfP) * ovalIn).toFixed(3) + ')');
+    oval.addColorStop(0.82, 'rgba(0,0,0,' + ((0.34 + 0.22 * openP) * ovalIn).toFixed(3) + ')');
     oval.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = oval;
     ctx.fillRect(-ry * 2.0, -ry * 2.0, ry * 4.0, ry * 4.0);
@@ -1257,10 +1507,10 @@ function hallwayTransition(onReveal) {
     if (!revealed && t >= T_REVEAL) { revealed = true; if (onReveal) onReveal(); }
     if (!fading && t >= T_FADE) {
       fading = true;
-      canvas.style.transition = 'opacity 1200ms ease';
+      canvas.style.transition = 'opacity 650ms ease';
       canvas.style.opacity = '0';
     }
-    if (t < DURATION + 1250) requestAnimationFrame(frame);
+    if (t < DURATION + 800) requestAnimationFrame(frame);
     else {
       canvas.style.display = 'none';
       canvas.style.transition = '';
@@ -1275,41 +1525,142 @@ function hallwayTransition(onReveal) {
 // PIN → ATTENTION orchestration: the screen bends into the walls (with its
 // mirror as the right-hand reflection), the corridor takes over, colors
 // drain to green, and the dark center opens onto the briefing.
-function meltPartPin(ov) {
-  // ── MELT & PART ── The screen swells into white heat, then pulls open
-  // from the CENTER — both halves are identical clones inserted in the same
-  // DOM operation with their animations pre-assigned, so the left and right
-  // pull is perfectly mirrored, frame for frame.
-  const left = ov.cloneNode(true);
-  const right = ov.cloneNode(true);
-  left.removeAttribute('id'); right.removeAttribute('id');
-  for (const el of [left, right]) {
-    el.style.zIndex = '10000';
-    el.style.pointerEvents = 'none';
-    el.style.display = '';
+function pinZeroDive(ov) {
+  // ── THE REAL ZERO EVOLVES ── no second zero, no projection of what comes
+  // next. The camera arrives fast, then SLOWS RIGHT DOWN and dwells on the
+  // actual digit — which begins to bend: continuous perspective flex with a
+  // slow organic wobble, then a vertical stretch that grows until the real
+  // pixels of the real screen are drawn out into unrecognizable streaks,
+  // and only then does it finely melt away. Under stress, tiny electric
+  // purple and blue arcs crackle off it.
+  let ox = 50, oy = 55;
+  try {
+    const zero = Array.from(ov.querySelectorAll('button, div, span'))
+      .find(el => el.children.length === 0 && el.textContent.trim() === '0');
+    if (zero) {
+      const r = zero.getBoundingClientRect();
+      if (r.width > 0) {
+        ox = ((r.left + r.width / 2) / window.innerWidth) * 100;
+        oy = ((r.top + r.height / 2) / window.innerHeight) * 100;
+      }
+    }
+  } catch (e) {}
+  ov.style.transformOrigin = ox + '% ' + oy + '%';
+  ov.style.zIndex = '10000';
+  ov.style.pointerEvents = 'none';
+  ov.style.willChange = 'transform, filter, opacity';
+  // stress layer: tiny purple/blue arcs over the bending digit
+  const sc = document.createElement('canvas');
+  sc.style.cssText = 'position:fixed;inset:0;z-index:10002;pointer-events:none';
+  const sw2 = window.innerWidth, sh2 = window.innerHeight;
+  sc.width = sw2; sc.height = sh2;
+  document.body.appendChild(sc);
+  const sctx = sc.getContext('2d');
+  const arcs = [];
+  const originX = sw2 * ox / 100, originY = sh2 * oy / 100;
+
+  const T = 4400, T_FAST = 950;
+  const start = performance.now();
+  const smooth = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+  function step() {
+    const now = performance.now();
+    const tt = now - start;
+    const p = Math.min(1, tt / T);
+    // fast approach, then the dwell: zoom nearly stops
+    const fastP = Math.min(1, tt / T_FAST);
+    const q = smooth(Math.max(0, (tt - T_FAST) / (T - T_FAST)));   // the slow evolution 0..1
+    const zoom = (1 + 15 * Math.pow(fastP, 2.1)) * (1 + 0.4 * q);
+    // the bend: continuous flex with a slow organic wobble
+    const wob = Math.sin(tt * 0.0035) * 1.6 * q;
+    const rx2 = 9 * Math.pow(q, 1.3) + wob;
+    const ry2 = -13 * Math.pow(q, 1.2) + wob * 0.7;
+    // the stretch: grows out of the bend, drawing the digit into streaks
+    const st = smooth(Math.max(0, (q - 0.40) / 0.60));
+    const sy = 1 + 72 * Math.pow(st, 2.3);                       // lengthwise…
+    const lat = smooth(Math.max(0, (q - 0.32) / 0.68));
+    const sxm = 1 + 9.5 * Math.pow(lat, 2);                      // …and laterally — the digit visibly expands
+    // color under stress: mild whitening only — it stays the same screen
+    const wht = 1 + 1.1 * q;
+    const hue = (10 + 14 * Math.sin(tt * 0.006)) * st;           // tiny violet/blue shimmer — the material under stress
+    const op = q < 0.86 ? 1 : 1 - smooth((q - 0.86) / 0.14);  // the fine melt, last of all
+    ov.style.transform = 'perspective(820px) rotateX(' + rx2.toFixed(2) + 'deg) rotateY(' + ry2.toFixed(2) + 'deg) scale(' + (zoom * sxm).toFixed(3) + ', ' + (zoom * sy).toFixed(2) + ')';
+    ov.style.filter = 'brightness(' + wht.toFixed(3) + ') hue-rotate(' + hue.toFixed(1) + 'deg) saturate(' + (1 + 0.35 * st).toFixed(3) + ')';
+    ov.style.opacity = op.toFixed(3);
+
+    // ── STRESS ── tiny purple & blue arcs, sparse and brief
+    sctx.clearRect(0, 0, sw2, sh2);
+    if (q > 0.22 && q < 0.97 && arcs.length < 3 && Math.random() < 0.10) {
+      const ang = Math.random() * Math.PI * 2;
+      const rad = Math.min(sw2, sh2) * (0.16 + Math.random() * 0.20);
+      arcs.push({ x: originX + Math.cos(ang) * rad, y: originY + Math.sin(ang) * rad * (1 + st * 2),
+                  len: 16 + Math.random() * 42, dir: Math.random() * Math.PI * 2,
+                  purple: Math.random() < 0.5, life: 0, ttl: 160 + Math.random() * 220 });
+    }
+    for (let i = arcs.length - 1; i >= 0; i--) {
+      const a2 = arcs[i];
+      a2.life += 16.7;
+      if (a2.life > a2.ttl) { arcs.splice(i, 1); continue; }
+      const al = Math.sin(Math.PI * a2.life / a2.ttl) * (0.34 + 0.28 * Math.random());
+      const col = a2.purple ? '190,90,255' : '95,150,255';
+      sctx.lineCap = 'round';
+      let px2 = a2.x, py2 = a2.y;
+      sctx.strokeStyle = 'rgba(' + col + ',' + (al * 0.4).toFixed(3) + ')';
+      sctx.lineWidth = 2.4;
+      sctx.beginPath(); sctx.moveTo(px2, py2);
+      for (let k = 0; k < 5; k++) {
+        px2 += Math.cos(a2.dir) * a2.len / 5 + (Math.random() - 0.5) * 5;
+        py2 += Math.sin(a2.dir) * a2.len / 5 + (Math.random() - 0.5) * 5;
+        sctx.lineTo(px2, py2);
+      }
+      sctx.stroke();
+      sctx.strokeStyle = 'rgba(235,230,255,' + al.toFixed(3) + ')';
+      sctx.lineWidth = 0.9;
+      sctx.stroke();
+    }
+
+    // ── PIXELATION UNDER STRESS ── as the stretch takes hold, the digit's
+    // surface grains into shimmering flecks across its expanding footprint:
+    // green and white mostly, stress purple and blue in small doses, and
+    // TINY amounts of pure black — pinprick voids opening in the material
+    // as it is drawn out laterally and lengthwise.
+    if (st > 0.22) {
+      const rxp = sw2 * (0.14 + 0.62 * lat);
+      const ryp = sh2 * (0.18 + 0.70 * st);
+      const N = Math.floor(30 + 260 * st);
+      for (let k = 0; k < N; k++) {
+        const ang2 = Math.random() * Math.PI * 2;
+        const rad2 = Math.pow(Math.random(), 0.72);
+        const fx = originX + Math.cos(ang2) * rxp * rad2;
+        const fy = originY + Math.sin(ang2) * ryp * rad2;
+        if (fx < 0 || fx > sw2 || fy < 0 || fy > sh2) continue;
+        const roll = Math.random();
+        const fa = (0.22 + 0.45 * Math.random()) * st;
+        let fill;
+        if (roll < 0.055) fill = 'rgba(0,0,0,' + (0.45 + 0.4 * Math.random()).toFixed(3) + ')';        // tiny black voids
+        else if (roll < 0.125) fill = 'rgba(190,90,255,' + (fa * 0.8).toFixed(3) + ')';                 // stress purple
+        else if (roll < 0.20) fill = 'rgba(95,150,255,' + (fa * 0.8).toFixed(3) + ')';                  // stress blue
+        else if (roll < 0.52) fill = 'rgba(215,255,225,' + fa.toFixed(3) + ')';
+        else fill = 'rgba(120,235,85,' + fa.toFixed(3) + ')';
+        sctx.fillStyle = fill;
+        const fs2 = 1.4 + Math.random() * 2.4;
+        sctx.fillRect(fx, fy, fs2, fs2);
+      }
+    }
+
+    if (p < 1) requestAnimationFrame(step);
+    else {
+      ov.style.display = 'none';
+      ov.style.transform = ''; ov.style.filter = ''; ov.style.opacity = '';
+      ov.style.zIndex = ''; ov.style.transformOrigin = ''; ov.style.willChange = '';
+      sc.remove();
+    }
   }
-  left.className = 'melt-part-left';
-  right.className = 'melt-part-right';
-  // Re-apply the overlay's base look the id selector used to provide.
-  for (const el of [left, right]) {
-    el.style.position = 'fixed'; el.style.inset = '0'; el.style.background = '#060608';
-    el.style.display = 'flex'; el.style.flexDirection = 'column';
-    el.style.alignItems = 'center'; el.style.justifyContent = 'center';
-    el.style.fontFamily = "'Inter',sans-serif";
-  }
-  const frag = document.createDocumentFragment();
-  frag.appendChild(left); frag.appendChild(right);
-  const veil = document.createElement('div');
-  veil.id = 'melt-veil';
-  frag.appendChild(veil);
-  ov.style.display = 'none';        // the live overlay steps out as its twins take over
-  document.body.appendChild(frag);  // one insertion → one animation start for both halves
-  setTimeout(() => { left.remove(); right.remove(); veil.remove(); }, 2800);
+  requestAnimationFrame(step);
 }
 
 function pinHallwayTransition(ov) {
-  hallwayTransition(null);   // the corridor is already moving behind the heat…
-  meltPartPin(ov);           // …as the screen melts white-hot and pulls open
+  hallwayTransition(null);   // the hallway builds silently beneath…
+  pinZeroDive(ov);           // …while the screen bends, zooms into the 0, stretches and melts
 }
 
 function matrixTunnelTransition(onReveal) {
@@ -2574,7 +2925,7 @@ const GFORM_ENTRIES = {
 function submitToGoogleForm(data) {
   if (GFORM_ACTION.indexOf('REPLACE') !== -1) return; // not wired yet — localStorage + JSON import still work
   // AUTHOR EXCLUSION: quiz author's attempts are never logged to the results sheet
-  if (String(data.spin || '') === '104083046615' || String(data.name || '').trim().toLowerCase() === 'josh hicks') return;
+  if (String(data.spin || '') === '104083046615' || String(data.name || '').trim().replace(/\s+/g, ' ').toLowerCase() === 'josh hicks') return;
   try {
     const cs = data.categoryScores || {};
     const flat = {
@@ -2610,7 +2961,7 @@ function submitToGoogleForm(data) {
 function submitInProgressPing(u) {
   if (GFORM_ACTION.indexOf('REPLACE') !== -1) return;
   // AUTHOR EXCLUSION: mirror of submitToGoogleForm — author never appears on the board
-  if (String(u.spin || '') === '104083046615' || String(u.name || '').trim().toLowerCase() === 'josh hicks') return;
+  if (String(u.spin || '') === '104083046615' || String(u.name || '').trim().replace(/\s+/g, ' ').toLowerCase() === 'josh hicks') return;
   try {
     const flat = {
       name: u.name, dealerName: u.dealer || '', region: u.region || '', state: u.state || '',
