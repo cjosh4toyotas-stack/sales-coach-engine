@@ -254,7 +254,7 @@ select.form-input { cursor: pointer; }
      animation is required for this button to exist on screen. */
   position: fixed;
   left: 0; right: 0;
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   margin: 0 auto;
   width: min(560px, calc(100% - 28px));
   z-index: 6;
@@ -402,6 +402,7 @@ select.form-input { cursor: pointer; }
 </div>
 
 <!-- SECURITY OVERLAY -->
+<div style="position:fixed;left:8px;bottom:5px;font:9px monospace;color:rgba(127,212,255,0.55);z-index:9600;pointer-events:none">BUILD 2026-09-06 · PB-UNIVERSAL</div>
 <div id="sec-overlay">
   <div id="lock-screen">
     <div class="lock-icon">🔒</div>
@@ -1055,6 +1056,9 @@ function hallwayTransition(onReveal) {
 
   const cx = W / 2, cy = H / 2;
   const DURATION = 11400;
+  // wall-clock failsafe: if rAF is throttled or stalls, the canvas still
+  // gets out of the way — the ATTENTION screen can never stay covered
+  setTimeout(() => { canvas.style.display = 'none'; }, DURATION + 2400);
   // ── STRICT PHASES ── each completes before the next begins:
   //   0–950ms   the DOM zoom onto the 0 (canvas dark, nothing projected)
   //   950–2050  ZOOM INTO THE PIXELS: the 0 as a coarse pixel ring, camera
@@ -1637,6 +1641,7 @@ function matrixTunnelTransition(onReveal) {
     stopMatrixRain();
   };
   const canvas = document.getElementById('matrix-tunnel-canvas');
+  setTimeout(() => { canvas.style.display = 'none'; }, 8000); // wall-clock failsafe
   const ctx = canvas.getContext('2d');
 
   const W = window.innerWidth, H = window.innerHeight;
