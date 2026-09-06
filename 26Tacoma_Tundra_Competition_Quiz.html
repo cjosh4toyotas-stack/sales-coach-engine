@@ -257,7 +257,7 @@ select.form-input { cursor: pointer; }
   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   margin: 0 auto;
   width: min(560px, calc(100% - 28px));
-  z-index: 6;
+  z-index: 9010; /* above the overlay (9000) and transition canvases (9001) — verified by test */
   opacity: 1 !important;
   padding: 15px 28px;
   background: rgba(4, 22, 38, 0.96);
@@ -437,7 +437,7 @@ select.form-input { cursor: pointer; }
     <div class="anon-glitch-title" data-text="ATTENTION">ATTENTION</div>
     <div class="anon-topic-line">// SUBJECT: 2026 TUNDRA &amp; TACOMA VS. THE COMPETITION &mdash; SILVERADO / RAM / F-150 / COLORADO / FRONTIER / RANGER / i-FORCE MAX</div>
     <div class="anon-body" id="anon-typed-text"></div><span class="anon-cursor" id="anon-cursor">█</span>
-    <div><button class="anon-proceed-btn" id="anon-proceed-btn" onclick="dismissAnonWarning()">PROCEED WHEN READY →</button></div>
+    <div><button class="anon-proceed-btn" id="anon-proceed-btn" onclick="dismissAnonWarning()" style="display:none">PROCEED WHEN READY →</button></div>
   </div>
 </div>
 
@@ -872,6 +872,16 @@ function typeAnonWarning() {
   const el = document.getElementById('anon-typed-text');
   const cursor = document.getElementById('anon-cursor');
   const btn = document.getElementById('anon-proceed-btn');
+  // ── PORTAL ── re-home the button as a DIRECT child of <body>: on iOS, an
+  // ancestor with a transform or filter re-anchors position:fixed elements
+  // to itself, which is how a "fixed" button can still leave the screen.
+  // At body level, nothing can capture it. Lifecycle is explicit.
+  if (btn.parentElement !== document.body) document.body.appendChild(btn);
+  (function showWhenClear() {
+    const c = document.getElementById('matrix-tunnel-canvas');
+    if (!c || c.style.display === 'none' || c.style.display === '') btn.style.display = 'block';
+    else setTimeout(showWhenClear, 300); // cinematic still playing — wall-clock failsafes guarantee this ends
+  })();
   btn.classList.add('shown'); // PROCEED is available immediately — never blocks the rep
   let i = 0;
   let done = false;
@@ -1055,7 +1065,7 @@ function hallwayTransition(onReveal) {
   canvas.style.display = 'block';
 
   const cx = W / 2, cy = H / 2;
-  const DURATION = 11400;
+  const DURATION = 9600;
   // wall-clock failsafe: if rAF is throttled or stalls, the canvas still
   // gets out of the way — the ATTENTION screen can never stay covered
   setTimeout(() => { canvas.style.display = 'none'; }, DURATION + 2400);
@@ -1067,7 +1077,7 @@ function hallwayTransition(onReveal) {
   //             turning white → green, blue electricity arcing as they do —
   //             they BECOME the hallway bands in place
   //   3900+     only now: motion toward the blackness, rain, everything else
-  const HANDOFF = 1250, PIX_END = 3500, EVOLVE_END = 4400; // hallway timing (EVOLVE_END on) untouched
+  const HANDOFF = 900, PIX_END = 2600, EVOLVE_END = 3200; // compressed — the zero no longer lingers
   const M = DURATION - EVOLVE_END;
   const T_COLOR = EVOLVE_END + M * 0.55;
   const T_REVEAL = EVOLVE_END + M * 0.62;
@@ -1224,9 +1234,9 @@ function hallwayTransition(onReveal) {
     // elongating into the vertical lines that the hallway's walls fade in
     // through. The hallway itself is untouched; this phase only hands off.
     if (t > HANDOFF && bandsIn < 0.999) {
-      const appearP = smoothF((t - HANDOFF) / (2500 - HANDOFF));  // slow organic pixelation
-      const moltP  = smoothF((t - 2450) / 700);                    // molten white-hot
-      const strP   = smoothF((t - 3000) / (EVOLVE_END - 3000));    // the stretch to the sides
+      const appearP = smoothF((t - HANDOFF) / (1750 - HANDOFF));  // organic pixelation, brisk
+      const moltP  = smoothF((t - 1650) / 500);                    // molten white-hot
+      const strP   = smoothF((t - 2100) / (EVOLVE_END - 2100));    // the stretch to the sides
       const fieldA = (1 - bandsIn);
       const CS = Math.max(9, Math.round(Math.min(W, H) / 46));
       const NX = Math.ceil(W / CS) + 2, NY = Math.ceil(H / CS) + 2;
@@ -1604,7 +1614,7 @@ function pinZeroDive(ov) {
   ov.style.zIndex = '10000';
   ov.style.pointerEvents = 'none';
   ov.style.willChange = 'transform, filter, opacity';
-  const T = 1400;
+  const T = 1000;
   const start = performance.now();
   const smooth = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
   function step() {
@@ -1837,6 +1847,7 @@ function matrixTunnelTransition(onReveal) {
 function dismissAnonWarning() {
   const btn = document.getElementById('anon-proceed-btn');
   btn.disabled = true;
+  btn.style.display = 'none'; // the portaled button retires with the screen
   startRegMatrix(); // keep the rain falling behind the registration screen
   matrixTunnelTransition(); // the rain keeps falling until the warp swallows the screen
 }
