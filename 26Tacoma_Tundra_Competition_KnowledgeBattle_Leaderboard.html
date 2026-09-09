@@ -97,6 +97,33 @@ h1 span{color:var(--red)}
 .row.inprog{background:rgba(247,185,85,.05);border-color:rgba(247,185,85,.30)}
 .row.inprog .rank,.row.inprog .score{color:#F7B955;opacity:.75}
 .row.inprog .meter i{background:#F7B955;box-shadow:0 0 10px rgba(247,185,85,.45)}
+/* ── DID NOT START: glowing red, pinned at the bottom ── */
+.row.dns{
+  background:rgba(242,25,46,.10);border-color:#F2192E;
+  box-shadow:0 0 14px rgba(242,25,46,.55),inset 0 0 18px rgba(242,25,46,.10);
+  animation:dnsGlow 1.5s ease-in-out infinite;
+}
+@keyframes dnsGlow{
+  0%,100%{box-shadow:0 0 14px rgba(242,25,46,.55),inset 0 0 18px rgba(242,25,46,.10);border-color:#F2192E}
+  50%{box-shadow:0 0 30px rgba(242,25,46,.95),inset 0 0 26px rgba(242,25,46,.18);border-color:#FF5A68}
+}
+.row.dns .who .name{color:#FF3B4A;text-shadow:0 0 10px rgba(242,25,46,.9),0 0 22px rgba(242,25,46,.6)}
+.row.dns .rank,.row.dns .score{color:#FF3B4A;text-shadow:0 0 10px rgba(242,25,46,.8)}
+.row.dns .score small,.row.dns .meta,.row.dns .who .dealer{color:#FF8A92}
+.row.dns .meter{background:rgba(242,25,46,.25)}
+.badge.dns{color:#FF3B4A;border:1px solid #F2192E;box-shadow:0 0 8px rgba(242,25,46,.7);animation:progPulse 1.2s ease-in-out infinite}
+.dns-callout{
+  margin-top:26px;padding:18px 22px;border-radius:10px;
+  background:rgba(242,25,46,.12);border:1px solid #F2192E;
+  box-shadow:0 0 22px rgba(242,25,46,.55);animation:dnsGlow 1.5s ease-in-out infinite;
+}
+.dns-callout .hd{
+  font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+  font-size:clamp(15px,2.2vw,22px);color:#FF3B4A;text-shadow:0 0 12px rgba(242,25,46,.9),0 0 26px rgba(242,25,46,.6);
+}
+.dns-callout .msg{margin-top:8px;font-size:clamp(14px,1.6vw,18px);line-height:1.5;color:#F2F2F4}
+.dns-callout .msg b{color:#FF3B4A;text-shadow:0 0 8px rgba(242,25,46,.8)}
+@media (prefers-reduced-motion:reduce){.row.dns,.dns-callout,.badge.dns{animation:none}}
 .req{
   display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   background:var(--panel);border:1px solid var(--line);border-left:4px solid #22C55E;
@@ -195,6 +222,36 @@ h1 span{color:var(--red)}
   var SHEET_GID = "1134957244";
   var REFRESH_MS = 15000;
 
+  // ====== MANDATORY ROSTER ======
+  // Every sales consultant expected to certify. Anyone on this list with no score
+  // and no in-progress attempt shows at the bottom of the board in glowing red.
+  // Edit freely — one entry per person, dealer optional.
+  var ROSTER = [
+    {name:"Ethan Aronson",     dealer:"McGrath Toyota of Iowa City"},
+    {name:"Braden Burr",       dealer:"McGrath Toyota of Iowa City"},
+    {name:"Kaden Darby",       dealer:"McGrath Toyota of Iowa City"},
+    {name:"Curtis Dillon",     dealer:"McGrath Toyota of Iowa City"},
+    {name:"Nicole Elledge",    dealer:"McGrath Toyota of Iowa City"},
+    {name:"Noah Fried",        dealer:"McGrath Toyota of Iowa City"},
+    {name:"Mario Garcia",      dealer:"McGrath Toyota of Iowa City"},
+    {name:"Tyler Hemphill",    dealer:"McGrath Toyota of Iowa City"},
+    {name:"Michael Huber",     dealer:"McGrath Toyota of Iowa City"},
+    {name:"Damon Koppes",      dealer:"McGrath Toyota of Iowa City"},
+    {name:"Derrius Loveless",  dealer:"McGrath Toyota of Iowa City"},
+    {name:"Jack Osland",       dealer:"McGrath Toyota of Iowa City"},
+    {name:"Hunter Robertson",  dealer:"McGrath Toyota of Iowa City"},
+    {name:"Hunter Schmitt",    dealer:"McGrath Toyota of Iowa City"},
+    {name:"Shawn Still",       dealer:"McGrath Toyota of Iowa City"},
+    {name:"Theron Stuelke",    dealer:"McGrath Toyota of Iowa City"},
+    {name:"Kyle Triplett",     dealer:"McGrath Toyota of Iowa City"},
+    {name:"Eon Van Rooyen",    dealer:"McGrath Toyota of Iowa City"},
+    {name:"Joe Vogt",          dealer:"McGrath Toyota of Iowa City"},
+    {name:"Michael Wells",     dealer:"McGrath Toyota of Iowa City"},
+    {name:"Aaron Woodward",    dealer:"McGrath Toyota of Iowa City"}
+  ];
+  var DNS_HEADLINE = "Mandatory training \u2014 not yet started";
+  var DNS_MESSAGE  = "This certification is required for every sales consultant. It is <b>30 questions</b>, <b>24 to certify</b>, and your best score counts. Grab your phone, scan the QR code, and get on the board \u2014 your name should not be in red at the next session.";
+
   var sheetRows = [];
   var inProgressRows = [];   // consultants who started but have no score yet — pinned at the bottom
   var lastFetch = null;
@@ -268,7 +325,7 @@ h1 span{color:var(--red)}
           iCat = {tac: idx(["tacomascore","tacoma"]), tun: idx(["tundrascore","tundra"]),
                   pwr: idx(["powertrainscore","powertrain","i-force"]),
                   val: idx(["valuescore","value"]), jud: idx(["judgmentscore","judgment","sales judgment"])};
-      var HIDDEN = ["josh hicks"];   // never displayed on the board
+      var HIDDEN = ["josh hicks"];   // never displayed on the board (also never shown as DNS)
       var ALIASES = { "mike wells": "Michael Wells", "joseph vogt": "Joe Vogt" };   // same person, merged
       var progMarks = [];   // blank-score IN_PROGRESS pings from the quiz's start-of-attempt submit
       var raw = (json.table.rows || []).map(function(r){
@@ -354,7 +411,23 @@ h1 span{color:var(--red)}
       seen[k] = true;
       return true;
     }).sort(function(a,b){ return a.name.localeCompare(b.name); });
-    return ranked.concat(prog);
+    // DID NOT START = on the mandatory roster, no score, no attempt underway.
+    // Only computed after the first successful sheet load so the roster doesn't
+    // flash red while the board is still connecting.
+    var dns = [];
+    if(loadedOnce){
+      var active = {};
+      ranked.concat(prog).forEach(function(r){ active[r.name.trim().toLowerCase()] = true; });
+      var seenDns = {};
+      ROSTER.forEach(function(p){
+        var k = String(p.name).trim().toLowerCase();
+        if(active[k] || seenDns[k]) return;
+        seenDns[k] = true;
+        dns.push({name:p.name, dealer:p.dealer||"", dns:true});
+      });
+      dns.sort(function(a,b){ return a.name.localeCompare(b.name); });
+    }
+    return ranked.concat(prog).concat(dns);
   }
 
   var medals = ["\uD83E\uDD47","\uD83E\uDD48","\uD83E\uDD49"];
@@ -395,6 +468,25 @@ h1 span{color:var(--red)}
           '<div class="meter"><i style="width:' + progPct + '%"></i></div>' +
           '<div class="score">&mdash;<small>/' + MAX + '</small></div>' +
           '<div class="meta">' + progMeta + '<br>No score yet</div>' +
+        '</div>';
+      }
+      // ── DID NOT START tab: glowing red, pinned below everyone else ──
+      if(r.dns){
+        var firstDns = (i === 0) || !list[i-1].dns;
+        var callout = "";
+        if(firstDns){
+          var dnsCount = list.filter(function(x){ return x.dns; }).length;
+          callout = '<div class="dns-callout">' +
+            '<div class="hd">' + esc(DNS_HEADLINE) + ' &nbsp;\u00b7&nbsp; ' + dnsCount + ' of ' + ROSTER.length + '</div>' +
+            '<div class="msg">' + DNS_MESSAGE + '</div>' +
+          '</div>';
+        }
+        return callout + '<div class="row dns">' +
+          '<div class="rank">&mdash;</div>' +
+          '<div class="who"><div class="name">' + esc(r.name) + '<span class="badge dns">Did Not Start</span></div><div class="dealer">' + esc(r.dealer||"") + '</div></div>' +
+          '<div class="meter"><i style="width:0%"></i></div>' +
+          '<div class="score">&mdash;<small>/' + MAX + '</small></div>' +
+          '<div class="meta">Not started<br>Mandatory \u2014 ' + THRESH + '/' + MAX + ' to certify</div>' +
         '</div>';
       }
       var pos = i + 1;
