@@ -55,6 +55,43 @@ body{
 .live .dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.live .dot{animation:none}}
+.session{display:flex;align-items:center;gap:12px;min-width:120px;justify-content:flex-end}
+.countdown{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:26px 20px 22px;text-align:center;
+  border-bottom:1px solid rgba(235,10,30,.35);
+  background:linear-gradient(180deg,rgba(235,10,30,.10),rgba(235,10,30,0));
+  font-family:'Rajdhani',sans-serif;font-weight:700;
+}
+.countdown .lbl{font-size:clamp(12px,1.6vw,16px);letter-spacing:.34em;color:#E8E8EC;text-transform:uppercase}
+.countdown .clk{
+  display:flex;align-items:flex-start;justify-content:center;gap:clamp(6px,1.5vw,18px);
+  font-variant-numeric:tabular-nums;font-size:clamp(44px,9vw,110px);line-height:1;
+  letter-spacing:.04em;color:var(--red);
+  text-shadow:0 0 22px rgba(235,10,30,.55);
+  animation:cdpulse 1.6s ease-in-out infinite;
+}
+.countdown .seg{display:flex;flex-direction:column;align-items:center;min-width:1.35em}
+.countdown .seg .u{font-size:clamp(10px,1.3vw,14px);letter-spacing:.3em;color:#E8E8EC;text-shadow:none;margin-top:8px;text-transform:uppercase}
+.countdown .sep{line-height:1;padding-top:.02em}
+@keyframes cdpulse{0%,100%{opacity:1;text-shadow:0 0 28px rgba(235,10,30,.7)}50%{opacity:.4;text-shadow:0 0 6px rgba(235,10,30,.2)}}
+@media (prefers-reduced-motion:reduce){.countdown .clk{animation:none}}
+.ended{
+  display:none;align-items:center;gap:8px;
+  border:1px solid #6B6B75;border-radius:999px;
+  padding:7px 16px;font-family:'Rajdhani',sans-serif;
+  font-weight:700;letter-spacing:.22em;font-size:12px;color:#C9C9D1;
+  white-space:nowrap;
+}
+body.session-ended .live,body.session-ended .countdown{display:none}
+body.session-ended .ended{display:flex}
+.ended-banner{
+  display:none;margin:0 0 26px;padding:16px 20px;text-align:center;
+  border:1px solid #6B6B75;border-radius:12px;background:rgba(255,255,255,.04);
+  font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.3em;
+  font-size:clamp(16px,2.6vw,24px);color:#E8E8EC;text-transform:uppercase;
+}
+body.session-ended .ended-banner{display:block}
 
 .wrap{max-width:1400px;margin:0 auto;padding:40px 28px 120px}
 .eyebrow{
@@ -163,7 +200,9 @@ h1 span{color:var(--red)}
 @media(max-width:820px){
   .topbar{padding:12px 14px}
   .topbar .title{letter-spacing:.12em;font-size:12px}
-  .live{padding:5px 10px;font-size:10px;letter-spacing:.14em}
+  .live,.ended{padding:5px 10px;font-size:10px;letter-spacing:.14em}
+  .countdown{padding:18px 12px 14px}
+  .session{gap:8px;min-width:0}
   .wrap{padding:22px 14px 100px}
   h1{margin-bottom:22px}
   .req{font-size:14px;padding:12px 14px;gap:8px}
@@ -190,12 +229,26 @@ h1 span{color:var(--red)}
     <span style="font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.24em;font-size:14px;color:#E8E8EC">TOYOTA</span>
   </div>
   <div class="title">2026 Tundra &amp; Tacoma vs. Competition &nbsp;·&nbsp; Knowledge Battle</div>
-  <div class="live"><span class="dot"></span>LIVE SESSION</div>
+  <div class="session">
+    <div class="live"><span class="dot"></span>LIVE SESSION</div>
+    <div class="ended">SEPTEMBER 2026 SESSION ENDED</div>
+  </div>
+</div>
+
+<div class="countdown">
+  <span class="lbl">Session Ends In</span>
+  <div class="clk" id="countdown">
+    <span class="seg"><span id="cd-d">--</span><span class="u">Days</span></span><span class="sep">:</span>
+    <span class="seg"><span id="cd-h">--</span><span class="u">Hours</span></span><span class="sep">:</span>
+    <span class="seg"><span id="cd-m">--</span><span class="u">Minutes</span></span><span class="sep">:</span>
+    <span class="seg"><span id="cd-s">--</span><span class="u">Seconds</span></span>
+  </div>
 </div>
 
 <div class="wrap">
-  <div class="eyebrow">Competitive Knowledge Battle &nbsp;·&nbsp; Live Results</div>
+  <div class="eyebrow">Competitive Knowledge Battle &nbsp;·&nbsp; <span id="eyebrow-state">Live Results</span></div>
   <h1>Session <span>Leaderboard</span></h1>
+  <div class="ended-banner">September 2026 Session Ended</div>
   <div class="req">
     <span class="lbl">Certification Requirement</span>
     <span><strong id="req-num">24</strong> / 30</span>
@@ -537,6 +590,56 @@ h1 span{color:var(--red)}
     fetchSheet();
     setInterval(fetchSheet, REFRESH_MS);
   }
+
+  // ====== SESSION COUNTDOWN ======
+  // Ends 6:00 PM Central (CDT, UTC-5) on Sep 15, 2026 = 23:00 UTC.
+  var SESSION_END = Date.UTC(2026, 8, 15, 23, 0, 0);
+  var clockOffset = 0;          // trusted time - device time (ms)
+  var sessionEnded = false;
+  var cdD = document.getElementById("cd-d"), cdH = document.getElementById("cd-h"),
+      cdM = document.getElementById("cd-m"), cdS = document.getElementById("cd-s");
+
+  function now(){ return Date.now() + clockOffset; }
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  function endSession(){
+    if(sessionEnded) return;
+    sessionEnded = true;
+    document.body.classList.add("session-ended");
+    var eb = document.getElementById("eyebrow-state");
+    if(eb) eb.textContent = "Final Results";
+    document.title = "Tundra & Tacoma vs. Competition \u00b7 Knowledge Battle \u00b7 September 2026 Session Ended";
+  }
+
+  function tick(){
+    var left = SESSION_END - now();
+    if(left <= 0){ endSession(); return; }
+    var s = Math.floor(left / 1000);
+    var d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600),
+        m = Math.floor((s % 3600) / 60), sec = s % 60;
+    cdD.textContent = pad(d); cdH.textContent = pad(h);
+    cdM.textContent = pad(m); cdS.textContent = pad(sec);
+  }
+
+  // Sync the clock against a real-time source (WorldTimeAPI, UTC) so a wrong
+  // device clock can't extend or cut the session. Falls back to device time.
+  function syncClock(){
+    var t0 = Date.now();
+    fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", {cache:"no-store"})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        var t1 = Date.now();
+        var server = new Date(j.utc_datetime).getTime() + (t1 - t0) / 2;
+        clockOffset = server - t1;
+        tick();
+      })
+      .catch(function(){ /* keep device clock */ });
+  }
+
+  tick();
+  syncClock();
+  setInterval(tick, 1000);
+  setInterval(syncClock, 10 * 60 * 1000);
 })();
 </script>
 </body>
