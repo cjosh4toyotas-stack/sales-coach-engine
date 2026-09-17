@@ -74,17 +74,20 @@ h1 span{color:var(--red)}
   content:"";position:absolute;top:7px;right:50%;width:100%;height:2px;background:var(--track);z-index:1;
 }
 .station.reached:not(:first-child)::before{background:var(--red-dim)}
-.rail .station:nth-child(1) .dot{background:var(--red);box-shadow:0 0 0 2px var(--red)}
-.rail .station:nth-child(2) .dot{background:var(--orange);box-shadow:0 0 0 2px var(--orange)}
-.rail .station:nth-child(3) .dot{background:var(--yellow);box-shadow:0 0 0 2px var(--yellow)}
-.rail .station:nth-child(4) .dot{background:var(--green);box-shadow:0 0 0 2px var(--green)}
-.rail .station:nth-child(2)::before{background:linear-gradient(90deg,var(--red),var(--orange))}
-.rail .station:nth-child(3)::before{background:linear-gradient(90deg,var(--orange),var(--yellow))}
-.rail .station:nth-child(4)::before{background:linear-gradient(90deg,var(--yellow),var(--green))}
-.rail .station:nth-child(1) .lvl{color:var(--red)}
-.rail .station:nth-child(2) .lvl{color:var(--orange)}
-.rail .station:nth-child(3) .lvl{color:var(--yellow)}
-.rail .station:nth-child(4) .lvl{color:var(--green)}
+.rail .station:nth-child(1) .dot{background:var(--steel);box-shadow:0 0 0 2px var(--steel)}
+.rail .station:nth-child(2) .dot{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.rail .station:nth-child(3) .dot{background:var(--orange);box-shadow:0 0 0 2px var(--orange)}
+.rail .station:nth-child(4) .dot{background:var(--yellow);box-shadow:0 0 0 2px var(--yellow)}
+.rail .station:nth-child(5) .dot{background:var(--green);box-shadow:0 0 0 2px var(--green)}
+.rail .station:nth-child(2)::before{background:linear-gradient(90deg,var(--steel),var(--red))}
+.rail .station:nth-child(3)::before{background:linear-gradient(90deg,var(--red),var(--orange))}
+.rail .station:nth-child(4)::before{background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.rail .station:nth-child(5)::before{background:linear-gradient(90deg,var(--yellow),var(--green))}
+.rail .station:nth-child(1) .lvl{color:var(--steel)}
+.rail .station:nth-child(2) .lvl{color:var(--red)}
+.rail .station:nth-child(3) .lvl{color:var(--orange)}
+.rail .station:nth-child(4) .lvl{color:var(--yellow)}
+.rail .station:nth-child(5) .lvl{color:var(--green)}
 .station .lvl{
   margin-top:14px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
   font-size:clamp(11px,1.8vw,15px);
@@ -130,15 +133,6 @@ h2.masters + .section-note{text-align:center}
 }
 .card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
 .card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
-.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
-.card .path b{color:var(--white)}
-.card .path .arrow{color:var(--red);margin:0 6px}
-.remain{text-align:right}
-.remain .num{
-  font-weight:900;font-size:44px;line-height:1;color:var(--red);
-  font-variation-settings:'wdth' 76;
-}
-.remain .num.one{color:var(--gold)}
 .card .name.gold-name{color:var(--gold)}
 .card .name.yellow-name{
   color:var(--yellow);
@@ -150,7 +144,9 @@ h2.masters + .section-note{text-align:center}
   50%{text-shadow:0 0 12px rgba(242,210,30,1), 0 0 28px rgba(242,210,30,.75), 0 0 48px rgba(242,210,30,.45)}
 }
 .card .name.redorange-name{color:var(--redorange)}
+.card .path .lv-nc{color:var(--steel)}
 .card .path .lv-fd{color:var(--red)}
+.card .path b.lv-fdb{color:var(--red)}
 .card .path b.lv-ct{color:var(--orange)}
 .card .path .lv-sr{color:var(--yellow)}
 .card .path b.lv-ms{color:var(--green)}
@@ -186,6 +182,15 @@ h2.masters + .section-note{text-align:center}
   0%,100%{text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35)}
   50%{text-shadow:0 0 12px rgba(228,10,30,1), 0 0 28px rgba(228,10,30,.85), 0 0 48px rgba(228,10,30,.55)}
 }
+.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+.card .path b{color:var(--white)}
+.card .path .arrow{color:var(--red);margin:0 6px}
+.remain{text-align:right}
+.remain .num{
+  font-weight:900;font-size:44px;line-height:1;color:var(--red);
+  font-variation-settings:'wdth' 76;
+}
+.remain .num.one{color:var(--gold)}
 .remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
 .minirail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .minirail i{
@@ -278,6 +283,11 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
     <div class="rail">
       <div class="station reached">
         <div class="dot"></div>
+        <div class="lvl">Not Certified</div>
+        <div class="count"><b>1</b> consultant</div>
+      </div>
+      <div class="station reached">
+        <div class="dot"></div>
         <div class="lvl">Foundations</div>
         <div class="count"><b>3</b> consultants</div>
       </div>
@@ -364,6 +374,63 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
         </details>
       </div>
 
+      <div class="card">
+        <div>
+          <span class="chip">New to the team</span>
+          <div class="name redorange-name">James Hatcher</div>
+          <div class="path"><span class="lv-nc">Not Certified</span> <span class="arrow">&rarr;</span> <b class="lv-fdb">Foundations</b></div>
+        </div>
+        <div class="remain"><div class="num">42</div><div class="lbl">classes to go</div></div>
+        <div class="minirail"></div>
+        <details>
+          <summary>Remaining courses</summary>
+          <ul>
+            <li>GR23-1: 2026 GR Supra</li>
+            <li>GR628-1: 2026 GR Corolla</li>
+            <li>TDLR-4: The Sales Guest Experience</li>
+            <li>TDLR-49: Toyota Recall, SSC, and CSP Overview</li>
+            <li>TDLR-71: Protecting Guests&rsquo; Private Data</li>
+            <li>TOB-0a: Sales Consultant Welcome</li>
+            <li>TOB-1: Toyota Heritage</li>
+            <li>TOB-2: Toyota Brands and Products</li>
+            <li>TOY-21: Introduction to Toyota Warranties</li>
+            <li>Toyota Sales Consultant ILT 1</li>
+            <li>TV01-1: STAR Safety System Overview</li>
+            <li>TV01-3: Toyota Safety Sense&trade; Overview</li>
+            <li>TV02-1: Toyota Audio Multimedia Systems Overview</li>
+            <li>TV02-2: Toyota Audio Multimedia (21MM)</li>
+            <li>TV02-4: 24MM Audio Multimedia System Overview</li>
+            <li>TV03-1: Connected Services by Toyota Overview</li>
+            <li>TV03-4: Toyota App eLearning Series</li>
+            <li>TV04-1: Beyond Zero - Toyota's Vision for a Carbon Neutral Future</li>
+            <li>TV04-2: Electrification eModule Series Part 1</li>
+            <li>TV04-3: EV Powertrains</li>
+            <li>TV12-2: 2026 Prius</li>
+            <li>TV18-1: 2026 Corolla</li>
+            <li>TV24-2: 2026 Toyota C-HR</li>
+            <li>TV25-2: 2026 Camry</li>
+            <li>TV286-1: 2026 bZ Woodland</li>
+            <li>TV287-2: 2026 bZ</li>
+            <li>TV30-2: 2025 Mirai</li>
+            <li>TV40-1: 2026 Toyota Crown</li>
+            <li>TV404-1: 2025 Toyota Crown Signia</li>
+            <li>TV44-3: 2026 RAV4</li>
+            <li>TV54-1: 2026 Sienna</li>
+            <li>TV61-1: 2025 Land Cruiser</li>
+            <li>TV625-1: 2025 GR86</li>
+            <li>TV63-1: 2026 Corolla Cross</li>
+            <li>TV67-1: 2026 Grand Highlander</li>
+            <li>TV69-1: 2026 Highlander</li>
+            <li>TV71-2: 2026 Tacoma</li>
+            <li>TV79-1: 2026 Sequoia</li>
+            <li>TV82-1: 2026 Tundra</li>
+            <li>TV86-2: 2026 4Runner</li>
+            <li>GR-01: GR Foundations</li>
+            <li>TOB-4: Introduction to Toyota Engage (2026)</li>
+          </ul>
+        </details>
+      </div>
+
     </div>
   </div>
 </section>
@@ -371,7 +438,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 <section>
   <div class="wrap">
     <h2 class="masters">The Masters</h2>
-    <p class="section-note">Top of the ladder &mdash; 17 of 21 consultants on this floor hold Master.</p>
+    <p class="section-note">Top of the ladder &mdash; 17 of 22 consultants on this floor hold Master.</p>
     <div class="wall">
       <div class="plaque"><div class="pname">Ethan Aronson</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Braden Burr</div><div class="badge">Master</div></div>
@@ -396,7 +463,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
 <footer>
   <div class="wrap">
-    <p>Source: Certifications by Toyota &mdash; data as of Sep 2, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
+    <p>Source: Certifications by Toyota &mdash; data as of Sep 17, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
     <p>Log in at cbt.educecloud.com to knock out your remaining courses. Questions on your list &mdash; see Josh.</p>
   </div>
 </footer>
