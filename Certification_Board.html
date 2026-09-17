@@ -133,15 +133,6 @@ h2.masters + .section-note{text-align:center}
 }
 .card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
 .card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
-.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
-.card .path b{color:var(--white)}
-.card .path .arrow{color:var(--red);margin:0 6px}
-.remain{text-align:right}
-.remain .num{
-  font-weight:900;font-size:44px;line-height:1;color:var(--red);
-  font-variation-settings:'wdth' 76;
-}
-.remain .num.one{color:var(--gold)}
 .card .name.gold-name{color:var(--gold)}
 .card .name.yellow-name{
   color:var(--yellow);
@@ -191,6 +182,15 @@ h2.masters + .section-note{text-align:center}
   0%,100%{text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35)}
   50%{text-shadow:0 0 12px rgba(228,10,30,1), 0 0 28px rgba(228,10,30,.85), 0 0 48px rgba(228,10,30,.55)}
 }
+.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+.card .path b{color:var(--white)}
+.card .path .arrow{color:var(--red);margin:0 6px}
+.remain{text-align:right}
+.remain .num{
+  font-weight:900;font-size:44px;line-height:1;color:var(--red);
+  font-variation-settings:'wdth' 76;
+}
+.remain .num.one{color:var(--gold)}
 .remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
 .minirail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .minirail i{
@@ -245,6 +245,15 @@ h2.masters + .section-note{text-align:center}
   font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--green);
 }
 .plaque .badge::before{content:"🏆";font-size:13px}
+
+#audio-toggle{
+  position:fixed;right:18px;bottom:18px;z-index:50;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--white);
+  font-size:20px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.45);
+}
+#audio-toggle:hover{border-color:var(--green)}
 
 /* ---------- footer ---------- */
 footer{margin-top:56px;padding:26px 0 44px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
@@ -468,6 +477,9 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
   </div>
 </footer>
 
+<audio id="masters-audio" src="masters-theme.m4a" loop preload="auto"></audio>
+<button id="audio-toggle" title="Music on/off" aria-label="Music on/off">&#128266;</button>
+
 <script>
 document.querySelectorAll('.card').forEach(function(card){
   var num = parseInt(card.querySelector('.remain .num').textContent, 10) || 0;
@@ -476,6 +488,25 @@ document.querySelectorAll('.card').forEach(function(card){
   rail.innerHTML = '';
   for(var i = 0; i < num; i++){ rail.appendChild(document.createElement('i')); }
 });
+
+(function(){
+  var audio = document.getElementById('masters-audio');
+  var toggle = document.getElementById('audio-toggle');
+  var wants = true;
+  audio.volume = 0.55;
+  function start(){
+    if(!wants) return;
+    audio.play().then(function(){ toggle.textContent = '\uD83D\uDD0A'; }).catch(function(){});
+  }
+  ['pointerdown','touchstart','keydown'].forEach(function(ev){
+    document.addEventListener(ev, function h(){ start(); document.removeEventListener(ev, h); }, {passive:true});
+  });
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(audio.paused){ wants = true; audio.play().catch(function(){}); toggle.textContent = '\uD83D\uDD0A'; }
+    else { wants = false; audio.pause(); toggle.textContent = '\uD83D\uDD07'; }
+  });
+})();
 </script>
 </body>
 </html>
