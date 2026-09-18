@@ -60,7 +60,7 @@ h1 span{color:var(--red)}
 
 /* ---------- deadline countdown ---------- */
 .deadline{background:linear-gradient(180deg,#2a0409,#1a0305);border-bottom:1px solid var(--red-dim);padding:14px 0}
-.deadline-inner{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap}
+.deadline-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
 .dmsg{
   color:var(--red);font-weight:900;text-transform:uppercase;letter-spacing:.08em;
   font-size:clamp(13px,1.9vw,18px);
@@ -77,7 +77,7 @@ h1 span{color:var(--red)}
 .dseg i{font-style:normal;color:var(--steel);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-top:4px}
 .dcolon{font-weight:900;font-size:clamp(26px,3.6vw,38px);line-height:1;color:var(--red);align-self:flex-start}
 .dremain{color:var(--steel);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.18em;align-self:center;margin-left:8px}
-@media (max-width:760px){.deadline-inner{justify-content:center;text-align:center}}
+
 
 /* ---------- team rail ---------- */
 .rail-block{padding:34px 0 40px;border-bottom:1px solid var(--line)}
@@ -154,15 +154,6 @@ h2.masters + .section-note{text-align:center}
 }
 .card:hover{transform:translateY(-2px);border-color:#4a4e54;border-left-color:var(--red)}
 .card .name{font-weight:900;font-size:21px;text-transform:uppercase;font-variation-settings:'wdth' 84;letter-spacing:.02em}
-.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
-.card .path b{color:var(--white)}
-.card .path .arrow{color:var(--red);margin:0 6px}
-.remain{text-align:right}
-.remain .num{
-  font-weight:900;font-size:44px;line-height:1;color:var(--red);
-  font-variation-settings:'wdth' 76;
-}
-.remain .num.one{color:var(--gold)}
 .card .name.gold-name{color:var(--gold)}
 .card .name.yellow-name{
   color:var(--yellow);
@@ -212,6 +203,15 @@ h2.masters + .section-note{text-align:center}
   0%,100%{text-shadow:0 0 8px rgba(228,10,30,.9), 0 0 18px rgba(228,10,30,.6), 0 0 32px rgba(228,10,30,.35)}
   50%{text-shadow:0 0 12px rgba(228,10,30,1), 0 0 28px rgba(228,10,30,.85), 0 0 48px rgba(228,10,30,.55)}
 }
+.card .path{color:var(--steel);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+.card .path b{color:var(--white)}
+.card .path .arrow{color:var(--red);margin:0 6px}
+.remain{text-align:right}
+.remain .num{
+  font-weight:900;font-size:44px;line-height:1;color:var(--red);
+  font-variation-settings:'wdth' 76;
+}
+.remain .num.one{color:var(--gold)}
 .remain .lbl{color:var(--steel);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
 .minirail{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .minirail i{
