@@ -256,6 +256,16 @@ h2.masters + .section-note{text-align:center}
   }
 }
 
+.plaque.fresh{border-top-color:var(--gold)}
+.plaque.fresh .badge{color:var(--gold)}
+@media (prefers-reduced-motion:no-preference){
+  .plaque.fresh{animation:rise .5s ease both, freshGlow 1.8s ease-in-out infinite alternate}
+  @keyframes freshGlow{
+    from{box-shadow:0 0 6px rgba(216,178,90,.25)}
+    to{box-shadow:0 0 16px rgba(216,178,90,.6)}
+  }
+}
+
 #audio-toggle{
   position:fixed;right:18px;bottom:18px;z-index:50;
   width:46px;height:46px;border-radius:50%;
@@ -318,12 +328,12 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
       <div class="station reached">
         <div class="dot"></div>
         <div class="lvl">Senior</div>
-        <div class="count"><b>1</b> consultant</div>
+        <div class="count"><b>0</b> consultants</div>
       </div>
       <div class="station reached">
         <div class="dot"></div>
         <div class="lvl">Master</div>
-        <div class="count"><b>17</b> consultants</div>
+        <div class="count"><b>18</b> consultants</div>
       </div>
     </div>
   </div>
@@ -376,20 +386,6 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <ul>
             <li>Toyota Sales Consultant ILT 2</li>
           </ul>
-        </details>
-      </div>
-
-      <div class="card sr-card">
-        <div>
-          <span class="chip next">1 elective out</span>
-          <div class="name">Nicole Elledge</div>
-          <div class="path"><span class="lv-sr">Senior</span> <span class="arrow">&rarr;</span> <b class="lv-ms">Master</b></div>
-        </div>
-        <div class="remain"><div class="num">1</div><div class="lbl">elective to go</div></div>
-        <div class="minirail"></div>
-        <details>
-          <summary>Remaining requirement</summary>
-          <ul><li>Complete 1 additional Career Development &amp; Growth elective course</li></ul>
         </details>
       </div>
 
@@ -457,12 +453,13 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 <section>
   <div class="wrap">
     <h2 class="masters">The Masters</h2>
-    <p class="section-note">Top of the ladder &mdash; 17 of 22 consultants on this floor hold Master.</p>
+    <p class="section-note">Top of the ladder &mdash; 18 of 22 consultants on this floor hold Master.</p>
     <div class="wall">
       <div class="plaque"><div class="pname">Ethan Aronson</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Braden Burr</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Kaden Darby</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Curtis Dillon</div><div class="badge">Master</div></div>
+      <div class="plaque fresh"><div class="pname">Nicole Elledge</div><div class="badge">New Master</div></div>
       <div class="plaque"><div class="pname">Mario Garcia</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Tyler Hemphill</div><div class="badge">Master</div></div>
       <div class="plaque"><div class="pname">Michael Huber</div><div class="badge">Master</div></div>
