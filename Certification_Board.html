@@ -578,15 +578,15 @@ document.querySelectorAll('.card').forEach(function(card){
   audio.volume = 0.55;
   function start(){
     if(!wants) return;
-    audio.play().then(function(){ toggle.textContent = '🔊'; }).catch(function(){});
+    audio.play().then(function(){ toggle.textContent = '\uD83D\uDD0A'; }).catch(function(){});
   }
   ['pointerdown','touchstart','keydown'].forEach(function(ev){
     document.addEventListener(ev, function h(){ start(); document.removeEventListener(ev, h); }, {passive:true});
   });
   toggle.addEventListener('click', function(e){
     e.stopPropagation();
-    if(audio.paused){ wants = true; audio.play().catch(function(){}); toggle.textContent = '🔊'; }
-    else { wants = false; audio.pause(); toggle.textContent = '🔇'; }
+    if(audio.paused){ wants = true; audio.play().catch(function(){}); toggle.textContent = '\uD83D\uDD0A'; }
+    else { wants = false; audio.pause(); toggle.textContent = '\uD83D\uDD07'; }
   });
 })();
 </script>
