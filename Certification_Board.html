@@ -58,6 +58,27 @@ h1{
 h1 span{color:var(--red)}
 .sub{margin:12px 0 28px;color:var(--steel);font-size:15px;max-width:640px}
 
+/* ---------- deadline countdown ---------- */
+.deadline{background:linear-gradient(180deg,#2a0409,#1a0305);border-bottom:1px solid var(--red-dim);padding:14px 0}
+.deadline-inner{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap}
+.dmsg{
+  color:var(--red);font-weight:900;text-transform:uppercase;letter-spacing:.08em;
+  font-size:clamp(13px,1.9vw,18px);
+  font-variation-settings:'wdth' 82;
+  animation:deadlineFlash 1s step-start infinite;
+}
+@keyframes deadlineFlash{50%{opacity:.2}}
+.dtimer{display:flex;align-items:flex-start;gap:6px}
+.dseg{display:inline-flex;flex-direction:column;align-items:center;min-width:52px}
+.dseg b{
+  font-weight:900;font-size:clamp(26px,3.6vw,38px);line-height:1;color:var(--white);
+  font-variation-settings:'wdth' 76;font-variant-numeric:tabular-nums;
+}
+.dseg i{font-style:normal;color:var(--steel);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-top:4px}
+.dcolon{font-weight:900;font-size:clamp(26px,3.6vw,38px);line-height:1;color:var(--red);align-self:flex-start}
+.dremain{color:var(--steel);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.18em;align-self:center;margin-left:8px}
+@media (max-width:760px){.deadline-inner{justify-content:center;text-align:center}}
+
 /* ---------- team rail ---------- */
 .rail-block{padding:34px 0 40px;border-bottom:1px solid var(--line)}
 .rail{display:flex;align-items:flex-start}
@@ -319,6 +340,19 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
   </div>
 </header>
 
+<div class="deadline">
+  <div class="wrap deadline-inner">
+    <div class="dmsg" id="dmsg">All required training must be completed by September 30th</div>
+    <div class="dtimer" aria-label="Time remaining until September 30 6:00 PM">
+      <span class="dseg"><b id="cd-d">--</b><i>Days</i></span><span class="dcolon">:</span>
+      <span class="dseg"><b id="cd-h">--</b><i>Hours</i></span><span class="dcolon">:</span>
+      <span class="dseg"><b id="cd-m">--</b><i>Minutes</i></span><span class="dcolon">:</span>
+      <span class="dseg"><b id="cd-s">--</b><i>Seconds</i></span>
+      <span class="dremain">Remaining</span>
+    </div>
+  </div>
+</div>
+
 <div class="rail-block">
   <div class="wrap">
     <div class="rail">
@@ -507,6 +541,28 @@ document.querySelectorAll('.card').forEach(function(card){
   rail.innerHTML = '';
   for(var i = 0; i < num; i++){ rail.appendChild(document.createElement('i')); }
 });
+
+(function(){
+  var target = new Date('2026-09-30T18:00:00-05:00').getTime();
+  var d = document.getElementById('cd-d'), h = document.getElementById('cd-h'),
+      m = document.getElementById('cd-m'), sec = document.getElementById('cd-s');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var diff = target - Date.now();
+    if(diff <= 0){
+      d.textContent = '00'; h.textContent = '00'; m.textContent = '00'; sec.textContent = '00';
+      document.getElementById('dmsg').textContent = 'Training deadline has passed';
+      clearInterval(timer);
+      return;
+    }
+    d.textContent = pad(Math.floor(diff / 86400000));
+    h.textContent = pad(Math.floor(diff / 3600000) % 24);
+    m.textContent = pad(Math.floor(diff / 60000) % 60);
+    sec.textContent = pad(Math.floor(diff / 1000) % 60);
+  }
+  tick();
+  var timer = setInterval(tick, 1000);
+})();
 
 (function(){
   var audio = document.getElementById('masters-audio');
