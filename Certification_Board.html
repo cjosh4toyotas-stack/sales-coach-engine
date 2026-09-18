@@ -451,12 +451,12 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
           <div class="name redorange-name">James Hatcher</div>
           <div class="path"><span class="lv-nc">Not Certified</span> <span class="arrow">&rarr;</span> <b class="lv-fdb">Foundations</b></div>
         </div>
-        <div class="remain"><div class="num">42</div><div class="lbl">classes to go</div></div>
+        <div class="remain"><div class="num">40</div><div class="lbl">classes to go</div></div>
         <div class="minirail"></div>
         <details>
           <summary>Remaining courses</summary>
           <ul>
-            <li>GR23-1: 2026 GR Supra</li>
+            <li>GR625-1: 2027 GR86</li>
             <li>GR628-1: 2026 GR Corolla</li>
             <li>TDLR-4: The Sales Guest Experience</li>
             <li>TDLR-49: Toyota Recall, SSC, and CSP Overview</li>
@@ -465,7 +465,6 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
             <li>TOB-1: Toyota Heritage</li>
             <li>TOB-2: Toyota Brands and Products</li>
             <li>TOY-21: Introduction to Toyota Warranties</li>
-            <li>Toyota Sales Consultant ILT 1</li>
             <li>TV01-1: STAR Safety System Overview</li>
             <li>TV01-3: Toyota Safety Sense&trade; Overview</li>
             <li>TV02-1: Toyota Audio Multimedia Systems Overview</li>
@@ -488,7 +487,6 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
             <li>TV44-3: 2026 RAV4</li>
             <li>TV54-1: 2026 Sienna</li>
             <li>TV61-1: 2025 Land Cruiser</li>
-            <li>TV625-1: 2025 GR86</li>
             <li>TV63-1: 2026 Corolla Cross</li>
             <li>TV67-1: 2026 Grand Highlander</li>
             <li>TV69-1: 2026 Highlander</li>
@@ -535,7 +533,7 @@ summary:focus-visible,.card:focus-visible{outline:2px solid var(--red);outline-o
 
 <footer>
   <div class="wrap">
-    <p>Source: Certifications by Toyota &mdash; data as of Sep 17, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
+    <p>Source: Certifications by Toyota &mdash; data as of Sep 18, 2026. Course lists refresh on a scheduled basis; recently completed classes may take a few hours to clear.</p>
     <p>Log in at cbt.educecloud.com to knock out your remaining courses. Questions on your list &mdash; see Josh.</p>
   </div>
 </footer>
@@ -581,15 +579,15 @@ document.querySelectorAll('.card').forEach(function(card){
   audio.volume = 0.55;
   function start(){
     if(!wants) return;
-    audio.play().then(function(){ toggle.textContent = '\uD83D\uDD0A'; }).catch(function(){});
+    audio.play().then(function(){ toggle.textContent = '🔊'; }).catch(function(){});
   }
   ['pointerdown','touchstart','keydown'].forEach(function(ev){
     document.addEventListener(ev, function h(){ start(); document.removeEventListener(ev, h); }, {passive:true});
   });
   toggle.addEventListener('click', function(e){
     e.stopPropagation();
-    if(audio.paused){ wants = true; audio.play().catch(function(){}); toggle.textContent = '\uD83D\uDD0A'; }
-    else { wants = false; audio.pause(); toggle.textContent = '\uD83D\uDD07'; }
+    if(audio.paused){ wants = true; audio.play().catch(function(){}); toggle.textContent = '🔊'; }
+    else { wants = false; audio.pause(); toggle.textContent = '🔇'; }
   });
 })();
 </script>
