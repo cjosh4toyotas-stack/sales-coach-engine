@@ -85,6 +85,7 @@ h1 span{color:var(--red)}
 .pill.ns{color:#ff6b78;border-color:var(--red-dim);background:rgba(235,10,30,.1)}
 .pill.ip{color:var(--gold);border-color:#7a6330;background:rgba(216,178,90,.12)}
 .pill.c{color:#7fe09b;border-color:#2e5c3d;background:rgba(47,162,75,.16)}
+.pill.f{color:#ffb3bb;border-color:var(--red);background:rgba(235,10,30,.32)}
 footer{margin-top:48px;padding:24px 0 40px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
 footer p{margin-bottom:4px}
 @media (max-width:560px){
@@ -146,6 +147,7 @@ footer p{margin-bottom:4px}
       <span><i style="background:var(--red)"></i>Not Started</span>
       <span><i style="background:var(--gold)"></i>In Progress</span>
       <span><i style="background:var(--green)"></i>Completed</span>
+      <span><i style="background:#7a0510;border:1px solid var(--red)"></i>Failed &mdash; retake needed</span>
     </div>
     <div class="roster" id="roster"></div>
   </div>
@@ -153,7 +155,7 @@ footer p{margin-bottom:4px}
 
 <footer>
   <div class="wrap">
-    <p>Source: Certifications by Toyota, Supplemental Training &mdash; data as of Sep 28, 2026. Recently completed courses may take a few hours to clear.</p>
+    <p>Source: Certifications by Toyota, Supplemental Training &mdash; data as of Sep 30, 2026. Recently completed courses may take a few hours to clear.</p>
     <p>Log in at cbt.educecloud.com and open Supplemental Training to knock these out. Questions &mdash; see Josh.</p>
   </div>
 </footer>
@@ -164,7 +166,7 @@ var ROSTER = [
 {n:"Braden Burr",id:632231,a:"c",b:"ip"},
 {n:"Kaden Darby",id:476916,a:"c",b:"c"},
 {n:"Curtis Dillon",id:436912,a:"ns",b:"ns"},
-{n:"Nicole Elledge",id:659759,a:"ns",b:"ns"},
+{n:"Nicole Elledge",id:659759,a:"c",b:"f"},
 {n:"Noah Fried",id:675141,a:"ns",b:"ns"},
 {n:"Mario Garcia",id:553611,a:"ns",b:"ns"},
 {n:"James Hatcher",id:691098,a:"ns",b:"ns"},
@@ -173,7 +175,7 @@ var ROSTER = [
 {n:"Michael Huber",id:214152,a:"ns",b:"ns"},
 {n:"Damon Koppes",id:398681,a:"ns",b:"ns"},
 {n:"Derrius Loveless",id:217898,a:"ns",b:"ns"},
-{n:"Jack Osland",id:515266,a:"ns",b:"ns"},
+{n:"Jack Osland",id:515266,a:"c",b:"ip"},
 {n:"Hunter Robertson",id:677101,a:"c",b:"ip"},
 {n:"Hunter Schmitt",id:265967,a:"ns",b:"ns"},
 {n:"Shawn Still",id:398801,a:"c",b:"ip"},
@@ -181,10 +183,10 @@ var ROSTER = [
 {n:"Kyle Triplett",id:437007,a:"ns",b:"ns"},
 {n:"Eon Van Rooyen",id:683515,a:"c",b:"ip"},
 {n:"Joseph Vogt",id:599059,a:"c",b:"ip"},
-{n:"Michael Wells",id:657847,a:"ns",b:"ns"},
+{n:"Michael Wells",id:657847,a:"c",b:"f"},
 {n:"Aaron Woodward",id:553558,a:"ns",b:"ns"}
 ];
-var LBL = {ns:'Not Started', ip:'In Progress', c:'Completed'};
+var LBL = {ns:'Not Started', ip:'In Progress', c:'Completed', f:'Failed'};
 (function(){
   var host = document.getElementById('roster');
   var done = 0;
@@ -208,8 +210,10 @@ var LBL = {ns:'Not Started', ip:'In Progress', c:'Completed'};
     var n = ROSTER.length;
     document.getElementById('bar-'+k+'-c').style.width = (c/n*100) + '%';
     document.getElementById('bar-'+k+'-ip').style.width = (ip/n*100) + '%';
+    var fl = ROSTER.filter(function(p){return p[k]==='f'}).length;
     document.getElementById('stat-'+k).innerHTML =
-      '<b>'+c+' of '+n+' completed</b>' + (ip ? ' &middot; <em>'+ip+' in progress</em>' : '');
+      '<b>'+c+' of '+n+' completed</b>' + (ip ? ' &middot; <em>'+ip+' in progress</em>' : '') +
+      (fl ? ' &middot; <span style="color:#ff8d99">'+fl+' failed</span>' : '');
   });
 })();
 
