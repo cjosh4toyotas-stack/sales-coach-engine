@@ -428,8 +428,8 @@ html{scroll-snap-type:y proximity}
 
 <div class="deadline">
   <div class="wrap deadline-inner">
-    <div class="dmsg" id="dmsg">All required training must be completed by September 30th</div>
-    <div class="dtimer" aria-label="Time remaining until September 30 6:00 PM">
+    <div class="dmsg" id="dmsg">All required training must be completed by October 15th</div>
+    <div class="dtimer" aria-label="Time remaining until October 15 6:00 PM">
       <span class="dseg"><b id="cd-d">--</b><i>Days</i></span><span class="dcolon">:</span>
       <span class="dseg"><b id="cd-h">--</b><i>Hours</i></span><span class="dcolon">:</span>
       <span class="dseg"><b id="cd-m">--</b><i>Minutes</i></span><span class="dcolon">:</span>
@@ -598,7 +598,7 @@ document.querySelectorAll('.card').forEach(function(card){
 });
 
 (function(){
-  var target = new Date('2026-09-30T18:00:00-05:00').getTime();
+  var target = new Date('2026-10-15T18:00:00-05:00').getTime();
   var d = document.getElementById('cd-d'), h = document.getElementById('cd-h'),
       m = document.getElementById('cd-m'), sec = document.getElementById('cd-s');
   function pad(n){ return (n < 10 ? '0' : '') + n; }
